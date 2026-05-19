@@ -1,0 +1,230 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: 42 33% 97%;
+    --foreground: 188 42% 13%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 188 42% 13%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 188 42% 13%;
+
+    --primary: 184 69% 24%;
+    --primary-foreground: 42 33% 97%;
+
+    --secondary: 185 20% 91%;
+    --secondary-foreground: 188 42% 13%;
+
+    --muted: 40 18% 92%;
+    --muted-foreground: 188 13% 38%;
+
+    --accent: 184 40% 88%;
+    --accent-foreground: 188 42% 13%;
+
+    --destructive: 4 78% 48%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 188 17% 84%;
+    --input: 188 17% 84%;
+    --ring: 184 69% 24%;
+
+    --radius: 1rem;
+
+    --pillar-blue: 202 78% 48%;
+    --pillar-red: 8 88% 57%;
+    --pillar-yellow: 47 92% 52%;
+    --pillar-green: 137 72% 45%;
+
+    --pillar-blue-soft: 202 70% 94%;
+    --pillar-red-soft: 8 75% 95%;
+    --pillar-yellow-soft: 47 90% 92%;
+    --pillar-green-soft: 137 62% 93%;
+
+    --roof: 184 50% 26%;
+    --roof-highlight: 184 44% 38%;
+    --foundation: 43 18% 84%;
+    --foundation-dark: 42 14% 68%;
+
+    /* Legacy aliases for existing components */
+    --hero-bg: hsl(var(--background));
+    --hero-main: hsl(var(--primary));
+    --hero-black: hsl(var(--foreground));
+    --hero-text: hsl(var(--muted-foreground));
+    --hero-secondary: hsl(var(--pillar-blue));
+    --hero-accent: hsl(var(--pillar-red));
+
+    --color-blue: hsl(var(--pillar-blue));
+    --color-red: hsl(var(--pillar-red));
+    --color-yellow: hsl(var(--pillar-yellow));
+    --color-green: hsl(var(--pillar-green));
+    --color-teal-foundation: hsl(var(--foundation));
+
+    --color-blue-soft: hsl(var(--pillar-blue-soft));
+    --color-red-soft: hsl(var(--pillar-red-soft));
+    --color-yellow-soft: hsl(var(--pillar-yellow-soft));
+    --color-green-soft: hsl(var(--pillar-green-soft));
+    --color-teal-soft: hsl(var(--accent));
+  }
+
+  .dark {
+    --background: 188 35% 8%;
+    --foreground: 42 33% 96%;
+
+    --card: 188 30% 11%;
+    --card-foreground: 42 33% 96%;
+
+    --popover: 188 30% 11%;
+    --popover-foreground: 42 33% 96%;
+
+    --primary: 184 55% 42%;
+    --primary-foreground: 188 35% 8%;
+
+    --secondary: 188 22% 17%;
+    --secondary-foreground: 42 33% 96%;
+
+    --muted: 188 20% 16%;
+    --muted-foreground: 42 10% 70%;
+
+    --accent: 184 28% 20%;
+    --accent-foreground: 42 33% 96%;
+
+    --destructive: 4 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 188 18% 22%;
+    --input: 188 18% 22%;
+    --ring: 184 55% 42%;
+
+    --pillar-blue: 202 78% 56%;
+    --pillar-red: 8 88% 62%;
+    --pillar-yellow: 47 92% 58%;
+    --pillar-green: 137 72% 52%;
+
+    --pillar-blue-soft: 202 42% 18%;
+    --pillar-red-soft: 8 40% 18%;
+    --pillar-yellow-soft: 47 38% 18%;
+    --pillar-green-soft: 137 36% 18%;
+
+    --roof: 184 42% 22%;
+    --roof-highlight: 184 44% 34%;
+    --foundation: 188 15% 20%;
+    --foundation-dark: 188 12% 14%;
+  }
+}
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --radius: var(--radius);
+
+  --color-pillar-blue: hsl(var(--pillar-blue));
+  --color-pillar-red: hsl(var(--pillar-red));
+  --color-pillar-yellow: hsl(var(--pillar-yellow));
+  --color-pillar-green: hsl(var(--pillar-green));
+  --color-pillar-blue-dark: hsl(var(--pillar-blue));
+  --color-pillar-red-dark: hsl(var(--pillar-red));
+  --color-pillar-yellow-dark: hsl(var(--pillar-yellow));
+  --color-pillar-green-dark: hsl(var(--pillar-green));
+  --color-pillar-blue-soft: hsl(var(--pillar-blue-soft));
+  --color-pillar-red-soft: hsl(var(--pillar-red-soft));
+  --color-pillar-yellow-soft: hsl(var(--pillar-yellow-soft));
+  --color-pillar-green-soft: hsl(var(--pillar-green-soft));
+
+  --color-roof: hsl(var(--roof));
+  --color-roof-highlight: hsl(var(--roof-highlight));
+  --color-foundation: hsl(var(--foundation));
+  --color-foundation-dark: hsl(var(--foundation-dark));
+  --color-foundation-soft: hsl(var(--secondary));
+  --font-sans: "ui-rounded", "Avenir Next", "Segoe UI", sans-serif;
+  --font-display: "Poppins", "Avenir Next", "Segoe UI", sans-serif;
+  --font-heading: "Poppins", "Avenir Next", "Segoe UI", sans-serif;
+  --font-body: "DM Sans", "Avenir Next", "Segoe UI", sans-serif;
+  --font-serif: "Merriweather", Georgia, "Times New Roman", serif;
+}
+
+body {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+main [data-scroll-reveal="pending"] {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  filter: blur(6px);
+  transition-property: opacity, transform, filter;
+  transition-duration: 650ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform, filter;
+}
+
+main [data-scroll-reveal="revealed"] {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main [data-scroll-reveal="pending"],
+  main [data-scroll-reveal="revealed"] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+@layer utilities {
+  .rounded,
+  .rounded-none,
+  .rounded-sm,
+  .rounded-md,
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl,
+  .rounded-full,
+  .rounded-s,
+  .rounded-e,
+  .rounded-t,
+  .rounded-r,
+  .rounded-b,
+  .rounded-l,
+  .rounded-ss,
+  .rounded-se,
+  .rounded-ee,
+  .rounded-es,
+  .rounded-tl,
+  .rounded-tr,
+  .rounded-br,
+  .rounded-bl {
+    border-radius: 0 !important;
+  }
+
+  [class*="rounded-"] {
+    border-radius: 0 !important;
+  }
+}

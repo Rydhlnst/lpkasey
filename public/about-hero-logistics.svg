@@ -1,0 +1,48 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#E8ECEF"/>
+  <rect x="0" y="0" width="1600" height="900" fill="url(#bg)"/>
+  <g opacity="0.95">
+    <rect x="84" y="70" width="292" height="142" rx="14" fill="#1F7AA3"/>
+    <rect x="402" y="70" width="292" height="142" rx="14" fill="#E78B54"/>
+    <rect x="720" y="70" width="292" height="142" rx="14" fill="#2A5F87"/>
+    <rect x="1038" y="70" width="292" height="142" rx="14" fill="#E5B44D"/>
+  </g>
+  <g opacity="0.9">
+    <rect x="122" y="248" width="252" height="126" rx="12" fill="#CC5E46"/>
+    <rect x="402" y="248" width="252" height="126" rx="12" fill="#2C93C2"/>
+    <rect x="682" y="248" width="252" height="126" rx="12" fill="#6E8E58"/>
+    <rect x="962" y="248" width="252" height="126" rx="12" fill="#D37E57"/>
+    <rect x="1242" y="248" width="252" height="126" rx="12" fill="#2B5A7E"/>
+  </g>
+  <g opacity="0.86">
+    <rect x="84" y="406" width="286" height="138" rx="12" fill="#E4A04B"/>
+    <rect x="398" y="406" width="286" height="138" rx="12" fill="#2B7199"/>
+    <rect x="712" y="406" width="286" height="138" rx="12" fill="#B65C4D"/>
+    <rect x="1026" y="406" width="286" height="138" rx="12" fill="#5A7D52"/>
+  </g>
+  <g opacity="0.78">
+    <rect x="120" y="578" width="230" height="116" rx="10" fill="#296B8E"/>
+    <rect x="378" y="578" width="230" height="116" rx="10" fill="#DA844A"/>
+    <rect x="636" y="578" width="230" height="116" rx="10" fill="#C35745"/>
+    <rect x="894" y="578" width="230" height="116" rx="10" fill="#2A88B3"/>
+    <rect x="1152" y="578" width="230" height="116" rx="10" fill="#809950"/>
+  </g>
+  <g stroke="#F7F8F9" stroke-opacity="0.55" stroke-width="2">
+    <path d="M0 220H1600"/>
+    <path d="M0 390H1600"/>
+    <path d="M0 560H1600"/>
+    <path d="M0 730H1600"/>
+    <path d="M320 0V900"/>
+    <path d="M640 0V900"/>
+    <path d="M960 0V900"/>
+    <path d="M1280 0V900"/>
+    <path d="M0 0L1600 900"/>
+    <path d="M1600 0L0 900"/>
+  </g>
+  <defs>
+    <linearGradient id="bg" x1="800" y1="0" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F3F5F7"/>
+      <stop offset="1" stop-color="#E6EBEF"/>
+    </linearGradient>
+  </defs>
+</svg>
