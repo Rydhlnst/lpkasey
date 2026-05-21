@@ -166,6 +166,32 @@ body {
   color: hsl(var(--foreground));
 }
 
+/* Custom main scrollbar */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+
+html::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--border));
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--muted-foreground));
+}
+
 main [data-scroll-reveal="pending"] {
   opacity: 0;
   transform: translate3d(0, 24px, 0);

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { Container } from "@/components/layout/container";
+import { EditableMedia } from "@/components/cms-inline/editable-media";
+import { EditableText } from "@/components/cms-inline/editable-text";
 import type { ValueItem } from "@/constants/values";
 import { cn } from "@/lib/utils";
 import { ScrollAnimation } from "@/components/uilayouts/scroll-animation";
@@ -22,12 +24,16 @@ interface SlideItem {
 
 function ValuesCarouselBlock({
   subheading,
+  subheadingPath,
   slides,
   reverseLayout = false,
+  basePath,
 }: {
   subheading: "KAUAE RUNGA" | "KAUAE RARO";
+  subheadingPath: string;
   slides: SlideItem[];
   reverseLayout?: boolean;
+  basePath: string;
 }) {
   const [index, setIndex] = useState(0);
   const current = slides[index];
@@ -42,7 +48,9 @@ function ValuesCarouselBlock({
   return (
     <div className={cn("relative mt-8 sm:mt-12", reverseLayout && "lg:ml-auto")}>
       <div className="mb-4 sm:mb-6">
-        <p className="font-heading text-lg font-bold tracking-[0.25em] text-[var(--hero-main)] uppercase">{subheading}</p>
+        <p className="font-heading text-lg font-bold tracking-[0.25em] text-[var(--hero-main)] uppercase">
+          <EditableText path={subheadingPath} fallback={subheading} />
+        </p>
       </div>
 
       <div className="hidden lg:block">
@@ -54,9 +62,14 @@ function ValuesCarouselBlock({
         <div className={cn("grid gap-6 lg:grid-cols-[minmax(0,0.42fr)_1fr]", reverseLayout && "lg:grid-cols-[1fr_minmax(0,0.42fr)]")}>
           <div className="relative rounded-2xl bg-[#a9a9a9] p-3">
             <span className="inline-flex rounded-full border border-black/20 bg-white/85 px-3 py-1 font-display text-sm font-medium text-[var(--hero-text)]">
-              {current.group}
+              <EditableText path={`${basePath}.${index}.group`} fallback={current.group} />
             </span>
-            <div className="mt-4 min-h-[14rem] rounded-xl bg-[#a9a9a9] sm:min-h-[20rem]" />
+            <EditableMedia
+              path={`${basePath}.${index}.media`}
+              type="image"
+              emptyLabel="Value image"
+              className="mt-4 min-h-[14rem] rounded-xl bg-[#a9a9a9] sm:min-h-[20rem]"
+            />
           </div>
 
           <div
@@ -66,11 +79,15 @@ function ValuesCarouselBlock({
             )}
           >
             <div>
-              <p className="font-display text-lg font-medium text-[var(--hero-main)]">{current.keyword}</p>
+              <p className="font-display text-lg font-medium text-[var(--hero-main)]">
+                <EditableText path={`${basePath}.${index}.keyword`} fallback={current.keyword} />
+              </p>
               <h3 className="mt-2 font-display text-3xl leading-tight font-semibold text-[var(--hero-black)] sm:text-5xl">
-                {current.title}
+                <EditableText path={`${basePath}.${index}.title`} fallback={current.title} />
               </h3>
-              <p className="mt-4 max-w-2xl font-serif text-base leading-7 text-[var(--hero-text)] sm:text-lg sm:leading-8">{current.text}</p>
+              <p className="mt-4 max-w-2xl font-serif text-base leading-7 text-[var(--hero-text)] sm:text-lg sm:leading-8">
+                <EditableText path={`${basePath}.${index}.text`} fallback={current.text} />
+              </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
@@ -78,14 +95,14 @@ function ValuesCarouselBlock({
                 href="/services"
                 className="inline-flex min-h-10 items-center gap-1 rounded-[80px] bg-[var(--hero-main)] px-4 py-2 font-serif text-base font-bold text-white"
               >
-                View Value
+                <EditableText path={`${basePath}.${index}.ctaPrimary`} fallback="View Value" />
                 <ArrowUpRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/about"
                 className="inline-flex min-h-10 items-center rounded-[80px] border border-[var(--hero-text)] px-4 py-2 font-serif text-base font-bold text-[var(--hero-text)]"
               >
-                Learn More
+                <EditableText path={`${basePath}.${index}.ctaSecondary`} fallback="Learn More" />
               </Link>
             </div>
           </div>
@@ -143,14 +160,29 @@ export function ValuesFrameworkCarousel({ upperValues, lowerValues }: ValuesFram
     <section className="border-y border-[hsl(var(--border))] bg-secondary/55 py-16 transition-colors duration-500 sm:py-20">
       <Container>
         <ScrollAnimation className="text-center">
-          <p className="font-display text-[18px] leading-[26px] text-[var(--hero-main)]">Values Framework</p>
-          <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight text-[var(--hero-black)] sm:text-5xl">KAUAE RUNGA & KAUAE RARO</h2>
+          <p className="font-display text-[18px] leading-[26px] text-[var(--hero-main)]">
+            <EditableText path="home.valuesFramework.label" fallback="Values Framework" />
+          </p>
+          <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight text-[var(--hero-black)] sm:text-5xl">
+            <EditableText path="home.valuesFramework.title" fallback="KAUAE RUNGA & KAUAE RARO" />
+          </h2>
         </ScrollAnimation>
         <ScrollAnimation delay={0.08}>
-          <ValuesCarouselBlock subheading="KAUAE RUNGA" slides={upperSlides} />
+          <ValuesCarouselBlock
+            subheading="KAUAE RUNGA"
+            subheadingPath="home.valuesFramework.upperSubheading"
+            slides={upperSlides}
+            basePath="home.valuesFramework.upper"
+          />
         </ScrollAnimation>
         <ScrollAnimation delay={0.16}>
-          <ValuesCarouselBlock subheading="KAUAE RARO" slides={lowerSlides} reverseLayout />
+          <ValuesCarouselBlock
+            subheading="KAUAE RARO"
+            subheadingPath="home.valuesFramework.lowerSubheading"
+            slides={lowerSlides}
+            reverseLayout
+            basePath="home.valuesFramework.lower"
+          />
         </ScrollAnimation>
       </Container>
     </section>

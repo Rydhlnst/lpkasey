@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { useState, type CSSProperties } from "react";
 import { Container } from "@/components/layout/container";
+import { EditableText } from "@/components/cms-inline/editable-text";
 import PillarSvg from "@/components/shared/pillar-svg";
 import { ScrollAnimation } from "@/components/uilayouts/scroll-animation";
 import { cn } from "@/lib/utils";
@@ -61,11 +62,14 @@ const toneStyles = {
 function RoofBeam() {
   return (
     <div className="relative z-10" aria-hidden>
-      <div className="relative left-1/2 w-[104%] -translate-x-1/2">
-        <div className="mx-auto h-9 w-[98%] rounded-t-md bg-[var(--color-foundation)] shadow-[0_10px_18px_rgba(38,33,24,0.16)]" />
-        <div className="mx-auto h-2 w-[95%] bg-[color-mix(in_oklab,var(--color-foundation)_84%,black)]" />
-        <div className="mx-auto h-2 w-[96%] bg-[color-mix(in_oklab,var(--color-foundation)_90%,white)]" />
-        <div className="mx-auto h-5 w-[99%] bg-[var(--color-foundation)]" />
+      <div className="relative left-1/2 w-[114%] -translate-x-1/2">
+        <svg className="mx-auto block h-auto w-full max-w-[100%] drop-shadow-[0_12px_20px_rgba(38,33,24,0.14)]" viewBox="0 0 1200 250" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="600,10 1180,170 20,170" fill="var(--color-foundation)" />
+          <polyline points="600,10 1180,170 20,170 600,10" fill="none" stroke="color-mix(in oklab, var(--color-foundation) 84%, black)" strokeWidth="10" />
+          <polyline points="600,24 1138,164 62,164 600,24" fill="none" stroke="color-mix(in oklab, var(--color-foundation) 90%, white)" strokeWidth="6" />
+          <rect x="8" y="170" width="1184" height="14" fill="var(--color-foundation)" />
+          <rect x="18" y="184" width="1164" height="10" fill="color-mix(in oklab, var(--color-foundation) 84%, black)" />
+        </svg>
       </div>
     </div>
   );
@@ -75,10 +79,12 @@ function Foundation() {
   return (
     <div className="relative z-10" aria-hidden>
       <div className="relative left-1/2 w-[110%] -translate-x-1/2">
-        <div className="mx-auto h-5 w-[99%] bg-[var(--color-foundation)]" />
-        <div className="mx-auto h-2 w-[96%] bg-[color-mix(in_oklab,var(--color-foundation)_90%,white)]" />
-        <div className="mx-auto h-2 w-[95%] bg-[color-mix(in_oklab,var(--color-foundation)_84%,black)]" />
-        <div className="mx-auto h-14 w-[98%] bg-[var(--color-foundation)] shadow-[0_12px_20px_rgba(38,33,24,0.14)]" />
+        <svg className="mx-auto block h-auto w-[99%] drop-shadow-[0_12px_20px_rgba(38,33,24,0.14)]" viewBox="0 0 1200 170" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="6" width="1184" height="32" fill="var(--color-foundation)" />
+          <rect x="34" y="44" width="1132" height="12" fill="color-mix(in oklab, var(--color-foundation) 90%, white)" />
+          <rect x="48" y="62" width="1104" height="12" fill="color-mix(in oklab, var(--color-foundation) 84%, black)" />
+          <rect x="20" y="80" width="1160" height="84" fill="var(--color-foundation)" />
+        </svg>
       </div>
     </div>
   );
@@ -97,13 +103,17 @@ function FloatingPanel({ pillar, activeIndex }: { pillar: PillarItem; activeInde
       delay={0.06}
     >
       <span className={cn("inline-block rounded-full px-2.5 py-0.5 text-[10px] font-bold tracking-[0.2em] uppercase", styles.accentText, styles.accentBg)}>
-        {pillar.label}
+        <EditableText path={`home.heroPillars.${activeIndex}.label`} fallback={pillar.label} />
       </span>
-      <h3 className="mt-2 font-display text-[15px] font-semibold leading-tight text-[var(--hero-black)]">{pillar.title}</h3>
+      <h3 className="mt-2 font-display text-[15px] font-semibold leading-tight text-[var(--hero-black)]">
+        <EditableText path={`home.heroPillars.${activeIndex}.title`} fallback={pillar.title} />
+      </h3>
       <div className={cn("my-2.5 h-px", styles.accentBg)} />
-      <p className="font-serif text-[12px] leading-5 text-[var(--hero-text)]">{pillar.description}</p>
+      <p className="font-serif text-[12px] leading-5 text-[var(--hero-text)]">
+        <EditableText path={`home.heroPillars.${activeIndex}.description`} fallback={pillar.description} />
+      </p>
       <Link href={pillar.href} className={cn("pointer-events-auto mt-3 inline-flex items-center gap-1 text-[11px] font-bold tracking-wide uppercase", styles.accentText)}>
-        Explore
+        <EditableText path={`home.heroPillars.${activeIndex}.cta`} fallback="Explore" />
         <ArrowUpRight className="h-3 w-3" aria-hidden />
       </Link>
     </ScrollAnimation>
@@ -154,20 +164,25 @@ export function HeroFoundation() {
 
       <Container className="relative z-10">
         <ScrollAnimation className="mx-auto max-w-4xl pb-8 pt-14 text-center sm:pb-10 sm:pt-16">
-          <p className="font-body text-[11px] font-bold tracking-[0.26em] text-[var(--hero-main)] uppercase">Hero Section</p>
+          <p className="font-body text-[11px] font-bold tracking-[0.26em] text-[var(--hero-main)] uppercase">
+            <EditableText path="home.hero.sectionLabel" fallback="Hero Section" />
+          </p>
           <h2 id="leadership-framework-heading" className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight text-[var(--hero-black)] sm:text-5xl">
-            Te Pae O Te Rangi
+            <EditableText path="home.hero.title" fallback="Te Pae O Te Rangi" />
           </h2>
           <p className="mx-auto mt-4 max-w-2xl font-serif text-base leading-7 text-[var(--hero-text)] sm:text-lg">
-            A safe meeting place for healing, identity, leadership, and connection.
+            <EditableText path="home.hero.subtitle" fallback="A safe meeting place for healing, identity, leadership, and connection." />
           </p>
           <p className="mx-auto mt-3 max-w-3xl font-serif text-base leading-7 text-[var(--hero-text)] sm:text-lg">
-            Te Pae O Te Rangi is the meeting place for all to come - a space where people can arrive as they are, feel safe, be vulnerable, reconnect, and grow through kaupapa Maori values.
+            <EditableText
+              path="home.hero.intro"
+              fallback="Te Pae O Te Rangi is the meeting place for all to come - a space where people can arrive as they are, feel safe, be vulnerable, reconnect, and grow through kaupapa Maori values."
+            />
           </p>
         </ScrollAnimation>
 
         <ScrollAnimation className="mb-3 text-center font-body text-[11px] font-semibold tracking-wide text-[var(--hero-text)] md:hidden" delay={0.06}>
-          Swipe to explore -&gt;
+          <EditableText path="home.hero.mobileHint" fallback="Swipe to explore ->" />
         </ScrollAnimation>
 
         <ScrollAnimation className="relative" delay={0.12}>

@@ -1,8 +1,9 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import type { CtaItem } from "@/constants/site";
 import { GLOBAL_CTA, SITE_CONFIG } from "@/constants/site";
 import { Container } from "@/components/layout/container";
-import { PlaceholderImage } from "@/components/shared/placeholder-image";
+import { EditableMedia } from "@/components/cms-inline/editable-media";
+import { EditableText } from "@/components/cms-inline/editable-text";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -27,7 +28,7 @@ const DEFAULT_CTAS: CtaItem[] = [
 ];
 
 export function HeroSection({
-  title = `${SITE_CONFIG.heroTitle} 💙❤💛💚`,
+  title = `${SITE_CONFIG.heroTitle} ???????`,
   subtitle = SITE_CONFIG.heroSubtitle,
   intro = SITE_CONFIG.heroIntro,
   meaning = SITE_CONFIG.heroMeaning,
@@ -44,27 +45,38 @@ export function HeroSection({
       <Container>
         <div className={cn("grid items-center gap-10 lg:grid-cols-2", centered && "mx-auto max-w-4xl lg:grid-cols-1")}>
           <div className={cn("space-y-5", centered && "text-center")}>
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">{title}</h1>
-            {subtitle ? <p className="text-lg text-muted-foreground">{subtitle}</p> : null}
-            {intro ? <p className="text-base leading-7 text-muted-foreground">{intro}</p> : null}
-            {meaning ? <p className="text-base leading-7 text-muted-foreground">{meaning}</p> : null}
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+              <EditableText path="home.genericHero.title" fallback={title} />
+            </h1>
+            {subtitle ? <p className="text-lg text-muted-foreground"><EditableText path="home.genericHero.subtitle" fallback={subtitle} /></p> : null}
+            {intro ? <p className="text-base leading-7 text-muted-foreground"><EditableText path="home.genericHero.intro" fallback={intro} /></p> : null}
+            {meaning ? <p className="text-base leading-7 text-muted-foreground"><EditableText path="home.genericHero.meaning" fallback={meaning} /></p> : null}
             {phrase ? (
               <div className="rounded-2xl border border-dashed border-border bg-card/70 p-4">
-                <p className="font-semibold tracking-wide">{phrase}</p>
-                {phraseSubtitle ? <p className="text-sm text-muted-foreground">{phraseSubtitle}</p> : null}
+                <p className="font-semibold tracking-wide"><EditableText path="home.genericHero.phrase" fallback={phrase} /></p>
+                {phraseSubtitle ? <p className="text-sm text-muted-foreground"><EditableText path="home.genericHero.phraseSubtitle" fallback={phraseSubtitle} /></p> : null}
               </div>
             ) : null}
             {ctas?.length ? (
               <div className={cn("flex flex-wrap gap-3", centered && "justify-center")}>
-                {ctas.map((cta) => (
+                {ctas.map((cta, index) => (
                   <Button key={cta.href + cta.label} asChild className="min-h-11 rounded-full">
-                    <Link href={cta.href}>{cta.label}</Link>
+                    <Link href={cta.href}>
+                      <EditableText path={`home.genericHero.ctas.${index}.label`} fallback={cta.label} />
+                    </Link>
                   </Button>
                 ))}
               </div>
             ) : null}
           </div>
-          {!centered ? <PlaceholderImage label={placeholderLabel} className="aspect-video w-full" /> : null}
+          {!centered ? (
+            <EditableMedia
+              path="home.genericHero.mediaMain"
+              type="image"
+              emptyLabel={placeholderLabel}
+              className="aspect-video w-full"
+            />
+          ) : null}
         </div>
       </Container>
     </section>

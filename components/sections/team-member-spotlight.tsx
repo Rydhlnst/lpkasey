@@ -1,23 +1,25 @@
-"use client";
+﻿"use client";
 
 import { useMemo, useState } from "react";
+import { EditableMedia } from "@/components/cms-inline/editable-media";
+import { EditableText } from "@/components/cms-inline/editable-text";
 import { Container } from "@/components/layout/container";
 import { SectionHeader } from "@/components/sections/section-header";
+import { PillarColorImage, type PillarTone } from "@/components/shared/pillar-color-image";
 
 type TeamMemberSpotlightItem = {
   name: string;
-  role: string;
   bio: string;
   quote: string;
-  image: string;
 };
 
 type TeamMemberSpotlightProps = {
   divisionName: string;
+  tone: PillarTone;
   members: TeamMemberSpotlightItem[];
 };
 
-export function TeamMemberSpotlight({ divisionName, members }: TeamMemberSpotlightProps) {
+export function TeamMemberSpotlight({ divisionName, tone, members }: TeamMemberSpotlightProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeMember = useMemo(() => members[activeIndex] ?? members[0], [activeIndex, members]);
 
@@ -33,6 +35,9 @@ export function TeamMemberSpotlight({ divisionName, members }: TeamMemberSpotlig
             badge="Our Team"
             title="Meet Our Expert Team"
             description={`The ${divisionName} division combines strategy, care, and practical execution to support people and communities.`}
+            badgePath="home.teamSpotlight.badge"
+            titlePath="home.teamSpotlight.title"
+            descriptionPath="home.teamSpotlight.description"
             align="center"
             className="mx-auto"
           />
@@ -46,14 +51,17 @@ export function TeamMemberSpotlight({ divisionName, members }: TeamMemberSpotlig
                 key={member.name}
                 type="button"
                 onClick={() => setActiveIndex(index)}
-                className={`border p-5 text-center transition-colors ${
-                  isActive ? "border-[var(--hero-main)] bg-[var(--hero-main)]/5" : "border-border bg-white hover:bg-muted/50"
+                className={`border p-5 text-center transition-all duration-200 ease-out ${
+                  isActive
+                    ? "border-[var(--hero-main)] bg-[var(--hero-main)]/5 scale-[1.01]"
+                    : "border-border bg-white hover:scale-[1.01] hover:bg-muted/50"
                 }`}
                 aria-pressed={isActive}
               >
-                <img src={member.image} alt={member.name} className="mx-auto h-14 w-14 rounded-none border border-border object-cover" />
-                <h3 className="mt-3 font-display text-lg font-bold text-[var(--hero-black)]">{member.name}</h3>
-                <p className="mt-1 font-serif text-sm font-bold text-[var(--hero-main)]">{member.role}</p>
+                <PillarColorImage tone={tone} className="mx-auto h-14 w-14 rounded-none" />
+                <h3 className="mt-3 font-display text-lg font-bold text-[var(--hero-black)]">
+                  <EditableText path={`home.teamSpotlight.members.${index}.name`} fallback={member.name} />
+                </h3>
               </button>
             );
           })}
@@ -62,20 +70,27 @@ export function TeamMemberSpotlight({ divisionName, members }: TeamMemberSpotlig
         <div className="grid items-center gap-8 border border-border bg-white/60 p-6 sm:p-8 lg:grid-cols-2">
           <div>
             <blockquote className="font-display text-2xl font-bold leading-tight tracking-tight text-[var(--hero-black)] sm:text-4xl">
-              "{activeMember.quote}"
+              "
+              <EditableText path={`home.teamSpotlight.members.${activeIndex}.quote`} fallback={activeMember.quote} />
+              "
             </blockquote>
-            <p className="mt-5 font-display text-lg font-bold text-[var(--hero-black)]">{activeMember.name}</p>
-            <p className="mt-1 font-serif text-sm font-bold text-[var(--hero-text)]">
-              {activeMember.role} · {divisionName} Team
+            <p className="mt-5 font-display text-lg font-bold text-[var(--hero-black)]">
+              <EditableText path={`home.teamSpotlight.members.${activeIndex}.name`} fallback={activeMember.name} />
             </p>
-            <p className="mt-4 font-serif text-base leading-7 text-[var(--hero-text)]">{activeMember.bio}</p>
+            <p className="mt-4 font-serif text-base leading-7 text-[var(--hero-text)]">
+              <EditableText path={`home.teamSpotlight.members.${activeIndex}.bio`} fallback={activeMember.bio} />
+            </p>
           </div>
           <div className="w-full overflow-hidden border border-border">
-            <img
-              src={activeMember.image}
-              alt={`${activeMember.name} portrait`}
-              className="aspect-[4/3] w-full object-cover"
-            />
+            <div className="relative aspect-[4/3] w-full overflow-hidden">
+              <EditableMedia
+                path={`home.teamSpotlight.members.${activeIndex}.photo`}
+                type="image"
+                emptyLabel="Team member image"
+                className="h-full w-full"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
+            </div>
           </div>
         </div>
       </Container>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import type React from "react";
 import { cn } from "@/lib/utils";
 import PillarSvg from "@/components/shared/pillar-svg";
 import { PillarColorImage } from "@/components/shared/pillar-color-image";
@@ -42,9 +43,9 @@ export const pillarToneColorMap = {
 export type CampaignTone = keyof typeof pillarToneColorMap;
 
 type CategoryPillarCardProps = {
-  label: string;
-  title: string;
-  description: string;
+  label: React.ReactNode;
+  title: React.ReactNode;
+  description: React.ReactNode;
   href: string;
   tone: CampaignTone;
 };
@@ -53,7 +54,7 @@ export function CategoryPillarCard({ label, title, description, href, tone }: Ca
   const toneMap = pillarToneColorMap[tone];
 
   return (
-    <article className="relative flex flex-col items-center">
+    <article className="group relative flex flex-col items-center transition-transform duration-300 ease-out hover:scale-[1.01]">
       <div className="relative mx-auto w-full max-w-[230px]">
         <PillarSvg
           className="pointer-events-none mx-auto h-[320px] w-full opacity-90 drop-shadow-[0_18px_25px_rgba(15,23,42,0.18)] sm:h-[350px]"
@@ -94,10 +95,10 @@ export function CategoryPillarCard({ label, title, description, href, tone }: Ca
         <p className="mt-3 font-body text-base leading-7 text-[var(--hero-text)]">{description}</p>
         <Link
           href={href}
-          className="mt-4 inline-flex items-center gap-1 font-body text-base font-bold text-[var(--hero-black)] underline underline-offset-4 transition hover:opacity-70 focus-visible:opacity-70"
+          className="mt-4 inline-flex items-center gap-1 font-body text-base font-bold text-[var(--hero-black)] underline underline-offset-4 transition-opacity duration-200 hover:opacity-70 focus-visible:opacity-70"
         >
           View {title} Members
-          <ArrowUpRight className="h-4 w-4" aria-hidden />
+          <ArrowUpRight className="h-4 w-4 transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:scale-110 group-hover:rotate-6" aria-hidden />
         </Link>
       </div>
     </article>

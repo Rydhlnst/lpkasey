@@ -1,4 +1,5 @@
 import { CategoryPillarCard, type CampaignTone } from "@/components/cards/CategoryPillarCard";
+import { EditableText } from "@/components/cms-inline/editable-text";
 import { Container } from "@/components/layout/container";
 
 type FeaturedCategory = {
@@ -51,18 +52,20 @@ export function FeaturedCategoriesSection() {
       <Container>
         <div className="h-5 w-full border border-[var(--hero-main)]/45 bg-[var(--hero-main)]/90" />
         <div className="w-full border-x border-b border-[var(--hero-main)]/45 bg-gradient-to-r from-[var(--hero-main)]/95 via-[var(--hero-main)]/85 to-[var(--hero-main)]/95 px-6 py-5 text-center text-white sm:px-10">
-          <p className="font-heading text-3xl font-bold tracking-tight sm:text-4xl">Featured Categories</p>
+          <p className="font-heading text-3xl font-bold tracking-tight sm:text-4xl">
+            <EditableText path="home.featuredCategories.heading" fallback="Featured Categories" />
+          </p>
           <div className="mx-auto mt-2 h-px w-44 bg-white/45" aria-hidden="true" />
         </div>
 
         <div className="-mt-1 w-full border-x border-b border-[var(--hero-main)]/30 bg-white/12 px-2 pb-2 pt-1 sm:px-3">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
-            {featuredCategories.map((category) => (
+            {featuredCategories.map((category, index) => (
               <CategoryPillarCard
                 key={category.key}
-                label={category.label}
-                title={category.title}
-                description={category.description}
+                label={<EditableText path={`home.featuredCategories.items.${index}.label`} fallback={category.label} />}
+                title={<EditableText path={`home.featuredCategories.items.${index}.title`} fallback={category.title} />}
+                description={<EditableText path={`home.featuredCategories.items.${index}.description`} fallback={category.description} />}
                 href={category.href}
                 tone={category.tone}
               />

@@ -1,9 +1,13 @@
 import { cn } from "@/lib/utils";
+import { EditableText } from "@/components/cms-inline/editable-text";
 
 export interface SectionHeaderProps {
   badge: string;
   title: string;
   description?: string;
+  badgePath?: string;
+  titlePath?: string;
+  descriptionPath?: string;
   align?: "left" | "center";
   maxWidth?: "default" | "wide";
   className?: string;
@@ -20,6 +24,9 @@ export function SectionHeader({
   badge,
   title,
   description,
+  badgePath,
+  titlePath,
+  descriptionPath,
   align = "left",
   maxWidth = "default",
   className,
@@ -28,10 +35,16 @@ export function SectionHeader({
   return (
     <div className={cn("space-y-3", widthClassMap[maxWidth], align === "center" && "mx-auto text-center", className)}>
       <p className="inline-flex w-fit bg-muted px-3 py-1 font-body text-xs font-semibold tracking-[0.16em] text-foreground uppercase">
-        {badge}
+        {badgePath ? <EditableText path={badgePath} fallback={badge} /> : badge}
       </p>
-      <h2 className="font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl">{title}</h2>
-      {description ? <p className={cn("font-serif text-base leading-7 text-muted-foreground", descriptionClassName)}>{description}</p> : null}
+      <h2 className="font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl">
+        {titlePath ? <EditableText path={titlePath} fallback={title} /> : title}
+      </h2>
+      {description ? (
+        <p className={cn("font-serif text-base leading-7 text-muted-foreground", descriptionClassName)}>
+          {descriptionPath ? <EditableText path={descriptionPath} fallback={description} /> : description}
+        </p>
+      ) : null}
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { EditableText } from "@/components/cms-inline/editable-text";
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -64,12 +65,14 @@ export function CTASection({
           </div>
 
           <h2 className="mt-3 text-center font-display text-3xl font-semibold leading-tight text-foreground md:text-5xl">
-            {title}
+            <EditableText path="home.ctaSection.title" fallback={title} />
           </h2>
 
           <form onSubmit={handleSubmit(onSubmit)} className="mx-auto mt-10 grid max-w-6xl gap-5 md:grid-cols-3 md:gap-6">
             <label className="space-y-2">
-              <span className="block font-body text-sm font-semibold text-foreground sm:text-base">Name (Required)</span>
+              <span className="block font-body text-sm font-semibold text-foreground sm:text-base">
+                <EditableText path="home.ctaSection.fields.firstNameLabel" fallback="Name (Required)" />
+              </span>
               <Input
                 {...register("firstName", {
                   required: "First name wajib diisi.",
@@ -84,7 +87,9 @@ export function CTASection({
             </label>
 
             <label className="space-y-2">
-              <span className="block font-body text-sm font-semibold text-foreground sm:text-base">Last Name (Required)</span>
+              <span className="block font-body text-sm font-semibold text-foreground sm:text-base">
+                <EditableText path="home.ctaSection.fields.lastNameLabel" fallback="Last Name (Required)" />
+              </span>
               <Input
                 {...register("lastName", {
                   required: "Last name wajib diisi.",
@@ -99,7 +104,9 @@ export function CTASection({
             </label>
 
             <label className="space-y-2">
-              <span className="block font-body text-sm font-semibold text-foreground sm:text-base">Email Address (Required)</span>
+              <span className="block font-body text-sm font-semibold text-foreground sm:text-base">
+                <EditableText path="home.ctaSection.fields.emailLabel" fallback="Email Address (Required)" />
+              </span>
               <Input
                 {...register("email", {
                   required: "Email wajib diisi.",
@@ -122,7 +129,7 @@ export function CTASection({
                 disabled={isSubmitting}
                 className="mx-auto min-h-12 rounded-none px-9 font-display text-xl font-semibold"
               >
-                {isSubmitting ? "Submitting..." : submitLabel}
+                {isSubmitting ? "Submitting..." : <EditableText path="home.ctaSection.submitLabel" fallback={submitLabel} />}
               </Button>
             </div>
           </form>
