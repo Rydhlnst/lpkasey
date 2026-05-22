@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { CMS_INLINE_MODE_COOKIE, isInlineModeEnabled } from "@/lib/cms/inline-mode";
 import { CmsLogoutButtonClient } from "@/app/(admin)/cms/logout-button-client";
 import { CmsInlineModeToggleButtonClient } from "@/app/(admin)/cms/inline-mode-toggle-button-client";
+import { CmsPageQuickPublishClient } from "@/app/(admin)/cms/page-quick-publish-client";
 
 const onboardingSteps = [
   "1. Enable Inline Mode using the button above.",
@@ -100,7 +101,7 @@ export default async function CmsDashboardPage() {
         <Card>
           <CardHeader>
             <CardTitle>Pages</CardTitle>
-            <CardDescription>Single primary CTA: open page for inline editing.</CardDescription>
+            <CardDescription>Quick publish or open each page for inline editing.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {pagesLoadError ? (
@@ -116,9 +117,12 @@ export default async function CmsDashboardPage() {
                     {mapCmsSlugToPublicRoute(page.slug)} • v{page.currentVersion} • {page.status}
                   </p>
                 </div>
-                <Button asChild size="sm" variant="outline">
-                  <Link href={mapCmsSlugToPublicRoute(page.slug)}>{inlineModeEnabled ? "Edit" : "View"}</Link>
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button asChild size="sm" variant="outline">
+                    <Link href={mapCmsSlugToPublicRoute(page.slug)}>{inlineModeEnabled ? "Edit" : "View"}</Link>
+                  </Button>
+                  <CmsPageQuickPublishClient slug={page.slug} title={page.title} status={page.status} />
+                </div>
               </div>
             ))}
           </CardContent>
