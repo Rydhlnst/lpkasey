@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { CmsPageShell } from "@/components/cms-inline/page-shell";
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { EditableText } from "@/components/cms-inline/editable-text";
 import { SectionHeader } from "@/components/sections/section-header";
 import { TeamMemberSpotlight } from "@/components/sections/team-member-spotlight";
@@ -276,12 +277,12 @@ export default async function AboutPillarPage({
       <section className="border-b border-border bg-background py-10 sm:py-14">
         <Container>
           <div className="overflow-visible rounded-[28px] border border-border bg-card p-4 sm:p-6">
-            <div className="relative flex min-h-[400px] items-center overflow-visible rounded-3xl">
+            <div className="relative flex min-h-[400px] items-start justify-start overflow-visible rounded-3xl">
               <Skeleton className="absolute inset-0 h-full w-full rounded-none opacity-60" />
-              <div className="relative z-10 m-4 sm:m-6">
+              <div className="relative z-10 ml-4 mt-4 sm:ml-6 sm:mt-6">
                 <PillarColorImage
                   tone={pillar.tone}
-                  className="absolute -left-20 -top-14 h-40 w-40 -rotate-[24deg] opacity-95 sm:-left-28 sm:-top-18 sm:h-52 sm:w-52"
+                  className="absolute -left-20 -top-14 h-40 w-40 -rotate-[24deg] opacity-95 sm:-left-28 sm:-top-32 md:-top-44 md:-left-42 sm:h-52 md:w-68 md:h-68 sm:w-52"
                   priority
                 />
                 <div className="relative max-w-xl rounded-3xl bg-white/92 p-6 shadow-[0_20px_40px_rgba(15,23,42,0.14)] sm:p-8">
@@ -304,7 +305,14 @@ export default async function AboutPillarPage({
         </Container>
       </section>
 
-      <TeamMemberSpotlight divisionName={pillar.name} tone={pillar.tone} members={spotlightMembers} />
+      <TeamMemberSpotlight
+        divisionName={pillar.name}
+        tone={pillar.tone}
+        members={spotlightMembers}
+        cmsPathPrefix="content.team"
+        mediaAspectClassName="aspect-[4/3]"
+        mediaCropAspect={4 / 3}
+      />
 
       <section className="border-b border-border bg-card py-14 sm:py-20">
         <Container className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
@@ -338,19 +346,19 @@ export default async function AboutPillarPage({
         <Container className="space-y-10">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <SectionHeader badgePath="content.next.badge" titlePath="content.next.title" badge="Next Division" title="Explore Other Divisions" />
-            <Link
-              href="/about"
+            <EditableLink
+              path="content.next.backCtaLink"
+              fallback={{ label: "Back to About", href: "/about" }}
               className="inline-flex border border-[var(--hero-main)]/30 px-5 py-2 font-display text-sm font-bold text-[var(--hero-main)] transition-transform duration-200 ease-out hover:scale-[1.02] hover:bg-[var(--hero-main)]/10"
-            >
-              <EditableText path="content.next.backCta" fallback="Back to About" />
-            </Link>
+            />
           </div>
 
           <div className="grid gap-5 md:grid-cols-3">
             {otherPillars.map((item) => (
-              <Link
+              <EditableLink
                 key={item.slug}
-                href={`/about/${item.slug}`}
+                path={`content.next.items.${item.slug}.link`}
+                fallback={{ label: "Explore Division", href: `/about/${item.slug}` }}
                 className="group overflow-hidden rounded-2xl border border-border bg-white transition-all duration-300 ease-out hover:scale-[1.01] hover:shadow-[0_16px_34px_rgba(12,35,54,0.10)]"
               >
                 <div className="relative flex h-56 w-full items-center justify-center overflow-hidden bg-muted/40">
@@ -371,7 +379,7 @@ export default async function AboutPillarPage({
                     <ArrowRight className="h-4 w-4 transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:scale-110 group-hover:-rotate-6" aria-hidden />
                   </span>
                 </div>
-              </Link>
+              </EditableLink>
             ))}
           </div>
         </Container>
@@ -379,3 +387,5 @@ export default async function AboutPillarPage({
     </CmsPageShell>
   );
 }
+
+

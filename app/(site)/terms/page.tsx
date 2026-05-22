@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { EditableText } from "@/components/cms-inline/editable-text";
 import { CmsPageShell } from "@/components/cms-inline/page-shell";
 import { Container } from "@/components/layout/container";
@@ -14,9 +14,11 @@ export default function TermsPage() {
           <p className="text-base leading-8 text-muted-foreground"><EditableText path="content.paragraphs.0" fallback="These terms describe the general conditions for using Te Pae O Te Rangi services and website content. By engaging with our programmes, contact channels, or digital pages, you agree to respectful and lawful use." /></p>
           <p className="text-base leading-8 text-muted-foreground"><EditableText path="content.paragraphs.1" fallback="Programme availability, session timing, and support scope may change over time. We encourage all visitors to confirm current details through our contact team before making commitments." /></p>
           <p className="text-base leading-8 text-muted-foreground"><EditableText path="content.paragraphs.2" fallback="For specific guidance related to bookings, cancellations, and referrals, please contact us directly." /></p>
-          <Link href="/contact" className="inline-flex text-sm font-semibold text-primary hover:underline"><EditableText path="content.cta" fallback="Contact our team" /></Link>
+          <EditableLink path="content.ctaLink" fallback={{ label: "Contact our team", href: "/contact" }} className="inline-flex text-sm font-semibold text-primary hover:underline" />
         </Container>
       </section>
     </CmsPageShell>
   );
 }
+
+

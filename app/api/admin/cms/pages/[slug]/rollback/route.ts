@@ -5,13 +5,13 @@ import { rollbackSchema } from "@/lib/cms/validation/schemas";
 
 export async function POST(request: Request, context: { params: Promise<{ slug: string }> }) {
   try {
-    const actor = getCmsActorFromHeaders(request.headers);
+    const actor = await getCmsActorFromHeaders(request.headers);
     assertCmsRole(actor, ["owner", "reviewer"]);
-    if (!actor) return err("UNAUTHORIZED", "Anda belum login sebagai admin.", 401);
+    if (!actor) return err("UNAUTHORIZED", "You are not logged in as admin.", 401);
 
     const payload = rollbackSchema.safeParse(await request.json());
     if (!payload.success) {
-      return err("VALIDATION_ERROR", "Payload rollback tidak valid.", 422, payload.error.flatten());
+      return err("VALIDATION_ERROR", "Invalid rollback payload.", 422, payload.error.flatten());
     }
 
     const { slug } = await context.params;

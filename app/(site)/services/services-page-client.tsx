@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ArrowRight, CalendarDays, MessageCircleMore, ShieldCheck, Sparkles } from "lucide-react";
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { Container } from "@/components/layout/container";
 import { SectionHeader } from "@/components/sections/section-header";
 import { EditableMedia } from "@/components/cms-inline/editable-media";
@@ -108,14 +108,15 @@ export function ServicesPageClient() {
                   <p className="mt-4 font-serif text-base leading-7 text-[var(--hero-text)]">
                     <EditableText path={`home.services.list.${index}.description`} fallback={service.description[0]} />
                   </p>
-                  <Link
-                    href="/contact"
+                  <EditableLink
+                    path={`home.services.list.${index}.ctaLink`}
+                    fallback={{ label: service.ctaLabel, href: "/contact" }}
                     className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[var(--hero-black)] transition hover:text-primary"
                     aria-label={`${service.ctaLabel} for ${service.title}`}
                   >
                     <EditableText path={`home.services.list.${index}.ctaLabel`} fallback={service.ctaLabel} />
                     <ArrowRight className="h-4 w-4" />
-                  </Link>
+                  </EditableLink>
                 </article>
               );
             })}

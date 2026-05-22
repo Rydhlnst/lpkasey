@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { Container } from "@/components/layout/container";
 import { SITE_CONFIG } from "@/constants/site";
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { EditableMedia } from "@/components/cms-inline/editable-media";
 import { EditableText } from "@/components/cms-inline/editable-text";
 import { ScrollAnimation } from "@/components/uilayouts/scroll-animation";
@@ -53,18 +53,16 @@ export function VisionMissionSection() {
             </div>
 
             <div className="flex flex-wrap gap-2">
-              <Link
-                href="/services"
+              <EditableLink
+                path="home.visionMission.ctaPrimaryLink"
+                fallback={{ label: "Join a Programme", href: "/services" }}
                 className="inline-flex min-h-10 items-center border border-[var(--hero-main)] bg-[var(--hero-main)] px-4 py-2 font-serif text-base font-bold text-white transition-opacity hover:opacity-90"
-              >
-                <EditableText path="home.visionMission.ctaPrimary" fallback="Join a Programme" />
-              </Link>
-              <Link
-                href="/about"
+              />
+              <EditableLink
+                path="home.visionMission.ctaSecondaryLink"
+                fallback={{ label: "Learn More", href: "/about" }}
                 className="inline-flex min-h-10 items-center border border-[var(--hero-text)] px-4 py-2 font-serif text-base font-bold text-[var(--hero-text)] transition-colors hover:bg-white/65"
-              >
-                <EditableText path="home.visionMission.ctaSecondary" fallback="Learn More" />
-              </Link>
+              />
             </div>
           </div>
 
@@ -75,7 +73,6 @@ export function VisionMissionSection() {
               emptyLabel="Vision image"
               className="absolute inset-0 h-full w-full"
             />
-            <div className="absolute -left-6 bottom-10 h-11 w-[70%] min-w-[14rem] max-w-[26rem] -rotate-[12deg] border-y border-[var(--hero-main)]/35 bg-[var(--hero-main)] text-white/90 sm:-left-10 md:-left-12" />
           </div>
         </ScrollAnimation>
       </Container>

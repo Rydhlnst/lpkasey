@@ -66,7 +66,8 @@ export function FeaturedCategoriesSection() {
                 label={<EditableText path={`home.featuredCategories.items.${index}.label`} fallback={category.label} />}
                 title={<EditableText path={`home.featuredCategories.items.${index}.title`} fallback={category.title} />}
                 description={<EditableText path={`home.featuredCategories.items.${index}.description`} fallback={category.description} />}
-                href={category.href}
+                linkPath={`home.featuredCategories.items.${index}.link`}
+                fallbackLink={{ label: `View ${category.title} Members`, href: category.href }}
                 tone={category.tone}
               />
             ))}

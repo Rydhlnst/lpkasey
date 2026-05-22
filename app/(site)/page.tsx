@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { HeroFoundation } from "@/components/sections/HeroFoundation";
 import { ImpactSection } from "@/components/sections/impact-section";
 import { VisionMissionSection } from "@/components/sections/vision-mission-section";
@@ -10,6 +9,7 @@ import { Container } from "@/components/layout/container";
 import { PROGRAMME_SUMMARY_LINKS } from "@/constants/links";
 import { KAUAE_RARO_VALUES, KAUAE_RUNGA_VALUES } from "@/constants/values";
 import { cmsService } from "@/lib/cms/service/cms-service";
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { EditableList } from "@/components/cms-inline/editable-list";
 import { EditableText } from "@/components/cms-inline/editable-text";
 import { CmsPageShell } from "@/components/cms-inline/page-shell";
@@ -72,7 +72,7 @@ export default async function HomePage() {
     (homeBlock.programmeSummary as Array<{ title: string; text: string }> | undefined) ??
     PROGRAMME_SUMMARY.map((item) => ({ title: item.title, text: item.text }));
   const programmeLinks =
-    ((page?.content.links as { programmeSummaryLinks?: Array<{ title: string; href: string }> } | undefined)?.programmeSummaryLinks ??
+    ((page?.content.links as { programmeSummaryLinks?: Array<{ title?: string; label?: string; href: string }> } | undefined)?.programmeSummaryLinks ??
       PROGRAMME_SUMMARY_LINKS);
 
   return (
@@ -147,12 +147,13 @@ export default async function HomePage() {
           />
           <div className="mt-8 grid gap-5 md:grid-cols-2">
             {programmeSummaryCms.map((item, index) => {
-              const mappedLink = programmeLinks.find((programmeLink) => programmeLink.title === item.title)?.href ?? PROGRAMME_SUMMARY[index]?.href ?? "/";
+              const mappedLink = programmeLinks[index]?.href ?? PROGRAMME_SUMMARY[index]?.href ?? "/";
               const iconSource = PROGRAMME_SUMMARY[index] ?? PROGRAMME_SUMMARY[0];
               return (
-                <Link
+                <EditableLink
                   key={item.title}
-                  href={mappedLink}
+                  path={`links.programmeSummaryLinks.${index}`}
+                  fallback={{ label: item.title, href: mappedLink }}
                   className="group relative overflow-hidden bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-muted/40 hover:shadow-[0_16px_36px_rgba(12,35,54,0.08)]"
                 >
                   <div className="relative z-10 flex items-start justify-between gap-4">
@@ -173,7 +174,7 @@ export default async function HomePage() {
                   </p>
 
                   <div className="relative z-10 mt-5 h-1.5 w-16 bg-foreground/15 transition-all duration-300 group-hover:w-24 group-hover:bg-foreground/25" />
-                </Link>
+                </EditableLink>
               );
             })}
           </div>
@@ -184,3 +185,5 @@ export default async function HomePage() {
     </CmsPageShell>
   );
 }
+
+

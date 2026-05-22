@@ -1,6 +1,8 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
+import { useCmsInlineSessionOptional } from "@/components/cms-inline/session-client";
 import type { CmsChange } from "@/lib/cms/types";
 import { getByPath, setByPath, updateListAtPath } from "@/lib/cms/revision-engine/diff";
 
@@ -31,23 +33,31 @@ const CmsInlineContext = createContext<CmsInlineContextValue | null>(null);
 export function CmsInlineProvider({
   initialContent,
   pageSlug,
+  scopeKey,
+  syncChromeOnSave = false,
   initialVersion,
   initialEditMode = false,
   children,
 }: {
   initialContent: Record<string, unknown>;
   pageSlug: string;
+  scopeKey?: string;
+  syncChromeOnSave?: boolean;
   initialVersion: number;
   initialEditMode?: boolean;
   children: React.ReactNode;
 }) {
-  const [isEditMode, setIsEditMode] = useState(initialEditMode);
-  const [isLinkEditMode, setLinkEditMode] = useState(false);
+  const session = useCmsInlineSessionOptional();
+  const resolvedScopeKey = scopeKey ?? `page-${pageSlug}`;
+  const [isEditModeLocal, setIsEditMode] = useState(initialEditMode);
+  const [isLinkEditModeLocal, setLinkEditMode] = useState(false);
   const [content, setContent] = useState(initialContent);
   const [baseContent, setBaseContent] = useState(initialContent);
   const [version, setVersion] = useState(initialVersion);
   const [changes, setChanges] = useState<CmsChange[]>([]);
   const [status, setStatus] = useState<SaveStatus>("idle");
+  const isEditMode = session?.isEditMode ?? isEditModeLocal;
+  const isLinkEditMode = session?.isLinkEditMode ?? isLinkEditModeLocal;
 
   const upsertChange = (change: CmsChange, identity: string) => {
     setChanges((prev) => {
@@ -99,14 +109,14 @@ export function CmsInlineProvider({
     setStatus("unsaved");
   };
 
-  const reset = () => {
+  const reset = useCallback(() => {
     setContent(baseContent);
     setChanges([]);
     setStatus("idle");
-  };
+  }, [baseContent]);
 
-  const save = async () => {
-    if (!changes.length) return;
+  const saveSelf = useCallback(async () => {
+    if (!changes.length) return true;
     setStatus("saving");
 
     try {
@@ -114,8 +124,6 @@ export function CmsInlineProvider({
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          "x-cms-role": "owner",
-          "x-cms-user": "owner.local",
         },
         body: JSON.stringify({ expectedVersion: version, changes }),
       });
@@ -124,7 +132,7 @@ export function CmsInlineProvider({
       if (!response.ok) throw new Error("save-failed");
       if (payload.data?.skipped) {
         setStatus("saved");
-        return;
+        return true;
       }
       setVersion(payload.data?.version ?? version + 1);
       if (payload.data?.content) {
@@ -133,20 +141,45 @@ export function CmsInlineProvider({
       }
       setChanges([]);
       setStatus("saved");
+      return true;
     } catch {
       setStatus("failed");
+      return false;
     }
-  };
+  }, [changes, pageSlug, version]);
 
-  const publish = async () => {
+  const save = useCallback(async () => {
+    if (!changes.length && !(session && syncChromeOnSave)) {
+      toast.info("No changes to save.");
+      return;
+    }
+
+    if (session && syncChromeOnSave) {
+      const result = await session.saveCascade(resolvedScopeKey);
+      if (result) {
+        toast.success("Changes saved successfully.");
+      } else {
+        setStatus("failed");
+        toast.error("Failed to save changes.");
+      }
+      return;
+    }
+
+    const result = await saveSelf();
+    if (result) {
+      toast.success("Changes saved successfully.");
+    } else {
+      toast.error("Failed to save changes.");
+    }
+  }, [changes.length, resolvedScopeKey, saveSelf, session, syncChromeOnSave]);
+
+  const publish = useCallback(async () => {
     setStatus("saving");
     try {
       const response = await fetch(`/api/admin/cms/pages/${pageSlug}/publish`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-cms-role": "owner",
-          "x-cms-user": "owner.local",
         },
         body: JSON.stringify({ advancedMode: false }),
       });
@@ -155,18 +188,43 @@ export function CmsInlineProvider({
     } catch {
       setStatus("failed");
     }
-  };
+  }, [pageSlug]);
+
+  useEffect(() => {
+    if (!session) return;
+    session.registerScope(resolvedScopeKey, {
+      save: saveSelf,
+      reset,
+      isDirty: () => changes.length > 0,
+      getStatus: () => status,
+    });
+    return () => {
+      session.unregisterScope(resolvedScopeKey);
+    };
+  }, [changes.length, reset, resolvedScopeKey, saveSelf, session, status]);
 
   const value = useMemo<CmsInlineContextValue>(
     () => ({
       isEditMode,
-      toggleEditMode: () => setIsEditMode((prev) => !prev),
+      toggleEditMode: () => {
+        if (session) {
+          session.toggleEditMode();
+          return;
+        }
+        setIsEditMode((prev) => !prev);
+      },
       pageSlug,
       version,
       content,
       status,
       isLinkEditMode,
-      setLinkEditMode,
+      setLinkEditMode: (value) => {
+        if (session) {
+          session.setLinkEditMode(value);
+          return;
+        }
+        setLinkEditMode(value);
+      },
       setField,
       addListItem,
       updateListItem,
@@ -177,7 +235,7 @@ export function CmsInlineProvider({
       reset,
       publish,
     }),
-    [isEditMode, pageSlug, version, content, status, isLinkEditMode],
+    [isEditMode, pageSlug, version, content, status, isLinkEditMode, session, save, reset, publish],
   );
 
   return <CmsInlineContext.Provider value={value}>{children}</CmsInlineContext.Provider>;
@@ -189,4 +247,8 @@ export function useCmsInline() {
     throw new Error("useCmsInline must be used inside CmsInlineProvider");
   }
   return context;
+}
+
+export function useCmsInlineOptional() {
+  return useContext(CmsInlineContext);
 }

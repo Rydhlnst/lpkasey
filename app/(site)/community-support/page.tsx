@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { Container } from "@/components/layout/container";
 import { SectionHeader } from "@/components/sections/section-header";
 import { Button } from "@/components/ui/button";
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { EditableMedia } from "@/components/cms-inline/editable-media";
 import { EditableText } from "@/components/cms-inline/editable-text";
 import { CmsPageShell } from "@/components/cms-inline/page-shell";
@@ -112,7 +112,7 @@ export default function CommunitySupportPage() {
                 </p>
                 <div className="mt-8">
                   <Button asChild className="min-h-11 border border-border bg-background px-6 font-body text-foreground hover:bg-secondary">
-                    <Link href="/contact">{mensGroup.ctaLabel}</Link>
+                    <EditableLink path="home.communitySupport.mensGroup.ctaLink" fallback={{ label: mensGroup.ctaLabel, href: "/contact" }} />
                   </Button>
                 </div>
               </div>
@@ -156,9 +156,9 @@ export default function CommunitySupportPage() {
               className="max-w-3xl"
             />
             <Button asChild className="min-h-12 w-full bg-primary px-8 font-body font-semibold text-primary-foreground sm:w-auto">
-              <Link href="/contact">
+              <EditableLink path="home.communitySupport.joinCtaLink" fallback={{ label: "Join a Support Group", href: "/contact" }}>
                 <EditableText path="home.communitySupport.joinCta" fallback="Join a Support Group" />
-              </Link>
+              </EditableLink>
             </Button>
           </div>
         </Container>
@@ -166,5 +166,7 @@ export default function CommunitySupportPage() {
     </CmsPageShell>
   );
 }
+
+
 
 

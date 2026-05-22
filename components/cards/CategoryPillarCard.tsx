@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type React from "react";
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { cn } from "@/lib/utils";
 import PillarSvg from "@/components/shared/pillar-svg";
 import { PillarColorImage } from "@/components/shared/pillar-color-image";
@@ -46,11 +46,12 @@ type CategoryPillarCardProps = {
   label: React.ReactNode;
   title: React.ReactNode;
   description: React.ReactNode;
-  href: string;
+  linkPath: string;
+  fallbackLink: { label: string; href: string; newTab?: boolean };
   tone: CampaignTone;
 };
 
-export function CategoryPillarCard({ label, title, description, href, tone }: CategoryPillarCardProps) {
+export function CategoryPillarCard({ label, title, description, linkPath, fallbackLink, tone }: CategoryPillarCardProps) {
   const toneMap = pillarToneColorMap[tone];
 
   return (
@@ -93,13 +94,14 @@ export function CategoryPillarCard({ label, title, description, href, tone }: Ca
           {title}
         </h3>
         <p className="mt-3 font-body text-base leading-7 text-[var(--hero-text)]">{description}</p>
-        <Link
-          href={href}
+        <EditableLink
+          path={linkPath}
+          fallback={fallbackLink}
           className="mt-4 inline-flex items-center gap-1 font-body text-base font-bold text-[var(--hero-black)] underline underline-offset-4 transition-opacity duration-200 hover:opacity-70 focus-visible:opacity-70"
+          showLabelWhenChildren
         >
-          View {title} Members
           <ArrowUpRight className="h-4 w-4 transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:scale-110 group-hover:rotate-6" aria-hidden />
-        </Link>
+        </EditableLink>
       </div>
     </article>
   );

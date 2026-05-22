@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { EditableText } from "@/components/cms-inline/editable-text";
 import { CmsPageShell } from "@/components/cms-inline/page-shell";
 import { Container } from "@/components/layout/container";
@@ -14,9 +14,11 @@ export default function CookiePreferencesPage() {
           <p className="text-base leading-8 text-muted-foreground"><EditableText path="content.paragraphs.0" fallback="Cookie preferences help you control how this website remembers session settings and measures general performance. You can adjust browser-level controls at any time." /></p>
           <p className="text-base leading-8 text-muted-foreground"><EditableText path="content.paragraphs.1" fallback="Essential cookies may remain active to support core website functionality. Optional analytics or experience cookies can be limited through your device and browser settings." /></p>
           <p className="text-base leading-8 text-muted-foreground"><EditableText path="content.paragraphs.2" fallback="If you need help understanding available options, our team can guide you." /></p>
-          <Link href="/contact" className="inline-flex text-sm font-semibold text-primary hover:underline"><EditableText path="content.cta" fallback="Ask about cookie settings" /></Link>
+          <EditableLink path="content.ctaLink" fallback={{ label: "Ask about cookie settings", href: "/contact" }} className="inline-flex text-sm font-semibold text-primary hover:underline" />
         </Container>
       </section>
     </CmsPageShell>
   );
 }
+
+

@@ -3,7 +3,7 @@
 import type React from "react";
 import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { useCmsInline } from "@/components/cms-inline/provider-client";
+import { useCmsInlineOptional } from "@/components/cms-inline/provider-client";
 
 export function EditableText({
   path,
@@ -16,8 +16,8 @@ export function EditableText({
   as?: keyof React.JSX.IntrinsicElements;
   fallback?: string;
 }) {
-  const { isEditMode, getField, setField } = useCmsInline();
-  const raw = getField(path);
+  const cms = useCmsInlineOptional();
+  const raw = cms?.getField(path);
   const value = typeof raw === "string" ? raw : fallback;
   const textRef = useRef<HTMLSpanElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -40,7 +40,7 @@ export function EditableText({
   }, []);
 
   const flushChange = (nextValue: string) => {
-    setField({ op: "set", path, value: nextValue, type: "text" });
+    cms?.setField({ op: "set", path, value: nextValue, type: "text" });
   };
 
   const queueChange = (nextValue: string) => {
@@ -48,7 +48,7 @@ export function EditableText({
     timeoutRef.current = setTimeout(() => flushChange(nextValue), 220);
   };
 
-  if (!isEditMode) {
+  if (!cms?.isEditMode) {
     return <Component className={className}>{value}</Component>;
   }
 

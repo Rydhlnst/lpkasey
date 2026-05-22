@@ -1,4 +1,4 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 type R2Config = {
   accountId: string;
@@ -8,7 +8,7 @@ type R2Config = {
   publicBaseUrl: string;
 };
 
-function getR2Config(): R2Config {
+export function getR2Config(): R2Config {
   const accountId = process.env.R2_ACCOUNT_ID;
   const accessKeyId = process.env.R2_ACCESS_KEY_ID;
   const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY;
@@ -22,7 +22,7 @@ function getR2Config(): R2Config {
   return { accountId, accessKeyId, secretAccessKey, bucket, publicBaseUrl };
 }
 
-function createClient(config: R2Config) {
+export function createR2Client(config: R2Config) {
   return new S3Client({
     region: "auto",
     endpoint: `https://${config.accountId}.r2.cloudflarestorage.com`,
@@ -40,7 +40,7 @@ export async function uploadImageToR2(params: {
   cacheControl?: string;
 }) {
   const config = getR2Config();
-  const client = createClient(config);
+  const client = createR2Client(config);
 
   await client.send(
     new PutObjectCommand({
@@ -54,4 +54,22 @@ export async function uploadImageToR2(params: {
 
   const base = config.publicBaseUrl.replace(/\/$/, "");
   return `${base}/${params.key}`;
+}
+
+export async function getObjectFromR2(key: string) {
+  const config = getR2Config();
+  const client = createR2Client(config);
+  const response = await client.send(
+    new GetObjectCommand({
+      Bucket: config.bucket,
+      Key: key,
+    }),
+  );
+
+  const body = response.Body ? await response.Body.transformToByteArray() : null;
+  return {
+    body,
+    contentType: response.ContentType ?? "application/octet-stream",
+    cacheControl: response.CacheControl ?? "public, max-age=31536000, immutable",
+  };
 }

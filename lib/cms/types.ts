@@ -7,6 +7,7 @@ export type CmsWorkflowState =
   | "EXPIRED";
 
 export type CmsRole = "owner" | "editor" | "reviewer";
+export type CmsScheduleStatus = "PENDING" | "PUBLISHED" | "EXPIRED" | "CANCELLED";
 
 export type CmsFieldType = "text" | "textarea" | "markdown" | "image" | "video" | "link";
 
@@ -105,6 +106,17 @@ export type CmsMediaAssetRecord = {
   mime: string;
   sizeBytes: number;
   altText: string;
+  createdBy: string;
+  createdAt: string;
+};
+
+export type CmsScheduleRecord = {
+  id: string;
+  pageId: string;
+  revisionId: string;
+  publishAt: string;
+  expireAt: string | null;
+  status: CmsScheduleStatus;
   createdBy: string;
   createdAt: string;
 };

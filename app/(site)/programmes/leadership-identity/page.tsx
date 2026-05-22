@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { EditableText } from "@/components/cms-inline/editable-text";
 import { CmsPageShell } from "@/components/cms-inline/page-shell";
 import { Container } from "@/components/layout/container";
@@ -14,11 +14,13 @@ export default function LeadershipIdentityProgrammePage() {
           <p className="text-base leading-8 text-muted-foreground"><EditableText path="content.paragraphs.0" fallback="This pathway supports rangatahi and whanau to strengthen confidence, direction, and identity through kaupapa Maori leadership practices and practical development experiences." /></p>
           <p className="text-base leading-8 text-muted-foreground"><EditableText path="content.paragraphs.1" fallback="Activities include structured mentoring, cultural grounding, and challenge-based learning to build resilience, communication, and accountability in daily life." /></p>
           <div className="flex flex-wrap gap-4">
-            <Link href="/services" className="inline-flex text-sm font-semibold text-primary hover:underline"><EditableText path="content.cta1" fallback="View related services" /></Link>
-            <Link href="/contact" className="inline-flex text-sm font-semibold text-primary hover:underline"><EditableText path="content.cta2" fallback="Enquire about this programme" /></Link>
+            <EditableLink path="content.cta1Link" fallback={{ label: "View related services", href: "/services" }} className="inline-flex text-sm font-semibold text-primary hover:underline" />
+            <EditableLink path="content.cta2Link" fallback={{ label: "Enquire about this programme", href: "/contact" }} className="inline-flex text-sm font-semibold text-primary hover:underline" />
           </div>
         </Container>
       </section>
     </CmsPageShell>
   );
 }
+
+

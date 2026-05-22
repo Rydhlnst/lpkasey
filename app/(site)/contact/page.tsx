@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { Mail, MapPin, PhoneCall } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { SectionHeader } from "@/components/sections/section-header";
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { EditableMedia } from "@/components/cms-inline/editable-media";
 import { EditableText } from "@/components/cms-inline/editable-text";
 import { CmsPageShell } from "@/components/cms-inline/page-shell";
@@ -103,16 +103,14 @@ export default function ContactPage() {
           {SOCIAL_LINKS.slice(0, CONTACT_SOCIAL_ICONS.length).map((item, index) => {
             const Icon = CONTACT_SOCIAL_ICONS[index];
             return (
-            <Link
+            <EditableLink
               key={`${item.href}-${index}`}
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`External link ${index + 1}`}
+              path={`home.contact.socialLinks.${index}`}
+              fallback={{ label: `External link ${index + 1}`, href: item.href, newTab: true }}
               className="inline-flex h-10 w-10 items-center justify-center border border-border bg-background text-foreground transition-colors hover:bg-muted"
             >
               <Icon className="h-4 w-4" />
-            </Link>
+            </EditableLink>
             );
           })}
         </div>
@@ -127,5 +125,7 @@ export default function ContactPage() {
     </CmsPageShell>
   );
 }
+
+
 
 

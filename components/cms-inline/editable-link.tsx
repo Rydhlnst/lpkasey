@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { useCmsInline } from "@/components/cms-inline/provider-client";
+import { useCmsInlineOptional } from "@/components/cms-inline/provider-client";
 
 type LinkValue = {
   label: string;
@@ -12,29 +12,69 @@ type LinkValue = {
   newTab?: boolean;
 };
 
-export function EditableLink({ path, className, children }: { path: string; className?: string; children?: React.ReactNode }) {
-  const { isEditMode, isLinkEditMode, getField, setField } = useCmsInline();
-  const raw = getField(path);
+export function EditableLink({
+  path,
+  className,
+  children,
+  fallback,
+  showLabelWhenChildren = false,
+  onFocus,
+  onMouseEnter,
+  onMouseLeave,
+  "aria-label": ariaLabel,
+}: {
+  path: string;
+  className?: string;
+  children?: React.ReactNode;
+  fallback?: LinkValue;
+  showLabelWhenChildren?: boolean;
+  onFocus?: React.FocusEventHandler<HTMLAnchorElement>;
+  onMouseEnter?: React.MouseEventHandler<HTMLAnchorElement>;
+  onMouseLeave?: React.MouseEventHandler<HTMLAnchorElement>;
+  "aria-label"?: string;
+}) {
+  const cms = useCmsInlineOptional();
+  const raw = cms?.getField(path);
+  const baseValue: LinkValue = fallback ?? { label: "Link", href: "#" };
   const value: LinkValue =
     raw && typeof raw === "object"
-      ? ({ label: "Link", href: "#", ...(raw as Record<string, unknown>) } as LinkValue)
-      : { label: "Link", href: "#" };
+      ? ({ ...baseValue, ...(raw as Record<string, unknown>) } as LinkValue)
+      : typeof raw === "string"
+        ? { ...baseValue, label: raw }
+        : baseValue;
 
   const target = value.newTab ? "_blank" : undefined;
   const rel = value.newTab ? "noopener noreferrer" : undefined;
+  const isEditMode = Boolean(cms?.isEditMode);
+  const isLinkEditMode = Boolean(cms?.isLinkEditMode);
 
   if (!isEditMode || !isLinkEditMode) {
+    const content = children
+      ? showLabelWhenChildren
+        ? (
+          <>
+            {value.label}
+            {children}
+          </>
+        )
+        : children
+      : value.label;
+
     return (
       <Link
         href={value.href}
         target={target}
         rel={rel}
         className={className}
+        onFocus={onFocus}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        aria-label={ariaLabel}
         onClick={(event) => {
           if (isEditMode) event.preventDefault();
         }}
       >
-        {children ?? value.label}
+        {content}
       </Link>
     );
   }
@@ -45,23 +85,23 @@ export function EditableLink({ path, className, children }: { path: string; clas
         <Label className="text-xs">Label</Label>
         <Input
           value={value.label}
-          onChange={(event) => setField({ op: "set", path, type: "link", value: { ...value, label: event.target.value } })}
+          onChange={(event) => cms?.setField({ op: "set", path, type: "link", value: { ...value, label: event.target.value } })}
         />
       </div>
       <div className="grid gap-1">
-        <Label className="text-xs">Tujuan Link</Label>
+        <Label className="text-xs">Link URL</Label>
         <Input
           value={value.href}
-          onChange={(event) => setField({ op: "set", path, type: "link", value: { ...value, href: event.target.value } })}
-          placeholder="/about atau https://..."
+          onChange={(event) => cms?.setField({ op: "set", path, type: "link", value: { ...value, href: event.target.value } })}
+          placeholder="/about or https://..."
         />
       </div>
       <div className="flex items-center gap-2">
         <Switch
           checked={Boolean(value.newTab)}
-          onCheckedChange={(checked) => setField({ op: "set", path, type: "link", value: { ...value, newTab: checked } })}
+          onCheckedChange={(checked) => cms?.setField({ op: "set", path, type: "link", value: { ...value, newTab: checked } })}
         />
-        <span className="text-xs">Buka tab baru</span>
+        <span className="text-xs">Open in new tab</span>
       </div>
     </div>
   );

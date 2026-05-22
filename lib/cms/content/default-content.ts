@@ -1,6 +1,7 @@
 import { NAVBAR_CTA, NAVIGATION_ITEMS } from "@/constants/navigation";
 import { COMPANY_LINKS, PROGRAMME_SUMMARY_LINKS, SOCIAL_LINKS } from "@/constants/links";
 import { SITE_CONFIG } from "@/constants/site";
+import { SERVICES } from "@/constants/services";
 import { KAUAE_RARO_VALUES, KAUAE_RUNGA_VALUES } from "@/constants/values";
 
 const LEADERSHIP_PILLARS_DEFAULT = [
@@ -59,6 +60,7 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
         },
       },
       links: {
+        brandLogo: { label: "Home", href: "/" },
         navbarItems: NAVIGATION_ITEMS,
         navbarCta: NAVBAR_CTA,
         socialLinks: SOCIAL_LINKS,
@@ -83,26 +85,44 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
             title: "Tumuakitanga",
             description: "Leadership that gives direction, clarity, and identity.",
             cta: "Explore",
+            ctaLink: { label: "Explore", href: "/about/ariki" },
+            cardLink: { label: "Open ARIKI pillar", href: "/about/ariki" },
           },
           {
             label: "Te Ahi",
             title: "Awatea",
             description: "The learner's path through knowledge, growth, and discipline.",
             cta: "Explore",
+            ctaLink: { label: "Explore", href: "/about/tohunga" },
+            cardLink: { label: "Open TOHUNGA pillar", href: "/about/tohunga" },
           },
           {
             label: "Te Haa",
             title: "Tautika",
             description: "Practical courage, action, and leverage in everyday life.",
             cta: "Explore",
+            ctaLink: { label: "Explore", href: "/about/mangotoa" },
+            cardLink: { label: "Open MANGOTOA pillar", href: "/about/mangotoa" },
           },
           {
             label: "Papatuanuku",
             title: "Rauemi",
             description: "Nurturing resources, care, and collective wellbeing.",
             cta: "Explore",
+            ctaLink: { label: "Explore", href: "/about/aronui" },
+            cardLink: { label: "Open ARONUI pillar", href: "/about/aronui" },
           },
         ],
+        navbar: {
+          openMenuLabel: "Open menu",
+        },
+        footer: {
+          tagline: SITE_CONFIG.tagline,
+          quickLinksTitle: "Quick Links",
+          companyTitle: "Company",
+          ctaText: "Have questions or want to get involved?",
+          copyright: `Copyright 2026 ${SITE_CONFIG.name}. All rights reserved.`,
+        },
         genericHero: {
           title: `${SITE_CONFIG.heroTitle} 💙❤💛💚`,
           subtitle: SITE_CONFIG.heroSubtitle,
@@ -110,7 +130,7 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
           meaning: SITE_CONFIG.heroMeaning,
           phrase: SITE_CONFIG.phrase,
           phraseSubtitle: SITE_CONFIG.phraseSubtitle,
-          ctas: PROGRAMME_SUMMARY_LINKS.map((item) => ({ label: item.title })),
+          ctas: PROGRAMME_SUMMARY_LINKS.map((item) => ({ label: item.title, link: { label: item.title, href: item.href } })),
           mediaMain: { url: "", altText: "Hero image" },
         },
         aboutSection: {
@@ -123,6 +143,7 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
           description2:
             "Through leadership, creativity, emotional wellbeing, cultural connection and community support, we empower whanau, rangatahi, tane, wahine and tamariki to recognise their value, their worth and their potential.",
           ctaLabel: "About Us",
+          ctaLink: { label: "About Us", href: "/about" },
           mediaMain: { url: "", altText: "About section image" },
           metrics: [
             {
@@ -243,6 +264,8 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
             "We believe in creating safe spaces where people can come together to heal, learn, grow, reconnect and strengthen their sense of identity, purpose and wellbeing.",
           ctaPrimary: "Join a Programme",
           ctaSecondary: "Learn More",
+          ctaPrimaryLink: { label: "Join a Programme", href: "/services" },
+          ctaSecondaryLink: { label: "Learn More", href: "/about" },
           mediaMain: { url: "", altText: "Vision image" },
         },
         valuesFramework: {
@@ -258,6 +281,8 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
             media: { url: "", altText: `${item.title} image` },
             ctaPrimary: "View Value",
             ctaSecondary: "Learn More",
+            ctaPrimaryLink: { label: "View Value", href: "/services" },
+            ctaSecondaryLink: { label: "Learn More", href: "/about" },
           })),
           lower: KAUAE_RARO_VALUES.map((item) => ({
             group: "KAUAE RARO",
@@ -267,6 +292,8 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
             media: { url: "", altText: `${item.title} image` },
             ctaPrimary: "View Value",
             ctaSecondary: "Learn More",
+            ctaPrimaryLink: { label: "View Value", href: "/services" },
+            ctaSecondaryLink: { label: "Learn More", href: "/about" },
           })),
         },
         leadershipPillars: {
@@ -274,12 +301,22 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
           description:
             "Through Te Whiringawha, we recognize four leadership styles that help people understand themselves and how they relate to others.",
           faqHeading: "Frequently Asked Questions",
-          pillars: LEADERSHIP_PILLARS_DEFAULT,
+          pillars: LEADERSHIP_PILLARS_DEFAULT.map((item) => ({
+            ...item,
+            ctaLink: { label: "Explore Pillar", href: `/about/${item.slug}` },
+            cardLink: { label: `Open ${item.name} pillar page`, href: `/about/${item.slug}` },
+          })),
           faq: LEADERSHIP_FAQ_DEFAULT,
         },
         featuredCategories: {
           heading: "Featured Categories",
-          items: FEATURED_CATEGORIES_DEFAULT,
+          items: FEATURED_CATEGORIES_DEFAULT.map((item, index) => ({
+            ...item,
+            link: {
+              label: `View ${item.title} Members`,
+              href: ["/members/ariki", "/members/tohunga", "/members/mangotoa", "/members/aronui"][index] ?? "/about",
+            },
+          })),
         },
         teamSpotlight: {
           badge: "Our Team",
@@ -306,6 +343,10 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
             url: "",
             altText: "Women group image",
           },
+          mensGroup: {
+            ctaLink: { label: "Contact us", href: "/contact" },
+          },
+          joinCtaLink: { label: "Join a Support Group", href: "/contact" },
         },
         services: {
           highlightMedia: [
@@ -314,12 +355,23 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
             { image: { url: "", altText: "Service image 3" } },
             { image: { url: "", altText: "Service image 4" } },
           ],
+          list: SERVICES.slice(0, 4).map((service) => ({
+            title: service.title,
+            description: service.description[0] ?? "",
+            ctaLabel: service.ctaLabel,
+            ctaLink: { label: service.ctaLabel, href: "/contact" },
+          })),
         },
         contact: {
           mediaMap: {
             url: "",
             altText: "Map image",
           },
+          socialLinks: SOCIAL_LINKS.map((item, index) => ({
+            label: `External link ${index + 1}`,
+            href: item.href,
+            newTab: true,
+          })),
         },
       },
     };
@@ -336,6 +388,7 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
           "If you would like to request updates or removal of personal information, please contact us directly.",
         ],
         cta: "Request privacy support",
+        ctaLink: { label: "Request privacy support", href: "/contact" },
       },
     };
   }
@@ -351,6 +404,7 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
           "For specific guidance related to bookings, cancellations, and referrals, please contact us directly.",
         ],
         cta: "Contact our team",
+        ctaLink: { label: "Contact our team", href: "/contact" },
       },
     };
   }
@@ -366,11 +420,19 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
           "If you need help understanding available options, our team can guide you.",
         ],
         cta: "Ask about cookie settings",
+        ctaLink: { label: "Ask about cookie settings", href: "/contact" },
       },
     };
   }
 
   if (slug.startsWith("programmes-")) {
+    const cta1Href =
+      slug === "programmes-cultural-frameworks"
+        ? "/about"
+        : slug === "programmes-community-support"
+          ? "/community-support"
+          : "/services";
+
     return {
       content: {
         badge: "Programme Detail",
@@ -378,6 +440,8 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
         paragraphs: ["", ""],
         cta1: "View related services",
         cta2: "Enquire about this programme",
+        cta1Link: { label: "View related services", href: cta1Href },
+        cta2Link: { label: "Enquire about this programme", href: "/contact" },
       },
     };
   }
@@ -386,8 +450,15 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
     return {
       content: {
         hero: { badge: "", title: "", description: "", overview: "" },
+        team: { badge: "Our Team", title: "Meet Our Expert Team", description: "", members: [] },
         faq: { badge: "For Your Questions", title: "Frequently Asked Questions", description: "", items: [] },
-        next: { badge: "Next Division", title: "Explore Other Divisions", backCta: "Back to About", items: {} },
+        next: {
+          badge: "Next Division",
+          title: "Explore Other Divisions",
+          backCta: "Back to About",
+          backCtaLink: { label: "Back to About", href: "/about" },
+          items: {},
+        },
       },
     };
   }

@@ -1,5 +1,4 @@
-import Link from "next/link";
-
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { EditableMedia } from "@/components/cms-inline/editable-media";
 import { EditableText } from "@/components/cms-inline/editable-text";
 import { Container } from "@/components/layout/container";
@@ -62,12 +61,11 @@ export function AboutSection() {
                     fallback="Through leadership, creativity, emotional wellbeing, cultural connection and community support, we empower whanau, rangatahi, tane, wahine and tamariki to recognise their value, their worth and their potential."
                   />
                 </p>
-                <Link
-                  href="/about"
+                <EditableLink
+                  path="home.aboutSection.ctaLink"
+                  fallback={{ label: "About Us", href: "/about" }}
                   className="inline-flex h-12 items-center rounded-full bg-[var(--color-teal-foundation)] px-8 text-base font-semibold text-white transition-opacity hover:opacity-90"
-                >
-                  <EditableText path="home.aboutSection.ctaLabel" fallback="About Us" />
-                </Link>
+                />
               </div>
 
               <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">

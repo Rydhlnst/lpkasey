@@ -1,8 +1,8 @@
 ﻿"use client";
 
-import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { useState, type CSSProperties } from "react";
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { Container } from "@/components/layout/container";
 import { EditableText } from "@/components/cms-inline/editable-text";
 import PillarSvg from "@/components/shared/pillar-svg";
@@ -63,10 +63,10 @@ function RoofBeam() {
   return (
     <div className="relative z-10" aria-hidden>
       <div className="relative left-1/2 w-[114%] -translate-x-1/2">
-        <svg className="mx-auto block h-auto w-full max-w-[100%] drop-shadow-[0_12px_20px_rgba(38,33,24,0.14)]" viewBox="0 0 1200 250" xmlns="http://www.w3.org/2000/svg">
+        <svg className="mx-auto block h-auto w-full max-w-[100%] drop-shadow-[0_12px_20px_rgba(38,33,24,0.14)]" viewBox="0 0 1200 194" xmlns="http://www.w3.org/2000/svg">
           <polygon points="600,10 1180,170 20,170" fill="var(--color-foundation)" />
-          <polyline points="600,10 1180,170 20,170 600,10" fill="none" stroke="color-mix(in oklab, var(--color-foundation) 84%, black)" strokeWidth="10" />
-          <polyline points="600,24 1138,164 62,164 600,24" fill="none" stroke="color-mix(in oklab, var(--color-foundation) 90%, white)" strokeWidth="6" />
+          <path d="M600 10 L1180 170 L20 170 Z" fill="none" stroke="color-mix(in oklab, var(--color-foundation) 84%, black)" strokeWidth="10" strokeLinejoin="round" />
+          <path d="M600 24 L1138 164 L62 164 Z" fill="none" stroke="color-mix(in oklab, var(--color-foundation) 90%, white)" strokeWidth="6" strokeLinejoin="round" />
           <rect x="8" y="170" width="1184" height="14" fill="var(--color-foundation)" />
           <rect x="18" y="184" width="1164" height="10" fill="color-mix(in oklab, var(--color-foundation) 84%, black)" />
         </svg>
@@ -112,10 +112,14 @@ function FloatingPanel({ pillar, activeIndex }: { pillar: PillarItem; activeInde
       <p className="font-serif text-[12px] leading-5 text-[var(--hero-text)]">
         <EditableText path={`home.heroPillars.${activeIndex}.description`} fallback={pillar.description} />
       </p>
-      <Link href={pillar.href} className={cn("pointer-events-auto mt-3 inline-flex items-center gap-1 text-[11px] font-bold tracking-wide uppercase", styles.accentText)}>
-        <EditableText path={`home.heroPillars.${activeIndex}.cta`} fallback="Explore" />
+      <EditableLink
+        path={`home.heroPillars.${activeIndex}.ctaLink`}
+        fallback={{ label: "Explore", href: pillar.href }}
+        className={cn("pointer-events-auto mt-3 inline-flex items-center gap-1 text-[11px] font-bold tracking-wide uppercase", styles.accentText)}
+        showLabelWhenChildren
+      >
         <ArrowUpRight className="h-3 w-3" aria-hidden />
-      </Link>
+      </EditableLink>
     </ScrollAnimation>
   );
 }
@@ -126,22 +130,29 @@ function PillarColumn({
   onEnter,
   onLeave,
   delay,
+  index,
 }: {
   pillar: PillarItem;
   active: boolean;
   onEnter: () => void;
   onLeave: () => void;
   delay: number;
+  index: number;
 }) {
   const styles = toneStyles[pillar.tone];
 
   return (
     <ScrollAnimation className="group relative snap-center" onMouseEnter={onEnter} onMouseLeave={onLeave} delay={delay}>
-      <Link href={pillar.href} className="relative block w-full text-left focus-visible:outline-none" onFocus={onEnter}>
+      <EditableLink
+        path={`home.heroPillars.${index}.cardLink`}
+        fallback={{ label: `Open ${pillar.name} pillar`, href: pillar.href }}
+        className="relative block w-full text-left focus-visible:outline-none"
+        onFocus={onEnter}
+      >
         <div className={cn("relative w-full origin-bottom transform-gpu transition-all duration-500 ease-out", active ? styles.glow : "")}>
           <PillarSvg className="block h-auto w-full" color={styles.pillarColor} strokeColor={styles.pillarStroke} />
         </div>
-      </Link>
+      </EditableLink>
     </ScrollAnimation>
   );
 }
@@ -181,19 +192,17 @@ export function HeroFoundation() {
           </p>
         </ScrollAnimation>
 
-        <ScrollAnimation className="mb-3 text-center font-body text-[11px] font-semibold tracking-wide text-[var(--hero-text)] md:hidden" delay={0.06}>
-          <EditableText path="home.hero.mobileHint" fallback="Swipe to explore ->" />
-        </ScrollAnimation>
-
         <ScrollAnimation className="relative" delay={0.12}>
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-10 bg-gradient-to-r from-[var(--hero-bg)] to-transparent md:hidden" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-10 bg-gradient-to-l from-[var(--hero-bg)] to-transparent md:hidden" />
-
-          <div className="overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:overflow-visible">
-            <div className="relative min-w-[46rem] snap-x snap-mandatory sm:min-w-[56rem] lg:min-w-0">
+          <div className="pb-2">
+            <div
+              className="relative mx-auto"
+              style={{
+                width: "min(96vw, 1120px, calc((100vh - 8.5rem) * 1.36))",
+              }}
+            >
               <RoofBeam />
 
-              <div className="-mt-4 grid grid-cols-4 gap-2 sm:-mt-5 sm:gap-3">
+              <div className="-mt-[0.6%] grid grid-cols-4 gap-[1.2%] sm:-mt-[0.8%]">
                 {PILLARS.map((pillar, idx) => (
                   <PillarColumn
                     key={pillar.name}
@@ -202,13 +211,16 @@ export function HeroFoundation() {
                     onEnter={() => setActiveIndex(idx)}
                     onLeave={() => setActiveIndex((prev) => (prev === idx ? null : prev))}
                     delay={0.16 + idx * 0.06}
+                    index={idx}
                   />
                 ))}
               </div>
 
               {activePillar && activeIndex !== null ? <FloatingPanel pillar={activePillar} activeIndex={activeIndex} /> : null}
 
-              <Foundation />
+              <div className="-mt-[1.1%]">
+                <Foundation />
+              </div>
             </div>
           </div>
         </ScrollAnimation>

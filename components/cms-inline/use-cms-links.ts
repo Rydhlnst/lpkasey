@@ -2,12 +2,23 @@
 
 import { NAVBAR_CTA, NAVIGATION_ITEMS } from "@/constants/navigation";
 import { COMPANY_LINKS, PROGRAMME_SUMMARY_LINKS, SOCIAL_LINKS } from "@/constants/links";
-import { useCmsInline } from "@/components/cms-inline/provider-client";
+import { useCmsInlineOptional } from "@/components/cms-inline/provider-client";
 
 export type CmsLinkItem = { label?: string; title?: string; href: string; newTab?: boolean };
 
 export function useCmsLinks() {
-  const { getField } = useCmsInline();
+  const cms = useCmsInlineOptional();
+  if (!cms) {
+    return {
+      navbarItems: NAVIGATION_ITEMS,
+      navbarCta: { label: NAVBAR_CTA.label, href: NAVBAR_CTA.href } as CmsLinkItem,
+      socialLinks: SOCIAL_LINKS,
+      companyLinks: COMPANY_LINKS,
+      programmeSummaryLinks: PROGRAMME_SUMMARY_LINKS,
+    };
+  }
+
+  const { getField } = cms;
   const navbarItems = (getField("links.navbarItems") as CmsLinkItem[] | undefined) ?? NAVIGATION_ITEMS;
   const navbarCta =
     (getField("links.navbarCta") as CmsLinkItem | undefined) ?? ({ label: NAVBAR_CTA.label, href: NAVBAR_CTA.href } as CmsLinkItem);

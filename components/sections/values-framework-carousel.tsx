@@ -1,8 +1,8 @@
 ﻿"use client";
 
-import Link from "next/link";
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { Container } from "@/components/layout/container";
 import { EditableMedia } from "@/components/cms-inline/editable-media";
 import { EditableText } from "@/components/cms-inline/editable-text";
@@ -91,19 +91,19 @@ function ValuesCarouselBlock({
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <Link
-                href="/services"
+              <EditableLink
+                path={`${basePath}.${index}.ctaPrimaryLink`}
+                fallback={{ label: "View Value", href: "/services" }}
                 className="inline-flex min-h-10 items-center gap-1 rounded-[80px] bg-[var(--hero-main)] px-4 py-2 font-serif text-base font-bold text-white"
               >
                 <EditableText path={`${basePath}.${index}.ctaPrimary`} fallback="View Value" />
                 <ArrowUpRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/about"
+              </EditableLink>
+              <EditableLink
+                path={`${basePath}.${index}.ctaSecondaryLink`}
+                fallback={{ label: "Learn More", href: "/about" }}
                 className="inline-flex min-h-10 items-center rounded-[80px] border border-[var(--hero-text)] px-4 py-2 font-serif text-base font-bold text-[var(--hero-text)]"
-              >
-                <EditableText path={`${basePath}.${index}.ctaSecondary`} fallback="Learn More" />
-              </Link>
+              />
             </div>
           </div>
         </div>

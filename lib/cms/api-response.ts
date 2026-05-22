@@ -23,28 +23,32 @@ export function mapError(error: unknown) {
   const message = error instanceof Error ? error.message : "INTERNAL_ERROR";
   switch (message) {
     case "UNAUTHORIZED":
-      return err("UNAUTHORIZED", "Anda belum login sebagai admin.", 401);
+      return err("UNAUTHORIZED", "You are not logged in as admin.", 401);
     case "FORBIDDEN":
-      return err("FORBIDDEN", "Anda tidak punya izin untuk aksi ini.", 403);
+      return err("FORBIDDEN", "You do not have permission for this action.", 403);
     case "NOT_FOUND":
-      return err("NOT_FOUND", "Halaman atau revisi tidak ditemukan.", 404);
+      return err("NOT_FOUND", "Page or revision was not found.", 404);
     case "CONFLICT_VERSION":
-      return err("CONFLICT_VERSION", "Konten berubah oleh user lain. Silakan refresh dahulu.", 409);
+      return err("CONFLICT_VERSION", "Content was changed by another user. Please refresh first.", 409);
     case "UNSAFE_URL":
-      return err("UNSAFE_URL", "URL tidak aman. Gunakan https/http/mailto/tel.", 422);
+      return err("UNSAFE_URL", "Unsafe URL. Use https/http/mailto/tel only.", 422);
+    case "CMS_DB_NOT_CONFIGURED":
+      return err("CMS_DB_NOT_CONFIGURED", "DATABASE_URL is not configured for persistent CMS storage.", 500);
     case "R2_NOT_CONFIGURED":
-      return err("R2_NOT_CONFIGURED", "Konfigurasi Cloudflare R2 belum lengkap.", 500);
+      return err("R2_NOT_CONFIGURED", "Cloudflare R2 configuration is incomplete.", 500);
     case "MEDIA_TYPE_NOT_ALLOWED":
-      return err("MEDIA_TYPE_NOT_ALLOWED", "Format media tidak didukung. Image: JPG/PNG/WEBP, Video: MP4/WEBM/MOV.", 422);
+      return err("MEDIA_TYPE_NOT_ALLOWED", "Unsupported media format. Image: JPG/PNG/WEBP/GIF/SVG/AVIF, Video: MP4/WEBM/MOV.", 422);
     case "MEDIA_TOO_LARGE":
-      return err("MEDIA_TOO_LARGE", "Ukuran file terlalu besar. Maksimal 10MB.", 422);
+      return err("MEDIA_TOO_LARGE", "File size is too large. Max 10MB (image) / 60MB (video).", 422);
     case "INVALID_LIST_PATH":
-      return err("INVALID_LIST_PATH", "Path list tidak valid.", 422);
+      return err("INVALID_LIST_PATH", "Invalid list path.", 422);
     case "INVALID_LIST_INDEX":
-      return err("INVALID_LIST_INDEX", "Index list tidak valid.", 422);
+      return err("INVALID_LIST_INDEX", "Invalid list index.", 422);
     case "INVALID_CONTENT_PATH":
-      return err("INVALID_CONTENT_PATH", "Path konten tidak diizinkan untuk halaman ini.", 422);
+      return err("INVALID_CONTENT_PATH", "Content path is not allowed for this page.", 422);
+    case "INVALID_SCHEDULE_RANGE":
+      return err("INVALID_SCHEDULE_RANGE", "Invalid publish/expiry schedule range.", 422);
     default:
-      return err("INTERNAL_ERROR", "Terjadi kesalahan sistem.", 500, { message });
+      return err("INTERNAL_ERROR", "System error occurred.", 500, { message });
   }
 }

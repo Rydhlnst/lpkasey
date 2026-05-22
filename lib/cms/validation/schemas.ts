@@ -61,12 +61,25 @@ export const cmsPatchSchema = z.object({
   message: z.string().max(200).optional(),
 });
 
-export const publishSchema = z.object({
-  revisionId: z.string().optional(),
-  scheduleAt: z.string().datetime().optional(),
-  expiryAt: z.string().datetime().optional(),
-  advancedMode: z.boolean().optional().default(false),
-});
+export const publishSchema = z
+  .object({
+    revisionId: z.string().optional(),
+    scheduleAt: z.string().datetime().optional(),
+    expiryAt: z.string().datetime().optional(),
+    advancedMode: z.boolean().optional().default(false),
+  })
+  .superRefine((value, ctx) => {
+    if (!value.scheduleAt || !value.expiryAt) return;
+    const scheduleAt = new Date(value.scheduleAt);
+    const expiryAt = new Date(value.expiryAt);
+    if (Number.isNaN(scheduleAt.getTime()) || Number.isNaN(expiryAt.getTime()) || expiryAt <= scheduleAt) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "expiryAt must be later than scheduleAt",
+        path: ["expiryAt"],
+      });
+    }
+  });
 
 export const rollbackSchema = z.object({
   revisionId: z.string(),
@@ -86,7 +99,7 @@ export const mediaUploadSchema = z.object({
 });
 
 export function assertMediaFileRules(file: File, mediaType: "image" | "video") {
-  const imageMime = ["image/jpeg", "image/png", "image/webp"];
+  const imageMime = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif", "image/svg+xml", "image/avif"];
   const videoMime = ["video/mp4", "video/webm", "video/quicktime"];
   const allowedMime = mediaType === "image" ? imageMime : videoMime;
   const maxBytes = mediaType === "image" ? 10 * 1024 * 1024 : 60 * 1024 * 1024;
@@ -117,6 +130,8 @@ const ALLOWED_PATH_PREFIX_REGISTRY: Record<string, string[]> = {
     "home.whoWeSupport",
     "home.hero",
     "home.heroPillars",
+    "home.navbar",
+    "home.footer",
     "home.genericHero",
     "home.aboutSection",
     "home.podcastHero",
@@ -172,7 +187,7 @@ const ALLOWED_PATH_PREFIX_REGISTRY: Record<string, string[]> = {
 
 export function assertChangePathAllowed(slug: string, path: string) {
   const allowedPrefixes = ALLOWED_PATH_PREFIX_REGISTRY[slug];
-  if (!allowedPrefixes?.length) return;
+  if (!allowedPrefixes?.length) throw new Error("INVALID_CONTENT_PATH");
 
   if (!allowedPrefixes.some((prefix) => path === prefix || path.startsWith(`${prefix}.`))) {
     throw new Error("INVALID_CONTENT_PATH");

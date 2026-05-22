@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 
 type PillarSvgProps = {
   className?: string;
@@ -13,6 +13,11 @@ export const PillarSvg: React.FC<PillarSvgProps> = ({
 }) => {
   const mainColor = color ?? "#38BDF8";
   const detailColor = strokeColor ?? "#0070B8";
+  const gradientId = useId().replace(/:/g, "");
+  const bodySheenId = `pillar-body-sheen-${gradientId}`;
+  const capSheenId = `pillar-cap-sheen-${gradientId}`;
+  const baseSheenId = `pillar-base-sheen-${gradientId}`;
+  const dropShadowId = `pillar-shadow-${gradientId}`;
 
   return (
     <svg
@@ -24,10 +29,39 @@ export const PillarSvg: React.FC<PillarSvgProps> = ({
       focusable="false"
       style={{ display: "block" }}
     >
-      <rect x="917.242" y="1127.77" width="2040" height="4160" fill={mainColor} stroke={detailColor} strokeWidth="80" />
-      <rect x="497.242" y="5352.17" width="2880" height="240" fill={mainColor} stroke={detailColor} strokeWidth="60" />
-      <rect x="257.242" y="5672.17" width="3360" height="320" rx="18" fill={mainColor} stroke={detailColor} strokeWidth="60" />
-      <rect x="917.249" width="2040" height="120" fill={mainColor} stroke={detailColor} strokeWidth="60" />
+      <defs>
+        <linearGradient id={bodySheenId} x1="917.242" y1="1127.77" x2="2957.24" y2="5287.77" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#FFFFFF" stopOpacity="0.28" />
+          <stop offset="0.18" stopColor="#FFFFFF" stopOpacity="0.1" />
+          <stop offset="0.52" stopColor="#000000" stopOpacity="0.06" />
+          <stop offset="1" stopColor="#000000" stopOpacity="0.16" />
+        </linearGradient>
+        <linearGradient id={capSheenId} x1="1937.25" y1="0" x2="1937.25" y2="1200" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#FFFFFF" stopOpacity="0.32" />
+          <stop offset="0.38" stopColor="#FFFFFF" stopOpacity="0.1" />
+          <stop offset="1" stopColor="#000000" stopOpacity="0.16" />
+        </linearGradient>
+        <linearGradient id={baseSheenId} x1="257.242" y1="5352.17" x2="3617.24" y2="5992.17" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#FFFFFF" stopOpacity="0.26" />
+          <stop offset="0.34" stopColor="#FFFFFF" stopOpacity="0.08" />
+          <stop offset="1" stopColor="#000000" stopOpacity="0.2" />
+        </linearGradient>
+        <filter id={dropShadowId} x="-8%" y="-4%" width="116%" height="112%">
+          <feDropShadow dx="0" dy="34" stdDeviation="26" floodColor="#000000" floodOpacity="0.16" />
+        </filter>
+      </defs>
+      <g filter={`url(#${dropShadowId})`}>
+        <rect x="917.242" y="1127.77" width="2040" height="4160" fill={mainColor} stroke={detailColor} strokeWidth="80" />
+        <rect x="917.242" y="1127.77" width="2040" height="4160" fill={`url(#${bodySheenId})`} />
+        <rect x="1007.24" y="1187.77" width="160" height="4040" fill="#FFFFFF" opacity="0.14" />
+        <rect x="2737.24" y="1187.77" width="120" height="4040" fill="#000000" opacity="0.1" />
+        <rect x="497.242" y="5352.17" width="2880" height="240" fill={mainColor} stroke={detailColor} strokeWidth="60" />
+        <rect x="497.242" y="5352.17" width="2880" height="240" fill={`url(#${baseSheenId})`} />
+        <rect x="257.242" y="5672.17" width="3360" height="320" rx="18" fill={mainColor} stroke={detailColor} strokeWidth="60" />
+        <rect x="257.242" y="5672.17" width="3360" height="320" rx="18" fill={`url(#${baseSheenId})`} />
+        <rect x="917.249" width="2040" height="120" fill={mainColor} stroke={detailColor} strokeWidth="60" />
+        <rect x="917.249" width="2040" height="1200" fill={`url(#${capSheenId})`} opacity="0.95" />
+      </g>
       <line x1="897.249" y1="523.037" x2="2977.25" y2="523.037" stroke={detailColor} strokeWidth="80" />
       <line x1="897.249" y1="1006.36" x2="2977.25" y2="1006.36" stroke={detailColor} strokeWidth="80" />
       <line x1="737.249" y1="221.698" x2="3137.25" y2="221.698" stroke={detailColor} strokeWidth="80" strokeLinecap="round" />

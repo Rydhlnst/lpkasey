@@ -4,7 +4,7 @@ import { assertCmsRole, getCmsActorFromHeaders } from "@/lib/auth/cms-auth";
 
 export async function GET(request: Request) {
   try {
-    const actor = getCmsActorFromHeaders(request.headers);
+    const actor = await getCmsActorFromHeaders(request.headers);
     assertCmsRole(actor, ["owner", "editor", "reviewer"]);
     const items = await cmsService.listMediaAssets();
     return ok({ items });

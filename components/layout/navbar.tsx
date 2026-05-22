@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -8,6 +7,7 @@ import { SITE_CONFIG } from "@/constants/site";
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
 import { EditableLink } from "@/components/cms-inline/editable-link";
+import { EditableText } from "@/components/cms-inline/editable-text";
 import { useCmsLinks } from "@/components/cms-inline/use-cms-links";
 import {
   Sheet,
@@ -26,9 +26,9 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background text-foreground">
       <Container className="flex h-20 items-center justify-between gap-3 sm:gap-4">
-        <Link href="/" className="flex items-center gap-3">
+        <EditableLink path="links.brandLogo" fallback={{ label: "Home", href: "/" }} className="flex items-center gap-3">
           <Image src="/logo.png" alt={`${SITE_CONFIG.name} logo`} width={40} height={40} className="h-10 w-10 object-contain" priority />
-        </Link>
+        </EditableLink>
 
         <div className="hidden md:flex md:items-center md:gap-6">
           <nav aria-label="Primary" className="hidden items-center gap-6 md:flex">
@@ -56,7 +56,9 @@ export function Navbar() {
           <SheetTrigger asChild className="shrink-0 md:hidden">
             <Button variant="outline" size="icon" className="min-h-11 min-w-11">
               <Menu className="h-5 w-5" />
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">
+                <EditableText path="home.navbar.openMenuLabel" fallback="Open menu" />
+              </span>
             </Button>
           </SheetTrigger>
 

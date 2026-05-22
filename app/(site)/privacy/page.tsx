@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { EditableText } from "@/components/cms-inline/editable-text";
 import { CmsPageShell } from "@/components/cms-inline/page-shell";
 import { Container } from "@/components/layout/container";
@@ -18,11 +18,11 @@ export default function PrivacyPage() {
           <p className="text-base leading-8 text-muted-foreground"><EditableText path="content.paragraphs.0" fallback="We respect your privacy and only collect information needed to respond to enquiries, coordinate programmes, and provide support services effectively." /></p>
           <p className="text-base leading-8 text-muted-foreground"><EditableText path="content.paragraphs.1" fallback="Personal information shared through forms, messages, or session coordination is handled with care and is not sold to third parties. Access is limited to relevant team members and trusted service providers." /></p>
           <p className="text-base leading-8 text-muted-foreground"><EditableText path="content.paragraphs.2" fallback="If you would like to request updates or removal of personal information, please contact us directly." /></p>
-          <Link href="/contact" className="inline-flex text-sm font-semibold text-primary hover:underline">
-            <EditableText path="content.cta" fallback="Request privacy support" />
-          </Link>
+          <EditableLink path="content.ctaLink" fallback={{ label: "Request privacy support", href: "/contact" }} className="inline-flex text-sm font-semibold text-primary hover:underline" />
         </Container>
       </section>
     </CmsPageShell>
   );
 }
+
+

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { EditableText } from "@/components/cms-inline/editable-text";
 import { CmsPageShell } from "@/components/cms-inline/page-shell";
 import { Container } from "@/components/layout/container";
@@ -14,11 +14,13 @@ export default function CulturalFrameworksProgrammePage() {
           <p className="text-base leading-8 text-muted-foreground"><EditableText path="content.paragraphs.0" fallback="This pathway explains how Te Whiringawha, Kauae Runga, Kauae Raro, and Tau guide leadership, decision making, and wellbeing practices across personal and community contexts." /></p>
           <p className="text-base leading-8 text-muted-foreground"><EditableText path="content.paragraphs.1" fallback="Participants gain practical language and structure to reflect on behavior, relationships, and growth while keeping identity and values at the center." /></p>
           <div className="flex flex-wrap gap-4">
-            <Link href="/about" className="inline-flex text-sm font-semibold text-primary hover:underline"><EditableText path="content.cta1" fallback="Explore framework context" /></Link>
-            <Link href="/contact" className="inline-flex text-sm font-semibold text-primary hover:underline"><EditableText path="content.cta2" fallback="Enquire about this programme" /></Link>
+            <EditableLink path="content.cta1Link" fallback={{ label: "Explore framework context", href: "/about" }} className="inline-flex text-sm font-semibold text-primary hover:underline" />
+            <EditableLink path="content.cta2Link" fallback={{ label: "Enquire about this programme", href: "/contact" }} className="inline-flex text-sm font-semibold text-primary hover:underline" />
           </div>
         </Container>
       </section>
     </CmsPageShell>
   );
 }
+
+

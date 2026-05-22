@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/layout/container";
-import { EditableMedia } from "@/components/cms-inline/editable-media";
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { EditableText } from "@/components/cms-inline/editable-text";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { PillarColorImage } from "@/components/shared/pillar-color-image";
@@ -150,7 +149,7 @@ export function LeadershipPillarsSection() {
               <ScrollAnimation
                 key={pillar.name}
                 className={cn(
-                  "group relative flex min-h-[320px] w-[min(82vw,22rem)] min-w-[16rem] shrink-0 snap-start flex-col justify-between overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-[0_16px_34px_rgba(12,35,54,0.08)] transition-[transform,border-color,box-shadow,background-color] duration-300 ease-out hover:scale-[1.01] sm:w-[360px] lg:w-auto",
+                  "group relative flex min-h-[276px] w-[min(82vw,22rem)] min-w-[16rem] shrink-0 snap-start flex-col justify-between overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-[0_16px_34px_rgba(12,35,54,0.08)] transition-[transform,border-color,box-shadow,background-color] duration-300 ease-out hover:scale-[1.01] sm:w-[360px] lg:w-auto",
                   pillar.accentClassName,
                   pillar.hoverSurfaceClassName
                 )}
@@ -197,19 +196,15 @@ export function LeadershipPillarsSection() {
                   </div>
                 </div>
 
-                <EditableMedia
-                  path={`home.leadershipPillars.pillars.${index}.media`}
-                  type="image"
-                  emptyLabel="Pillar image"
-                  className="relative z-10 mt-4 min-h-24"
-                />
-
-                <div className="relative z-10 mt-8 flex items-center justify-between border-t border-border pt-4">
-                  <span className="font-body text-sm font-semibold text-foreground">
-                    <EditableText path={`home.leadershipPillars.pillars.${index}.cta`} fallback="Explore Pillar" />
-                  </span>
-                  <Link
-                    href={`/about/${pillar.slug}`}
+                <div className="relative z-10 mt-5 flex items-center justify-between border-t border-border pt-4">
+                  <EditableLink
+                    path={`home.leadershipPillars.pillars.${index}.ctaLink`}
+                    fallback={{ label: "Explore Pillar", href: `/about/${pillar.slug}` }}
+                    className="font-body text-sm font-semibold text-foreground"
+                  />
+                  <EditableLink
+                    path={`home.leadershipPillars.pillars.${index}.ctaLink`}
+                    fallback={{ label: `Explore ${pillar.name} pillar`, href: `/about/${pillar.slug}` }}
                     className={cn(
                       "inline-flex h-10 w-10 items-center justify-center rounded-lg border bg-card transition-all duration-300 ease-out hover:scale-110",
                       pillar.buttonClassName
@@ -217,12 +212,17 @@ export function LeadershipPillarsSection() {
                     aria-label={`Explore ${pillar.name} pillar`}
                   >
                     <ArrowUpRight className="h-4 w-4 transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:rotate-6 group-hover:scale-110" aria-hidden />
-                  </Link>
+                  </EditableLink>
                 </div>
 
-                <Link href={`/about/${pillar.slug}`} className="absolute inset-0 z-20" aria-label={`Open ${pillar.name} pillar page`}>
+                <EditableLink
+                  path={`home.leadershipPillars.pillars.${index}.cardLink`}
+                  fallback={{ label: `Open ${pillar.name} pillar page`, href: `/about/${pillar.slug}` }}
+                  className="absolute inset-0 z-20"
+                  aria-label={`Open ${pillar.name} pillar page`}
+                >
                   <span className="sr-only">Open {pillar.name}</span>
-                </Link>
+                </EditableLink>
               </ScrollAnimation>
             );
           })}

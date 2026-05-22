@@ -1,6 +1,6 @@
-import Link from "next/link";
 import type { CtaItem } from "@/constants/site";
 import { GLOBAL_CTA, SITE_CONFIG } from "@/constants/site";
+import { EditableLink } from "@/components/cms-inline/editable-link";
 import { Container } from "@/components/layout/container";
 import { EditableMedia } from "@/components/cms-inline/editable-media";
 import { EditableText } from "@/components/cms-inline/editable-text";
@@ -61,9 +61,10 @@ export function HeroSection({
               <div className={cn("flex flex-wrap gap-3", centered && "justify-center")}>
                 {ctas.map((cta, index) => (
                   <Button key={cta.href + cta.label} asChild className="min-h-11 rounded-full">
-                    <Link href={cta.href}>
-                      <EditableText path={`home.genericHero.ctas.${index}.label`} fallback={cta.label} />
-                    </Link>
+                    <EditableLink
+                      path={`home.genericHero.ctas.${index}.link`}
+                      fallback={{ label: cta.label, href: cta.href }}
+                    />
                   </Button>
                 ))}
               </div>

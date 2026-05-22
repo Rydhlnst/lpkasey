@@ -3,11 +3,15 @@ import { getCmsActorFromHeaders, assertCmsRole } from "@/lib/auth/cms-auth";
 import { mapError, ok, err } from "@/lib/cms/api-response";
 import { cmsPatchSchema } from "@/lib/cms/validation/schemas";
 
-export async function GET(_: Request, context: { params: Promise<{ slug: string }> }) {
+export async function GET(request: Request, context: { params: Promise<{ slug: string }> }) {
   try {
+    const actor = await getCmsActorFromHeaders(request.headers);
+    assertCmsRole(actor, ["owner", "editor", "reviewer"]);
+    if (!actor) return err("UNAUTHORIZED", "You are not logged in as admin.", 401);
+
     const { slug } = await context.params;
     const page = await cmsService.getPageBySlug(slug);
-    if (!page) return err("NOT_FOUND", "Halaman tidak ditemukan.", 404);
+    if (!page) return err("NOT_FOUND", "Page was not found.", 404);
     return ok({
       pageId: page.id,
       slug: page.slug,
@@ -24,13 +28,13 @@ export async function GET(_: Request, context: { params: Promise<{ slug: string 
 
 export async function PATCH(request: Request, context: { params: Promise<{ slug: string }> }) {
   try {
-    const actor = getCmsActorFromHeaders(request.headers);
+    const actor = await getCmsActorFromHeaders(request.headers);
     assertCmsRole(actor, ["owner", "editor", "reviewer"]);
-    if (!actor) return err("UNAUTHORIZED", "Anda belum login sebagai admin.", 401);
+    if (!actor) return err("UNAUTHORIZED", "You are not logged in as admin.", 401);
 
     const payload = cmsPatchSchema.safeParse(await request.json());
     if (!payload.success) {
-      return err("VALIDATION_ERROR", "Payload tidak valid.", 422, payload.error.flatten());
+      return err("VALIDATION_ERROR", "Invalid payload.", 422, payload.error.flatten());
     }
 
     const { slug } = await context.params;

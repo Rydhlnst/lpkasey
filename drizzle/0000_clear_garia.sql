@@ -12,6 +12,7 @@ CREATE TABLE "cms_audit_logs" (
 CREATE TABLE "cms_media_assets" (
 	"id" text PRIMARY KEY NOT NULL,
 	"url" text NOT NULL,
+	"key" text NOT NULL,
 	"mime" text NOT NULL,
 	"size_bytes" integer NOT NULL,
 	"width" integer,
@@ -26,7 +27,9 @@ CREATE TABLE "cms_pages" (
 	"slug" text NOT NULL,
 	"title" text NOT NULL,
 	"current_revision_id" text NOT NULL,
+	"current_version" integer DEFAULT 1 NOT NULL,
 	"status" text NOT NULL,
+	"updated_by" text NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"deleted_at" timestamp with time zone

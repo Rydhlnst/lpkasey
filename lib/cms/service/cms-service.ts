@@ -92,17 +92,26 @@ export const cmsService = {
       status: revision.workflowState,
     };
 
-    await cmsRepository.appendRevision(revision);
-    await cmsRepository.updatePage(updatedPage);
-    await cmsRepository.appendAudit({
-      id: cmsRepository.createId("audit"),
-      pageId: page.id,
-      revisionId: revision.id,
-      actorId: params.actorId,
-      action: "SAVE_DRAFT",
-      changedPaths: revision.changedPaths,
-      meta: { summary: revision.summary },
-      createdAt: now,
+    await cmsRepository.withTransaction(async (tx) => {
+      const latestPage = await cmsRepository.getPageBySlug(params.slug, tx);
+      if (!latestPage) throw new Error("NOT_FOUND");
+      if (latestPage.currentVersion !== params.expectedVersion) throw new Error("CONFLICT_VERSION");
+
+      await cmsRepository.appendRevision(revision, tx);
+      await cmsRepository.updatePage(updatedPage, tx);
+      await cmsRepository.appendAudit(
+        {
+          id: cmsRepository.createId("audit"),
+          pageId: page.id,
+          revisionId: revision.id,
+          actorId: params.actorId,
+          action: "SAVE_DRAFT",
+          changedPaths: revision.changedPaths,
+          meta: { summary: revision.summary },
+          createdAt: now,
+        },
+        tx,
+      );
     });
 
     return { skipped: false, page: updatedPage, revision, operationSummary };
@@ -119,6 +128,8 @@ export const cmsService = {
     actorId: string;
     role: CmsRole;
     revisionId?: string;
+    scheduleAt?: string;
+    expiryAt?: string;
     advancedMode?: boolean;
   }) {
     if (!canPublish(params.role)) throw new Error("FORBIDDEN");
@@ -133,25 +144,71 @@ export const cmsService = {
     if (!revision) throw new Error("NOT_FOUND");
 
     const now = cmsRepository.nowIso();
-    const nextState: CmsWorkflowState = params.advancedMode ? "APPROVED" : "PUBLISHED";
+    const nowDate = new Date(now);
+    const scheduleAtDate = params.scheduleAt ? new Date(params.scheduleAt) : null;
+    const expiryAtDate = params.expiryAt ? new Date(params.expiryAt) : null;
+
+    if (scheduleAtDate && Number.isNaN(scheduleAtDate.getTime())) throw new Error("INVALID_SCHEDULE_RANGE");
+    if (expiryAtDate && Number.isNaN(expiryAtDate.getTime())) throw new Error("INVALID_SCHEDULE_RANGE");
+    if (scheduleAtDate && expiryAtDate && expiryAtDate <= scheduleAtDate) throw new Error("INVALID_SCHEDULE_RANGE");
+    if (!scheduleAtDate && expiryAtDate && expiryAtDate <= nowDate) throw new Error("INVALID_SCHEDULE_RANGE");
+    if (scheduleAtDate && scheduleAtDate <= nowDate) throw new Error("INVALID_SCHEDULE_RANGE");
+
+    const shouldSchedule = Boolean(scheduleAtDate);
+    const nextState: CmsWorkflowState = shouldSchedule
+      ? "APPROVED"
+      : params.advancedMode
+        ? "APPROVED"
+        : "PUBLISHED";
 
     const updatedPage = {
       ...page,
-      status: "PUBLISHED" as CmsWorkflowState,
+      content: revision.contentSnapshot,
+      currentRevisionId: revision.id,
+      status: nextState,
       updatedAt: now,
       updatedBy: params.actorId,
     };
 
-    await cmsRepository.updatePage(updatedPage);
-    await cmsRepository.appendAudit({
-      id: cmsRepository.createId("audit"),
-      pageId: page.id,
-      revisionId: revision.id,
-      actorId: params.actorId,
-      action: "PUBLISH",
-      changedPaths: revision.changedPaths,
-      meta: { fromState: nextState },
-      createdAt: now,
+    await cmsRepository.withTransaction(async (tx) => {
+      const latestPage = await cmsRepository.getPageBySlug(params.slug, tx);
+      if (!latestPage) throw new Error("NOT_FOUND");
+      if (latestPage.currentVersion !== page.currentVersion) throw new Error("CONFLICT_VERSION");
+
+      await cmsRepository.updatePage(updatedPage, tx);
+      if (shouldSchedule && scheduleAtDate) {
+        await cmsRepository.createSchedule(
+          {
+            id: cmsRepository.createId("sch"),
+            pageId: page.id,
+            revisionId: revision.id,
+            publishAt: scheduleAtDate.toISOString(),
+            expireAt: expiryAtDate ? expiryAtDate.toISOString() : null,
+            status: "PENDING",
+            createdBy: params.actorId,
+            createdAt: now,
+          },
+          tx,
+        );
+      }
+      await cmsRepository.appendAudit(
+        {
+          id: cmsRepository.createId("audit"),
+          pageId: page.id,
+          revisionId: revision.id,
+          actorId: params.actorId,
+          action: "PUBLISH",
+          changedPaths: revision.changedPaths,
+          meta: {
+            nextState,
+            scheduled: shouldSchedule,
+            scheduleAt: scheduleAtDate ? scheduleAtDate.toISOString() : null,
+            expiryAt: expiryAtDate ? expiryAtDate.toISOString() : null,
+          },
+          createdAt: now,
+        },
+        tx,
+      );
     });
 
     return { page: updatedPage, revision };
@@ -195,17 +252,26 @@ export const cmsService = {
       updatedBy: params.actorId,
     };
 
-    await cmsRepository.appendRevision(rollbackRevision);
-    await cmsRepository.updatePage(updatedPage);
-    await cmsRepository.appendAudit({
-      id: cmsRepository.createId("audit"),
-      pageId: page.id,
-      revisionId: rollbackRevision.id,
-      actorId: params.actorId,
-      action: "ROLLBACK",
-      changedPaths: rollbackRevision.changedPaths,
-      meta: { sourceRevisionId: target.id },
-      createdAt: now,
+    await cmsRepository.withTransaction(async (tx) => {
+      const latestPage = await cmsRepository.getPageBySlug(params.slug, tx);
+      if (!latestPage) throw new Error("NOT_FOUND");
+      if (latestPage.currentVersion !== page.currentVersion) throw new Error("CONFLICT_VERSION");
+
+      await cmsRepository.appendRevision(rollbackRevision, tx);
+      await cmsRepository.updatePage(updatedPage, tx);
+      await cmsRepository.appendAudit(
+        {
+          id: cmsRepository.createId("audit"),
+          pageId: page.id,
+          revisionId: rollbackRevision.id,
+          actorId: params.actorId,
+          action: "ROLLBACK",
+          changedPaths: rollbackRevision.changedPaths,
+          meta: { sourceRevisionId: target.id },
+          createdAt: now,
+        },
+        tx,
+      );
     });
 
     return { page: updatedPage, revision: rollbackRevision };
