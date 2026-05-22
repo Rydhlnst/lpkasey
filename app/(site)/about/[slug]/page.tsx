@@ -276,16 +276,17 @@ export default async function AboutPillarPage({
     <CmsPageShell slug={`about-${pillar.slug}`} fallbackContent={getDefaultCmsContentBySlug(`about-${pillar.slug}`)}>
       <section className="border-b border-border bg-background py-10 sm:py-14">
         <Container>
-          <div className="overflow-visible rounded-[28px] border border-border bg-card p-4 sm:p-6">
+          <div className="overflow-visible rounded-[28px] relative border border-border bg-card p-4 sm:p-6">
             <div className="relative flex min-h-[400px] items-start justify-start overflow-visible rounded-3xl">
               <Skeleton className="absolute inset-0 h-full w-full rounded-none opacity-60" />
-              <div className="relative z-10 ml-4 mt-4 sm:ml-6 sm:mt-6">
+              <div className="relative z-10">
                 <PillarColorImage
                   tone={pillar.tone}
-                  className="absolute -left-20 -top-14 h-40 w-40 -rotate-[24deg] opacity-95 sm:-left-28 sm:-top-32 md:-top-44 md:-left-42 sm:h-52 md:w-68 md:h-68 sm:w-52"
+                  className="pointer-events-none absolute -left-16 -top-18 md:-left-24 md:-top-28 lg:-left-28 lg:-top-32 z-20 h-40 w-40 -rotate-[32deg] opacity-95 sm:h-56 sm:w-56 md:h-72 md:w-72"
+                  imageClassName="origin-top-left scale-[0.85]"
                   priority
                 />
-                <div className="relative max-w-xl rounded-3xl bg-white/92 p-6 shadow-[0_20px_40px_rgba(15,23,42,0.14)] sm:p-8">
+                <div className="relative ml-4 mt-4 max-w-xl rounded-3xl bg-white/92 p-6 shadow-[0_20px_40px_rgba(15,23,42,0.14)] sm:ml-6 sm:mt-6 sm:p-8">
                   <p className="inline-flex rounded-full border border-border bg-muted px-3 py-1 font-body text-[11px] font-semibold tracking-[0.14em] uppercase">
                     <EditableText path="content.hero.badge" fallback={`${pillar.name} - ${pillar.label}`} />
                   </p>

@@ -1,0 +1,181 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Te Pae O Te Rangi logo" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "Te Pae O Te Rangi logo" [ref=e5]
+      - generic [ref=e6]:
+        - navigation "Primary" [ref=e7]:
+          - link "Home" [ref=e8] [cursor=pointer]:
+            - /url: /
+          - link "About" [ref=e9] [cursor=pointer]:
+            - /url: /about
+          - link "Services" [ref=e10] [cursor=pointer]:
+            - /url: /services
+          - link "Community Support" [ref=e11] [cursor=pointer]:
+            - /url: /community-support
+          - link "Contact" [ref=e12] [cursor=pointer]:
+            - /url: /contact
+        - button "Book a Session" [ref=e13]:
+          - link "Book a Session" [ref=e14] [cursor=pointer]:
+            - /url: /contact
+  - main [ref=e15]:
+    - generic [ref=e21]:
+      - generic:
+        - img "Blue pillar motif"
+      - generic [ref=e22]:
+        - paragraph [ref=e23]
+        - heading [level=1]
+        - paragraph
+        - paragraph
+    - generic [ref=e25]:
+      - generic [ref=e27]:
+        - paragraph [ref=e28]:
+          - generic [ref=e29]: Our Team
+        - heading "Meet Our Expert Team" [level=2] [ref=e30]
+        - paragraph [ref=e31]: The Ariki division combines strategy, care, and practical execution to support people and communities.
+      - generic [ref=e32]:
+        - button "Blue pillar motif Kasey Reihana" [pressed] [ref=e33]:
+          - img "Blue pillar motif" [ref=e35]
+          - heading "Kasey Reihana" [level=3] [ref=e36]
+        - button "Blue pillar motif Mātua D" [ref=e37]:
+          - img "Blue pillar motif" [ref=e39]
+          - heading "Mātua D" [level=3] [ref=e40]
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - blockquote [ref=e43]: "\"Leadership works best when direction is clear and people know why their contribution matters.\""
+          - paragraph [ref=e44]: Kasey Reihana
+          - paragraph [ref=e45]: David keeps the Ariki direction clear by aligning cultural values with long-term strategy and decision-making priorities.
+        - generic [ref=e46]:
+          - generic:
+            - img "Media"
+    - generic [ref=e48]:
+      - generic [ref=e50]:
+        - paragraph [ref=e51]:
+          - generic [ref=e52]: For Your Questions
+        - heading "Frequently Asked Questions" [level=2] [ref=e53]
+        - paragraph
+      - generic [ref=e54]:
+        - generic [ref=e55]:
+          - heading "What does the Ariki division focus on?" [level=3] [ref=e56]:
+            - button "What does the Ariki division focus on?" [expanded] [ref=e57]:
+              - generic [ref=e58]: What does the Ariki division focus on?
+              - img
+          - region "What does the Ariki division focus on?" [ref=e59]:
+            - generic [ref=e60]: Ariki focuses on leadership, vision-setting, and decision-making that keeps the organization moving in one direction.
+        - heading "How does Ariki support other divisions?" [level=3] [ref=e62]:
+          - button "How does Ariki support other divisions?" [ref=e63]:
+            - generic [ref=e64]: How does Ariki support other divisions?
+            - img
+        - heading "Why is Ariki important for long-term growth?" [level=3] [ref=e66]:
+          - button "Why is Ariki important for long-term growth?" [ref=e67]:
+            - generic [ref=e68]: Why is Ariki important for long-term growth?
+            - img
+    - generic [ref=e70]:
+      - generic [ref=e71]:
+        - generic [ref=e72]:
+          - paragraph [ref=e73]:
+            - generic [ref=e74]: Next Division
+          - heading "Explore Other Divisions" [level=2] [ref=e75]
+        - link "Back to About" [ref=e76] [cursor=pointer]:
+          - /url: /about
+      - generic [ref=e77]:
+        - link "Red pillar motif Te Ahi Tohunga Awatea Explore Division" [ref=e78] [cursor=pointer]:
+          - /url: /about/tohunga
+          - img "Red pillar motif" [ref=e81]
+          - generic [ref=e82]:
+            - paragraph [ref=e83]: Te Ahi
+            - heading "Tohunga" [level=3] [ref=e84]
+            - paragraph [ref=e85]: Awatea
+            - generic [ref=e86]:
+              - generic [ref=e87]: Explore Division
+              - img [ref=e88]
+        - link "Yellow pillar motif Te Haa Mangotoa Tautika Explore Division" [ref=e90] [cursor=pointer]:
+          - /url: /about/mangotoa
+          - img "Yellow pillar motif" [ref=e93]
+          - generic [ref=e94]:
+            - paragraph [ref=e95]: Te Haa
+            - heading "Mangotoa" [level=3] [ref=e96]
+            - paragraph [ref=e97]: Tautika
+            - generic [ref=e98]:
+              - generic [ref=e99]: Explore Division
+              - img [ref=e100]
+        - link "Green pillar motif Papatuanuku Aronui Rauemi Explore Division" [ref=e102] [cursor=pointer]:
+          - /url: /about/aronui
+          - img "Green pillar motif" [ref=e105]
+          - generic [ref=e106]:
+            - paragraph [ref=e107]: Papatuanuku
+            - heading "Aronui" [level=3] [ref=e108]
+            - paragraph [ref=e109]: Rauemi
+            - generic [ref=e110]:
+              - generic [ref=e111]: Explore Division
+              - img [ref=e112]
+  - generic [ref=e116]:
+    - img [ref=e118]
+    - heading "Stay Connected" [level=2] [ref=e120]
+    - generic [ref=e121]:
+      - generic [ref=e122]:
+        - generic [ref=e123]: Name (Required)
+        - textbox "Name (Required)" [ref=e124]:
+          - /placeholder: First name
+      - generic [ref=e125]:
+        - generic [ref=e126]: Last Name (Required)
+        - textbox "Last Name (Required)" [ref=e127]:
+          - /placeholder: Last name
+      - generic [ref=e128]:
+        - generic [ref=e129]: Email Address (Required)
+        - textbox "Email Address (Required)" [ref=e130]:
+          - /placeholder: you@example.com
+      - button "Sign Me Up" [ref=e132]:
+        - generic [ref=e133]: Sign Me Up
+  - contentinfo [ref=e134]:
+    - generic [ref=e135]:
+      - generic [ref=e136]:
+        - generic [ref=e137]:
+          - link "Te Pae O Te Rangi logo" [ref=e138] [cursor=pointer]:
+            - /url: /
+            - img "Te Pae O Te Rangi logo" [ref=e139]
+          - paragraph [ref=e140]: A safe meeting place for healing, identity, leadership, and connection.
+          - generic [ref=e141]:
+            - link [ref=e142] [cursor=pointer]:
+              - /url: https://www.facebook.com/tepaeoterangi
+              - img [ref=e143]
+            - link [ref=e145] [cursor=pointer]:
+              - /url: https://www.linkedin.com/company/te-pae-o-te-rangi
+              - img [ref=e146]
+            - link [ref=e148] [cursor=pointer]:
+              - /url: https://x.com/tepaeoterangi
+              - img [ref=e149]
+            - link [ref=e151] [cursor=pointer]:
+              - /url: https://www.instagram.com/tepaeoterangi
+              - img [ref=e152]
+        - generic [ref=e154]:
+          - heading "Quick Links" [level=3] [ref=e155]
+          - navigation "Quick links" [ref=e156]:
+            - link "Home" [ref=e157] [cursor=pointer]:
+              - /url: /
+            - link "About" [ref=e158] [cursor=pointer]:
+              - /url: /about
+            - link "Services" [ref=e159] [cursor=pointer]:
+              - /url: /services
+            - link "Community Support" [ref=e160] [cursor=pointer]:
+              - /url: /community-support
+            - link "Contact" [ref=e161] [cursor=pointer]:
+              - /url: /contact
+        - generic [ref=e162]:
+          - heading "Company" [level=3] [ref=e163]
+          - navigation "Company links" [ref=e164]:
+            - link "Terms & Conditions" [ref=e165] [cursor=pointer]:
+              - /url: /terms
+            - link "Privacy Policy" [ref=e166] [cursor=pointer]:
+              - /url: /privacy
+            - link "Cookie Preferences" [ref=e167] [cursor=pointer]:
+              - /url: /cookie-preferences
+        - generic [ref=e168]:
+          - paragraph [ref=e169]: Have questions or want to get involved?
+          - link "Book a Session" [ref=e170] [cursor=pointer]:
+            - /url: /contact
+      - paragraph [ref=e172]: Copyright 2026 Te Pae O Te Rangi. All rights reserved.
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e178] [cursor=pointer]:
+    - img [ref=e179]
