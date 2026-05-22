@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CMS_INLINE_MODE_COOKIE, isInlineModeEnabled } from "@/lib/cms/inline-mode";
 import { CmsLogoutButtonClient } from "@/app/(admin)/cms/logout-button-client";
+import { CmsInlineModeToggleButtonClient } from "@/app/(admin)/cms/inline-mode-toggle-button-client";
 
 const onboardingSteps = [
   "1. Enable Inline Mode using the button above.",
@@ -72,13 +73,7 @@ export default async function CmsDashboardPage() {
             <p className="mt-1 text-xs text-muted-foreground">Active login: {accountText}</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <Button asChild variant={inlineModeEnabled ? "outline" : "default"}>
-              <Link
-                href={`/api/admin/cms/inline-mode?enabled=${inlineModeEnabled ? "0" : "1"}&redirectTo=${encodeURIComponent("/cms")}`}
-              >
-                {inlineModeEnabled ? "Disable Inline Edit" : "Enable Inline Edit"}
-              </Link>
-            </Button>
+            <CmsInlineModeToggleButtonClient inlineModeEnabled={inlineModeEnabled} />
             <Button asChild className="bg-cyan-600 hover:bg-cyan-700">
               <Link href="/">Open Website</Link>
             </Button>

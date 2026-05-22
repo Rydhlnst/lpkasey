@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useCmsInlineSessionOptional } from "@/components/cms-inline/session-client";
 import type { CmsChange } from "@/lib/cms/types";
 import { getByPath, setByPath, updateListAtPath } from "@/lib/cms/revision-engine/diff";
+import { getApiErrorMessageFromPayload, getApiErrorMessageFromResponse, getErrorMessage } from "@/lib/cms/client-error";
 
 type SaveStatus = "idle" | "unsaved" | "saving" | "saved" | "failed" | "published";
 
@@ -116,7 +117,7 @@ export function CmsInlineProvider({
   }, [baseContent]);
 
   const saveSelf = useCallback(async () => {
-    if (!changes.length) return true;
+    if (!changes.length) return { ok: true as const };
     setStatus("saving");
 
     try {
@@ -128,23 +129,28 @@ export function CmsInlineProvider({
         body: JSON.stringify({ expectedVersion: version, changes }),
       });
 
-      const payload = (await response.json()) as { data?: { version?: number; content?: Record<string, unknown>; skipped?: boolean } };
-      if (!response.ok) throw new Error("save-failed");
-      if (payload.data?.skipped) {
-        setStatus("saved");
-        return true;
+      const payload = (await response
+        .json()
+        .catch(() => null)) as { data?: { version?: number; content?: Record<string, unknown>; skipped?: boolean } } | null;
+      if (!response.ok) {
+        const message = getApiErrorMessageFromPayload(payload, "Failed to save changes.");
+        return { ok: false as const, message };
       }
-      setVersion(payload.data?.version ?? version + 1);
-      if (payload.data?.content) {
+      if (payload?.data?.skipped) {
+        setStatus("saved");
+        return { ok: true as const };
+      }
+      setVersion(payload?.data?.version ?? version + 1);
+      if (payload?.data?.content) {
         setContent(payload.data.content);
         setBaseContent(payload.data.content);
       }
       setChanges([]);
       setStatus("saved");
-      return true;
-    } catch {
+      return { ok: true as const };
+    } catch (error) {
       setStatus("failed");
-      return false;
+      return { ok: false as const, message: getErrorMessage(error, "Failed to save changes.") };
     }
   }, [changes, pageSlug, version]);
 
@@ -160,16 +166,16 @@ export function CmsInlineProvider({
         toast.success("Changes saved successfully.");
       } else {
         setStatus("failed");
-        toast.error("Failed to save changes.");
+        toast.error("Failed to save changes in one or more sections.");
       }
       return;
     }
 
     const result = await saveSelf();
-    if (result) {
+    if (result.ok) {
       toast.success("Changes saved successfully.");
     } else {
-      toast.error("Failed to save changes.");
+      toast.error(result.message ?? "Failed to save changes.");
     }
   }, [changes.length, resolvedScopeKey, saveSelf, session, syncChromeOnSave]);
 
@@ -183,17 +189,25 @@ export function CmsInlineProvider({
         },
         body: JSON.stringify({ advancedMode: false }),
       });
-      if (!response.ok) throw new Error("publish-failed");
+      if (!response.ok) {
+        setStatus("failed");
+        const message = await getApiErrorMessageFromResponse(response, "Failed to publish changes.");
+        toast.error(message);
+        return;
+      }
       setStatus("published");
-    } catch {
+      toast.success("Changes published successfully.");
+    } catch (error) {
       setStatus("failed");
+      toast.error(getErrorMessage(error, "Failed to publish changes."));
     }
   }, [pageSlug]);
 
   useEffect(() => {
     if (!session) return;
+    const saveForSession = async () => (await saveSelf()).ok;
     session.registerScope(resolvedScopeKey, {
-      save: saveSelf,
+      save: saveForSession,
       reset,
       isDirty: () => changes.length > 0,
       getStatus: () => status,

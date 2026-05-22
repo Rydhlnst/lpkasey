@@ -1,13 +1,15 @@
 "use client";
 
-import { type CSSProperties, useEffect, useRef, useState } from "react";
+import { type CSSProperties, useCallback, useEffect, useRef, useState } from "react";
 import { Check, Crop, ImageUp, SquarePen, X } from "lucide-react";
 import Cropper, { type Area } from "react-easy-crop";
+import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { useCmsInline } from "@/components/cms-inline/provider-client";
+import { getApiErrorMessageFromPayload, getErrorMessage } from "@/lib/cms/client-error";
 
 type CropArea = {
   x: number;
@@ -114,14 +116,6 @@ export function EditableMedia({
   const mediaActionsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setDraftCropArea(currentCropArea);
-    setIsCropEditorOpen(false);
-    setIsMediaActionsOpen(false);
-    setCrop({ x: 0, y: 0 });
-    setZoom(1);
-  }, [path, resolvedUrl, currentCropArea?.x, currentCropArea?.y, currentCropArea?.width, currentCropArea?.height]);
-
-  useEffect(() => {
     if (!isMediaActionsOpen) return;
 
     function handlePointerDown(event: MouseEvent) {
@@ -159,11 +153,10 @@ export function EditableMedia({
         try {
           const payload = JSON.parse(xhr.responseText || "{}") as {
             data?: { asset?: { url: string; altText: string; key?: string } };
-            error?: { code?: string; message?: string };
           };
           if (xhr.status < 200 || xhr.status >= 300 || !payload.data?.asset) {
-            const serverMessage = payload.error?.message?.trim();
-            reject(new Error(serverMessage || `Upload failed (${xhr.status}).`));
+            const message = getApiErrorMessageFromPayload(payload, `Upload failed (${xhr.status}).`);
+            reject(new Error(message));
             return;
           }
           resolve(payload.data.asset);
@@ -195,41 +188,14 @@ export function EditableMedia({
         },
       });
       setUploadProgress(100);
+      toast.success(type === "image" ? "Image uploaded successfully." : "Video uploaded successfully.");
     } catch (error) {
-      const message = error instanceof Error && error.message ? error.message : "Upload failed. Please try another file.";
+      const message = getErrorMessage(error, "Upload failed. Please try another file.");
       setUploadError(message);
+      toast.error(message);
     } finally {
       setIsUploading(false);
     }
-  }
-
-  if (!isEditMode) {
-    if (!resolvedUrl) {
-      if (!emptyLabel) return null;
-      return (
-        <div className={cn("flex items-center justify-center bg-muted/30 text-center", className)}>
-          <span className="px-3 text-sm font-medium text-foreground/70">{emptyLabel}</span>
-        </div>
-      );
-    }
-    if (type === "video") {
-      return (
-        <video className={className} controls preload="metadata">
-          <source src={resolvedUrl} />
-        </video>
-      );
-    }
-
-    return (
-      <img
-        src={resolvedUrl}
-        alt={value.altText || "CMS image"}
-        className={className}
-        style={cropStyle}
-        loading="lazy"
-        decoding="async"
-      />
-    );
   }
 
   const canCropImage = type === "image" && !!resolvedUrl;
@@ -242,7 +208,7 @@ export function EditableMedia({
     setIsCropEditorOpen(true);
   }
 
-  function applyCrop() {
+  const applyCrop = useCallback(() => {
     setField({
       op: "set",
       path,
@@ -253,7 +219,7 @@ export function EditableMedia({
       },
     });
     setIsCropEditorOpen(false);
-  }
+  }, [draftCropArea, path, setField, type, value]);
 
   function resetCrop() {
     setIsMediaActionsOpen(false);
@@ -294,6 +260,35 @@ export function EditableMedia({
       window.removeEventListener("keydown", handleCropKeys);
     };
   }, [isCropEditorOpen, applyCrop]);
+
+  if (!isEditMode) {
+    if (!resolvedUrl) {
+      if (!emptyLabel) return null;
+      return (
+        <div className={cn("flex items-center justify-center bg-muted/30 text-center", className)}>
+          <span className="px-3 text-sm font-medium text-foreground/70">{emptyLabel}</span>
+        </div>
+      );
+    }
+    if (type === "video") {
+      return (
+        <video className={className} controls preload="metadata">
+          <source src={resolvedUrl} />
+        </video>
+      );
+    }
+
+    return (
+      <img
+        src={resolvedUrl}
+        alt={value.altText || "CMS image"}
+        className={className}
+        style={cropStyle}
+        loading="lazy"
+        decoding="async"
+      />
+    );
+  }
 
   return (
     <div className="space-y-2">

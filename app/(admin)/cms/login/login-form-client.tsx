@@ -2,16 +2,18 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth/client";
+import { getErrorMessage } from "@/lib/cms/client-error";
 
 export function CmsLoginFormClient() {
   const router = useRouter();
   const seedEmail = "kasey123@cms.local";
-  const [username, setUsername] = useState("kasey123");
-  const [password, setPassword] = useState("kaseypassword123");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -32,12 +34,18 @@ export function CmsLoginFormClient() {
           password,
         });
         if (signInByEmailError) {
-          setError(signInByEmailError.message || signInByUsernameError.message || "Login failed. Check username/password.");
+          const message = signInByEmailError.message || signInByUsernameError.message || "Login failed. Check username/password.";
+          setError(message);
+          toast.error(message);
           return;
         }
       }
       router.push("/cms");
       router.refresh();
+    } catch (error) {
+      const message = getErrorMessage(error, "Login failed. Please try again.");
+      setError(message);
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }

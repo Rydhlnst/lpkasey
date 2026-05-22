@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCmsInline } from "@/components/cms-inline/provider-client";
+import { getApiErrorMessageFromResponse, getErrorMessage } from "@/lib/cms/client-error";
 
 const SAVE_BAR_VISIBILITY_KEY = "cms-inline-savebar-hidden";
 
@@ -27,15 +30,15 @@ function statusLabel(status: ReturnType<typeof useCmsInline>["status"]) {
 
 export function CmsSaveBar() {
   const { isEditMode, save, publish, status } = useCmsInline();
+  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [isHidden, setIsHidden] = useState(false);
+  const [isHidden, setIsHidden] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.localStorage.getItem(SAVE_BAR_VISIBILITY_KEY) === "1";
+  });
   const [isLeavingEditMode, setIsLeavingEditMode] = useState(false);
-
-  useEffect(() => {
-    const hidden = window.localStorage.getItem(SAVE_BAR_VISIBILITY_KEY) === "1";
-    setIsHidden(hidden);
-  }, []);
+  const [activeAction, setActiveAction] = useState<"save" | "publish" | null>(null);
 
   const hidePanel = () => {
     setIsHidden(true);
@@ -47,12 +50,45 @@ export function CmsSaveBar() {
     window.localStorage.setItem(SAVE_BAR_VISIBILITY_KEY, "0");
   };
 
-  const leaveEditMode = () => {
+  const leaveEditMode = async () => {
     if (isLeavingEditMode) return;
     setIsLeavingEditMode(true);
     const query = searchParams.toString();
     const redirectTo = query ? `${pathname}?${query}` : pathname;
-    window.location.assign(`/api/admin/cms/inline-mode?enabled=0&redirectTo=${encodeURIComponent(redirectTo)}`);
+    try {
+      const response = await fetch(`/api/admin/cms/inline-mode?enabled=0&redirectTo=${encodeURIComponent(redirectTo)}`, {
+        method: "GET",
+      });
+      if (!response.ok) {
+        const message = await getApiErrorMessageFromResponse(response, "Failed to exit edit mode.");
+        throw new Error(message);
+      }
+      toast.success("Edit mode disabled.");
+      router.refresh();
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Failed to exit edit mode."));
+      setIsLeavingEditMode(false);
+    }
+  };
+
+  const onSave = async () => {
+    if (activeAction) return;
+    setActiveAction("save");
+    try {
+      await save();
+    } finally {
+      setActiveAction(null);
+    }
+  };
+
+  const onPublish = async () => {
+    if (activeAction) return;
+    setActiveAction("publish");
+    try {
+      await publish();
+    } finally {
+      setActiveAction(null);
+    }
   };
 
   if (isHidden) {
@@ -75,13 +111,21 @@ export function CmsSaveBar() {
           </Button>
         </div>
         <div className="flex items-center gap-2">
-          <Button size="sm" onClick={() => void save()} disabled={!isEditMode}>
-            Save
+          <Button size="sm" onClick={() => void onSave()} disabled={!isEditMode || !!activeAction}>
+            {activeAction === "save" ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : null}
+            {activeAction === "save" ? "Saving..." : "Save"}
           </Button>
-          <Button size="sm" className="bg-cyan-600 hover:bg-cyan-700" onClick={() => void publish()} disabled={!isEditMode}>
-            Quick Publish
+          <Button
+            size="sm"
+            className="bg-cyan-600 hover:bg-cyan-700"
+            onClick={() => void onPublish()}
+            disabled={!isEditMode || !!activeAction}
+          >
+            {activeAction === "publish" ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : null}
+            {activeAction === "publish" ? "Publishing..." : "Quick Publish"}
           </Button>
-          <Button size="sm" variant="destructive" onClick={leaveEditMode} disabled={isLeavingEditMode}>
+          <Button size="sm" variant="destructive" onClick={() => void leaveEditMode()} disabled={isLeavingEditMode}>
+            {isLeavingEditMode ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : null}
             {isLeavingEditMode ? "Leaving..." : "Exit Edit Mode"}
           </Button>
         </div>
