@@ -1,10 +1,13 @@
 ﻿"use client";
 
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { useState, type CSSProperties } from "react";
+import { SITE_CONFIG } from "@/constants/site";
 import { EditableLink } from "@/components/cms-inline/editable-link";
 import { Container } from "@/components/layout/container";
 import { EditableText } from "@/components/cms-inline/editable-text";
+import { PillarColorImage } from "@/components/shared/pillar-color-image";
 import PillarSvg from "@/components/shared/pillar-svg";
 import { ScrollAnimation } from "@/components/uilayouts/scroll-animation";
 import { cn } from "@/lib/utils";
@@ -59,6 +62,8 @@ const toneStyles = {
   },
 } as const;
 
+const yellowBirdImageClass = "brightness-[0.72] contrast-[1.34] saturate-[1.1] drop-shadow-[0_2px_4px_rgba(70,52,8,0.42)]";
+
 function RoofBeam() {
   return (
     <div className="relative z-10" aria-hidden>
@@ -70,6 +75,17 @@ function RoofBeam() {
           <rect x="8" y="170" width="1184" height="14" fill="var(--color-foundation)" />
           <rect x="18" y="184" width="1164" height="10" fill="color-mix(in oklab, var(--color-foundation) 84%, black)" />
         </svg>
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <Image
+            src="/logo.png"
+            alt={`${SITE_CONFIG.name} logo`}
+            width={64}
+            height={64}
+            className="h-[min(10vw,10vh)] w-[min(10vw,10vh)] min-h-12 min-w-12 max-h-24 max-w-24 sm:h-[min(9.5vw,9.5vh)] sm:w-[min(9.5vw,9.5vh)] sm:min-h-13 sm:min-w-13 sm:max-h-26 sm:max-w-26 md:h-[min(9vw,9vh)] md:w-[min(9vw,9vh)] md:min-h-14 md:min-w-14 md:max-h-28 md:max-w-28 lg:h-[min(15.3vw,15.3vh)] lg:w-[min(15.3vw,15.3vh)] lg:min-h-20 lg:min-w-20 lg:max-h-36 lg:max-w-36 object-contain drop-shadow-[0_8px_18px_rgba(10,10,10,0.24)]"
+            priority
+          />
+        </div>
+
       </div>
     </div>
   );
@@ -102,9 +118,18 @@ function FloatingPanel({ pillar, activeIndex }: { pillar: PillarItem; activeInde
       style={{ left: clampedLeft } as CSSProperties}
       delay={0.06}
     >
-      <span className={cn("inline-block rounded-full px-2.5 py-0.5 text-[10px] font-bold tracking-[0.2em] uppercase", styles.accentText, styles.accentBg)}>
-        <EditableText path={`home.heroPillars.${activeIndex}.label`} fallback={pillar.label} />
-      </span>
+      <div className="flex items-start justify-between gap-3">
+        <span className={cn("inline-block rounded-full px-2.5 py-0.5 text-[10px] font-bold tracking-[0.2em] uppercase", styles.accentText, styles.accentBg)}>
+          <EditableText path={`home.heroPillars.${activeIndex}.label`} fallback={pillar.label} />
+        </span>
+        <PillarColorImage
+          tone={pillar.tone}
+          className="h-10 w-10 shrink-0"
+          imageClassName={cn(
+            pillar.tone === "yellow" ? yellowBirdImageClass : ""
+          )}
+        />
+      </div>
       <h3 className="mt-2 font-display text-[15px] font-semibold leading-tight text-[var(--hero-black)]">
         <EditableText path={`home.heroPillars.${activeIndex}.title`} fallback={pillar.title} />
       </h3>
@@ -151,6 +176,18 @@ function PillarColumn({
       >
         <div className={cn("relative w-full origin-bottom transform-gpu transition-all duration-500 ease-out", active ? styles.glow : "")}>
           <PillarSvg className="block h-auto w-full" color={styles.pillarColor} strokeColor={styles.pillarStroke} />
+          <div className="pointer-events-none absolute left-1/2 top-[22%] z-10 -translate-x-1/2">
+            <PillarColorImage
+              tone={pillar.tone}
+              className={cn(
+                "h-[min(10vw,10vh)] w-[min(10vw,10vh)] min-h-12 min-w-12 max-h-24 max-w-24 transition-transform duration-500",
+                active ? "scale-105" : "scale-100"
+              )}
+              imageClassName={cn(
+                pillar.tone === "yellow" ? yellowBirdImageClass : ""
+              )}
+            />
+          </div>
         </div>
       </EditableLink>
     </ScrollAnimation>
@@ -228,5 +265,3 @@ export function HeroFoundation() {
     </section>
   );
 }
-
-
