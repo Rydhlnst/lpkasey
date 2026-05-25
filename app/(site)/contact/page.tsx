@@ -117,8 +117,29 @@ export default function ContactPage() {
       </Container>
 
       <div className="mt-8 flex justify-end">
-        <div className="h-128 w-[92vw] max-w-[860px] rounded-l-2xl">
-          <EditableMedia path="home.contact.mediaMap" type="image" emptyLabel="Map image" className="h-full w-full rounded-l-2xl rounded-r-none" />
+        <div className="w-[92vw] max-w-[1100px] overflow-hidden rounded-l-2xl border border-border/40 bg-background">
+          <div className="grid min-h-[520px] md:grid-cols-[0.95fr_1.45fr]">
+            <div className="flex flex-col justify-center gap-3 p-6 sm:p-8">
+              <p className="text-xs font-semibold tracking-[0.12em] text-muted-foreground uppercase">
+                <EditableText path="home.contact.locationDetailsLabel" fallback="Location details" />
+              </p>
+              <h2 className="text-2xl font-semibold tracking-tight">
+                <EditableText path="home.contact.locationDetailsTitle" fallback="Find us here" />
+              </h2>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                <EditableText
+                  path="home.contact.locationDetailsBody1"
+                  fallback="Use this space to add directions, nearby landmarks, parking notes, and accessibility guidance for visitors."
+                />
+              </p>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                <EditableText path="home.contact.locationDetailsBody2" fallback={SITE_CONFIG.contactAddress} />
+              </p>
+            </div>
+            <div className="min-h-[280px]">
+              <EditableMedia path="home.contact.mediaMap" type="image" emptyLabel="Map image" className="h-full w-full object-cover" />
+            </div>
+          </div>
         </div>
       </div>
     </section>

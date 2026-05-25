@@ -57,17 +57,18 @@ export function ImpactSection() {
               fallback="Through leadership, creativity, emotional wellbeing, cultural connection and community support, we empower whanau, rangatahi, tane, wahine and tamariki to recognise their value, their worth and their potential."
             />
           </p>
-          <div className="grid gap-4 border-t border-[var(--hero-main)]/25 pt-6 md:grid-cols-3">
+          <div className="grid items-stretch gap-0 border-t border-[var(--hero-main)]/25 pt-6 md:grid-cols-3">
             {IMPACT_METRICS.map((metric, index) => (
               <ScrollAnimation
                 key={metric.label}
-                className="flex min-h-36 min-w-0 flex-col justify-center border-l border-[var(--hero-main)]/20 pl-4 md:first:border-l-0 md:first:pl-0"
+                className="grid min-h-36 min-w-0 grid-rows-[auto_1fr] border-l border-[var(--hero-main)]/20 px-6 first:border-l-0 md:px-8 md:first:pl-0"
                 delay={0.2 + index * 0.06}
               >
-                <p className="font-display text-[clamp(2.2rem,4vw,4rem)] leading-[0.95] font-semibold text-[var(--hero-black)] [overflow-wrap:anywhere]">
+                <p className="font-display whitespace-nowrap text-[clamp(2.2rem,4vw,4rem)] md:text-[clamp(2.5rem,3vw,3rem)] leading-none font-semibold tracking-tight text-[var(--hero-black)]">
                   <EditableText path={`home.impact.metrics.${index}.value`} fallback={metric.value} />
                 </p>
-                <p className="mt-2 font-display text-[18px] leading-[26px] text-[var(--hero-secondary)]">
+
+                <p className="mt-4 max-w-[14rem] font-display text-[18px] leading-[26px] text-[var(--hero-secondary)]">
                   <EditableText path={`home.impact.metrics.${index}.label`} fallback={metric.label} />
                 </p>
               </ScrollAnimation>

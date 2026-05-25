@@ -213,7 +213,7 @@ export function HeroFoundation() {
       <Container className="relative z-10">
         <ScrollAnimation className="mx-auto max-w-4xl pb-8 pt-14 text-center sm:pb-10 sm:pt-16">
           <p className="font-body text-[11px] font-bold tracking-[0.26em] text-[var(--hero-main)] uppercase">
-            <EditableText path="home.hero.sectionLabel" fallback="Hero Section" />
+            {/* <EditableText path="home.hero.sectionLabel" fallback="Hero Section" /> */}
           </p>
           <h2 id="leadership-framework-heading" className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight text-[var(--hero-black)] sm:text-5xl">
             <EditableText path="home.hero.title" fallback="Te Pae O Te Rangi" />

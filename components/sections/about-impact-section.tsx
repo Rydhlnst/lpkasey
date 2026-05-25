@@ -71,10 +71,14 @@ export function AboutSection() {
               <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                 {IMPACT_ITEMS.map((item, index) => (
                   <article key={item.value} className="space-y-4 border-l border-border pl-4 sm:pl-6">
-                    <p className="border-t border-border pt-4 text-4xl font-bold tracking-tight text-foreground">
-                      <EditableText path={`home.aboutSection.metrics.${index}.value`} fallback={item.value} />
+                    <p className="border-t border-border pt-4 text-lg font-bold leading-none tracking-tight text-foreground whitespace-nowrap break-normal [overflow-wrap:normal] [word-break:keep-all] md:text-lg lg:text-lg xl:text-lg">
+                      <EditableText
+                        path={`home.aboutSection.metrics.${index}.value`}
+                        fallback={item.value}
+                        className="!text-lg whitespace-nowrap md:!text-lg lg:!text-lg xl:!text-lg"
+                      />
                     </p>
-                    <p className="text-lg leading-8 text-muted-foreground">
+                    <p className="overflow-hidden text-ellipsis whitespace-nowrap text-lg leading-8 text-muted-foreground">
                       <EditableText path={`home.aboutSection.metrics.${index}.text`} fallback={item.text} />
                     </p>
                   </article>
