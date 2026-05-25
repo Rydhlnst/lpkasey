@@ -60,15 +60,16 @@ function ValuesCarouselBlock({
 
       <ScrollAnimation className="relative overflow-hidden rounded-3xl bg-white p-4 shadow-[0_0_80px_rgba(18,18,18,0.08)] sm:p-6" delay={0.06}>
         <div className={cn("grid gap-6 lg:grid-cols-[minmax(0,0.42fr)_1fr]", reverseLayout && "lg:grid-cols-[1fr_minmax(0,0.42fr)]")}>
-          <div className="relative rounded-2xl bg-[#a9a9a9] p-3">
-            <span className="inline-flex rounded-full border border-black/20 bg-white/85 px-3 py-1 font-display text-sm font-medium text-[var(--hero-text)]">
+          <div className="relative aspect-square w-full rounded-2xl bg-[#a9a9a9] p-3">
+            <span className="absolute left-3 top-3 z-10 inline-flex rounded-full border border-black/20 bg-white/85 px-3 py-1 font-display text-sm font-medium text-[var(--hero-text)]">
               <EditableText path={`${basePath}.${index}.group`} fallback={current.group} />
             </span>
             <EditableMedia
               path={`${basePath}.${index}.media`}
               type="image"
               emptyLabel="Value image"
-              className="mt-4 min-h-[14rem] rounded-xl bg-[#a9a9a9] sm:min-h-[20rem]"
+              cropAspect={1}
+              className="h-full w-full rounded-xl object-cover bg-[#a9a9a9]"
             />
           </div>
 

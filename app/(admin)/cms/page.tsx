@@ -30,8 +30,8 @@ function mapCmsSlugToPublicRoute(slug: string) {
 export default async function CmsDashboardPage() {
   await ensureCmsDefaultOwnerSeed();
   const session = await auth.api.getSession({ headers: await headers() });
-  const allowedEmail = process.env.CMS_SEED_EMAIL ?? "kasey123@cms.local";
-  const allowedUsername = process.env.CMS_SEED_USERNAME ?? "kasey123";
+  const allowedEmail = process.env.CMS_SEED_EMAIL ?? "kaseyadmin@cms.local";
+  const allowedUsername = process.env.CMS_SEED_USERNAME ?? "kaseyadmin";
   const isAllowed =
     !!session?.user &&
     (session.user.email === allowedEmail || (session.user as { username?: string }).username === allowedUsername);

@@ -22,8 +22,8 @@ function getHeaderActor(headers: Headers): CmsActor | null {
 
 function isAllowedCmsUser(session: { user?: { email?: string | null; username?: string | null; id?: string | null } } | null) {
   if (!session?.user) return false;
-  const allowedEmail = process.env.CMS_SEED_EMAIL ?? "kasey123@cms.local";
-  const allowedUsername = process.env.CMS_SEED_USERNAME ?? "kasey123";
+  const allowedEmail = process.env.CMS_SEED_EMAIL ?? "kaseyadmin@cms.local";
+  const allowedUsername = process.env.CMS_SEED_USERNAME ?? "kaseyadmin";
   const email = session.user.email ?? "";
   const username = session.user.username ?? "";
   return email === allowedEmail || username === allowedUsername;

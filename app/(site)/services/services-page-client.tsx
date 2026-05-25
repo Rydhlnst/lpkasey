@@ -9,7 +9,7 @@ import { EditableMedia } from "@/components/cms-inline/editable-media";
 import { EditableText } from "@/components/cms-inline/editable-text";
 import { SERVICES } from "@/constants/services";
 
-const highlightServices = SERVICES.slice(0, 4);
+const highlightServices = SERVICES;
 const serviceTags = ["All", "Leadership & Identity", "Healing & Wellbeing"];
 const serviceIcons = [Sparkles, MessageCircleMore, CalendarDays, ShieldCheck];
 
@@ -39,15 +39,22 @@ export function ServicesPageClient() {
             </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-6 gap-y-12 md:grid-cols-6">
             {highlightServices.map((service, index) => (
-              <article key={service.title} className="flex h-full flex-col">
-                <header className="min-h-[112px]">
+              <article
+                key={service.title}
+                className={`flex h-full flex-col ${
+                  index === 3 && highlightServices.length === 5
+                    ? "md:col-start-2 md:col-span-2"
+                    : "md:col-span-2"
+                }`}
+              >
+                <header>
                   <h2 className="font-display text-xl font-semibold text-[var(--hero-black)]">
                     <EditableText path={`home.services.highlight.${index}.title`} fallback={service.title} />
                   </h2>
                 </header>
-                <main className="mt-4">
+                <main className="mt-2">
                   <div className="overflow-hidden rounded-2xl border border-border">
                     <EditableMedia path={`home.services.highlightMedia.${index}.image`} type="image" emptyLabel={service.placeholderLabel} className="h-56 w-full rounded-none" />
                   </div>

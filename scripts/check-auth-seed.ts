@@ -12,7 +12,7 @@ async function main() {
   );
   const users = await client.query(
     'select id,email,username from "user" where email=$1 or username=$2',
-    ["kasey123@cms.local", "kasey123"],
+    ["kaseyadmin@cms.local", "kaseyadmin"],
   );
 
   // eslint-disable-next-line no-console

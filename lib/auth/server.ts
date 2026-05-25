@@ -11,10 +11,23 @@ let authInstance: ReturnType<typeof betterAuth> | null = null;
 function createAuthInstance() {
   const db = getCmsDb();
   if (!db) return null;
+  const authBaseUrl = process.env.BETTER_AUTH_URL ?? "http://localhost:3000";
+  const trustedOrigins =
+    process.env.NODE_ENV === "production"
+      ? [authBaseUrl]
+      : Array.from(
+          new Set([
+            authBaseUrl,
+            "http://localhost:3000",
+            "http://localhost:3001",
+            "http://localhost:3002",
+            "http://localhost:3003",
+          ]),
+        );
 
   return betterAuth({
     secret: process.env.BETTER_AUTH_SECRET ?? "dev-better-auth-secret-change-me",
-    baseURL: process.env.BETTER_AUTH_URL ?? "http://localhost:3000",
+    baseURL: authBaseUrl,
     database: drizzleAdapter(db, {
       provider: "pg",
       schema: {
@@ -29,13 +42,13 @@ function createAuthInstance() {
       disableSignUp: false,
     },
     plugins: [username()],
-    trustedOrigins: [process.env.BETTER_AUTH_URL ?? "http://localhost:3000"],
+    trustedOrigins,
     databaseHooks: {
       user: {
         create: {
           before: async (user) => {
-            const allowedEmail = process.env.CMS_SEED_EMAIL ?? "kasey123@cms.local";
-            const allowedUsername = process.env.CMS_SEED_USERNAME ?? "kasey123";
+            const allowedEmail = process.env.CMS_SEED_EMAIL ?? "kaseyadmin@cms.local";
+            const allowedUsername = process.env.CMS_SEED_USERNAME ?? "kaseyadmin";
             if (user.email !== allowedEmail && user.username !== allowedUsername) {
               throw new APIError("BAD_REQUEST", { message: "Signup is disabled" });
             }
@@ -60,9 +73,9 @@ export async function ensureCmsDefaultOwnerSeed() {
   const db = getCmsDb();
   if (!db) return;
 
-  const seedUsername = "kasey123";
-  const seedPassword = "kaseypassword123";
-  const seedEmail = process.env.CMS_SEED_EMAIL ?? "kasey123@cms.local";
+  const seedUsername = process.env.CMS_SEED_USERNAME ?? "kaseyadmin";
+  const seedPassword = process.env.CMS_SEED_PASSWORD ?? "kaseyadmin123";
+  const seedEmail = process.env.CMS_SEED_EMAIL ?? "kaseyadmin@cms.local";
   const seedName = process.env.CMS_SEED_NAME ?? "Kasey Owner";
 
   const existingRows = await db

@@ -11,7 +11,7 @@ import { getErrorMessage } from "@/lib/cms/client-error";
 
 export function CmsLoginFormClient() {
   const router = useRouter();
-  const seedEmail = "kasey123@cms.local";
+  const seedEmail = "kaseyadmin@cms.local";
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);

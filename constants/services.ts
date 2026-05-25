@@ -51,26 +51,6 @@ export const SERVICES: ServiceItem[] = [
     placeholderLabel: "Rangatahi Leadership Initiative",
   },
   {
-    title: "Mau Rakau Programme",
-    category: "Leadership & Identity",
-    description: [
-      "Mau Rakau is a journey of personal, physical, and cultural growth.",
-      "Through disciplined practice, self-management, communication, and relationship-building, taiohi are supported to connect with their whakapapa and strengthen confidence.",
-      "This programme introduces the deeper meaning behind the taiaha as a pathway into respect, focus, identity, and responsibility.",
-    ],
-    bullets: [
-      "Understand the origins of the taiaha",
-      "Engage with marae tikanga",
-      "Build discipline and focus",
-      "Push through personal challenges",
-      "Develop respect for self and others",
-      "Honour the tapu, mauri, and mana of the kaupapa",
-      "Strengthen confidence through movement and practice",
-    ],
-    ctaLabel: "Learn More",
-    placeholderLabel: "Mau Rakau Pathway",
-  },
-  {
     title: "Healing Through Music Programme - Te Manu Puoro",
     category: "Healing & Wellbeing",
     description: [
@@ -111,6 +91,26 @@ export const SERVICES: ServiceItem[] = [
     ],
     ctaLabel: "Enquire Now",
     placeholderLabel: "Romiromi / Mirimiri",
+  },
+  {
+    title: "Mau Rakau Programme",
+    category: "Leadership & Identity",
+    description: [
+      "Mau Rakau is a journey of personal, physical, and cultural growth.",
+      "Through disciplined practice, self-management, communication, and relationship-building, taiohi are supported to connect with their whakapapa and strengthen confidence.",
+      "This programme introduces the deeper meaning behind the taiaha as a pathway into respect, focus, identity, and responsibility.",
+    ],
+    bullets: [
+      "Understand the origins of the taiaha",
+      "Engage with marae tikanga",
+      "Build discipline and focus",
+      "Push through personal challenges",
+      "Develop respect for self and others",
+      "Honour the tapu, mauri, and mana of the kaupapa",
+      "Strengthen confidence through movement and practice",
+    ],
+    ctaLabel: "Learn More",
+    placeholderLabel: "Mau Rakau Pathway",
   },
 ];
 
