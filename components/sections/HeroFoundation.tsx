@@ -215,8 +215,16 @@ export function HeroFoundation() {
           <p className="font-body text-[11px] font-bold tracking-[0.26em] text-[var(--hero-main)] uppercase">
             {/* <EditableText path="home.hero.sectionLabel" fallback="Hero Section" /> */}
           </p>
-          <h2 id="leadership-framework-heading" className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight text-[var(--hero-black)] sm:text-5xl">
-            <EditableText path="home.hero.title" fallback="Te Pae O Te Rangi" />
+          <h2 id="leadership-framework-heading" className="mt-3">
+            <span className="sr-only">Te Pae O Te Rangi</span>
+            <Image
+              src="/logo.png"
+              alt={`${SITE_CONFIG.name} logo`}
+              width={720}
+              height={720}
+              className="mx-auto h-auto w-[min(62vw,22rem)] object-contain drop-shadow-[0_14px_28px_rgba(10,10,10,0.22)] sm:w-[min(56vw,26rem)] lg:w-[min(44vw,34rem)]"
+              priority
+            />
           </h2>
           <p className="mx-auto mt-4 max-w-2xl font-serif text-base leading-7 text-[var(--hero-text)] sm:text-lg">
             <EditableText path="home.hero.subtitle" fallback="A safe meeting place for healing, identity, leadership, and connection." />

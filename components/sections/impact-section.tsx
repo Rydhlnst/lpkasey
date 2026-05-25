@@ -35,19 +35,23 @@ export function ImpactSection() {
           </p>
         </ScrollAnimation>
 
-        <ScrollAnimation className="grid gap-6 lg:grid-cols-[2fr_1fr]" delay={0.08}>
-          <EditableMedia
-            path="home.impact.mediaImage"
-            type="image"
-            emptyLabel="Impact image"
-            className="min-h-[14rem] border border-[var(--hero-main)]/25 bg-white/55 shadow-[0_22px_36px_rgba(7,58,61,0.14)] sm:min-h-[18rem]"
-          />
-          <EditableMedia
-            path="home.impact.mediaVideo"
-            type="video"
-            emptyLabel="Impact video"
-            className="min-h-[14rem] border border-[var(--hero-main)]/25 bg-white/40 sm:min-h-[18rem]"
-          />
+        <ScrollAnimation className="grid gap-8 md:grid-cols-2 md:gap-10" delay={0.08}>
+          <div className="mx-auto w-full max-w-[23rem]">
+            <EditableMedia
+              path="home.impact.mediaImage"
+              type="image"
+              emptyLabel="Impact image"
+              className="aspect-[9/16] w-full overflow-hidden rounded-[4px] border border-[var(--hero-main)]/25 bg-white/55 object-cover shadow-[0_22px_36px_rgba(7,58,61,0.14)]"
+            />
+          </div>
+          <div className="mx-auto w-full max-w-[23rem]">
+            <EditableMedia
+              path="home.impact.mediaVideo"
+              type="video"
+              emptyLabel="Impact video"
+              className="aspect-[9/16] w-full overflow-hidden rounded-[4px] border border-[var(--hero-main)]/25 bg-black object-contain shadow-[0_22px_36px_rgba(7,58,61,0.14)]"
+            />
+          </div>
         </ScrollAnimation>
 
         <ScrollAnimation className="grid gap-8 lg:grid-cols-[minmax(0,24rem)_1fr] lg:items-start" delay={0.16}>

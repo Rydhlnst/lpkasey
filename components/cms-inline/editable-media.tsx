@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { useCmsInline } from "@/components/cms-inline/provider-client";
 import { getApiErrorMessageFromPayload, getErrorMessage } from "@/lib/cms/client-error";
@@ -109,6 +110,7 @@ export function EditableMedia({
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isCropEditorOpen, setIsCropEditorOpen] = useState(false);
   const [isMediaActionsOpen, setIsMediaActionsOpen] = useState(false);
+  const [isMediaReady, setIsMediaReady] = useState(false);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [draftCropArea, setDraftCropArea] = useState<CropArea | null>(currentCropArea);
@@ -130,6 +132,10 @@ export function EditableMedia({
       document.removeEventListener("mousedown", handlePointerDown);
     };
   }, [isMediaActionsOpen]);
+
+  useEffect(() => {
+    setIsMediaReady(false);
+  }, [resolvedUrl, type]);
 
   function uploadWithProgress(file: File, altText: string): Promise<{ url: string; altText: string; key?: string }> {
     return new Promise((resolve, reject) => {
@@ -272,21 +278,36 @@ export function EditableMedia({
     }
     if (type === "video") {
       return (
-        <video className={className} controls preload="metadata">
-          <source src={resolvedUrl} />
-        </video>
+        <div className={cn("relative overflow-hidden", className)}>
+          {!isMediaReady ? <Skeleton className="absolute inset-0 rounded-none" /> : null}
+          <video
+            className={cn("h-full w-full bg-black object-contain transition-opacity duration-300", isMediaReady ? "opacity-100" : "opacity-0")}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            onLoadedData={() => setIsMediaReady(true)}
+          >
+            <source src={resolvedUrl} />
+          </video>
+        </div>
       );
     }
 
     return (
-      <img
-        src={resolvedUrl}
-        alt={value.altText || "CMS image"}
-        className={className}
-        style={cropStyle}
-        loading="lazy"
-        decoding="async"
-      />
+      <div className={cn("relative overflow-hidden", className)}>
+        {!isMediaReady ? <Skeleton className="absolute inset-0 rounded-none" /> : null}
+        <img
+          src={resolvedUrl}
+          alt={value.altText || "CMS image"}
+          className={cn("h-full w-full object-cover transition-opacity duration-300", isMediaReady ? "opacity-100" : "opacity-0")}
+          style={cropStyle}
+          loading="lazy"
+          decoding="async"
+          onLoad={() => setIsMediaReady(true)}
+        />
+      </div>
     );
   }
 
@@ -324,23 +345,40 @@ export function EditableMedia({
           )}
         >
           {type === "video" ? (
-            <video className="h-full w-full object-cover" controls preload="metadata">
-              <source src={resolvedUrl} />
-            </video>
+            <>
+              {!isMediaReady ? <Skeleton className="absolute inset-0 rounded-none" /> : null}
+              <video
+                className={cn("h-full w-full bg-black object-contain transition-opacity duration-300", isMediaReady ? "opacity-100" : "opacity-0")}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                onLoadedData={() => setIsMediaReady(true)}
+              >
+                <source src={resolvedUrl} />
+              </video>
+            </>
           ) : (
-            <img
-              src={resolvedUrl}
-              alt={value.altText || "CMS image"}
-              className="h-full w-full object-cover"
-              style={cropStyle}
-              loading="lazy"
-              decoding="async"
-            />
+            <>
+              {!isMediaReady ? <Skeleton className="absolute inset-0 rounded-none" /> : null}
+              <img
+                src={resolvedUrl}
+                alt={value.altText || "CMS image"}
+                className={cn("h-full w-full object-cover transition-opacity duration-300", isMediaReady ? "opacity-100" : "opacity-0")}
+                style={cropStyle}
+                loading="lazy"
+                decoding="async"
+                onLoad={() => setIsMediaReady(true)}
+              />
+            </>
           )}
 
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-900/55 to-transparent px-3 py-2 text-xs text-white">
-            {isUploading ? "Uploading..." : "Use edit icon to crop or change image"}
-          </div>
+          {type === "image" ? (
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-900/55 to-transparent px-3 py-2 text-xs text-white">
+              {isUploading ? "Uploading..." : "Use edit icon to crop or change image"}
+            </div>
+          ) : null}
 
           <div ref={mediaActionsRef} className="absolute right-2 top-2 z-20">
             <button
@@ -502,7 +540,7 @@ export function EditableMedia({
         <div className="space-y-2 rounded-md border border-border/70 bg-muted/10 p-2">
           <Label className="text-[11px]">Preview</Label>
           {type === "video" ? (
-            <video className="max-h-64 w-full rounded-md object-contain bg-slate-900/80" controls preload="metadata">
+            <video className="max-h-64 w-full rounded-md object-contain bg-slate-900/80" autoPlay loop muted playsInline preload="metadata">
               <source src={resolvedUrl} />
             </video>
           ) : (
