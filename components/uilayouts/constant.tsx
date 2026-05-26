@@ -1,5 +1,24 @@
-import { Icons } from '@/assets/icons/Icons';
-import preview from '@/assets/preview/Preview';
+const Icons = {
+  doc_icon5: '',
+  doc_icon4: '',
+  doc_star: '',
+  doc_icon3: '',
+  doc_circle: '',
+  doc_rectangle: '',
+  doc_icon2: '',
+  doc_triangle: '',
+} as const;
+
+const preview = {
+  carousel: '',
+  tabs: '',
+  faqs: '',
+  grid: '',
+  image_masking: '',
+  image_mousetrail: '',
+  sticky: '',
+  galleryNew: '',
+} as const;
 
 export function Link(props: { href?: string; children?: React.ReactNode }) {
   if (props.href?.startsWith('hover:')) {
