@@ -2,13 +2,13 @@ import { Mail, MapPin, PhoneCall } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { SectionHeader } from "@/components/sections/section-header";
 import { EditableLink } from "@/components/cms-inline/editable-link";
-import { EditableMedia } from "@/components/cms-inline/editable-media";
 import { EditableText } from "@/components/cms-inline/editable-text";
 import { CmsPageShell } from "@/components/cms-inline/page-shell";
 import { SOCIAL_LINKS } from "@/constants/links";
 import { SITE_CONFIG } from "@/constants/site";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { getDefaultCmsContentBySlug } from "@/lib/cms/content/default-content";
+import { ContactMapCard } from "./contact-map-card";
 
 const CONTACT_REASONS = [
   "Book a Romiromi / Mirimiri session",
@@ -20,6 +20,7 @@ const CONTACT_REASONS = [
 ];
 
 const CONTACT_SOCIAL_ICONS = [FaFacebook, FaInstagram, FaTwitter] as const;
+const DEFAULT_MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE_CONFIG.contactAddress)}`;
 
 export default function ContactPage() {
   return (
@@ -137,7 +138,7 @@ export default function ContactPage() {
               </p>
             </div>
             <div className="min-h-[280px]">
-              <EditableMedia path="home.contact.mediaMap" type="image" emptyLabel="Map image" className="h-full w-full object-cover" />
+              <ContactMapCard fallbackLinkUrl={DEFAULT_MAP_URL} />
             </div>
           </div>
         </div>

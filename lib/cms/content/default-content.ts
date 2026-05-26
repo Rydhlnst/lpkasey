@@ -360,6 +360,7 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
           })),
         },
         contact: {
+          gmapsValue: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE_CONFIG.contactAddress)}`,
           mediaMap: {
             url: "",
             altText: "Map image",
