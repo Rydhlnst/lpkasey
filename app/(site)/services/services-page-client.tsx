@@ -1,23 +1,51 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ArrowRight, CalendarDays, MessageCircleMore, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, MessageCircleMore, ShieldCheck, Sparkles } from "lucide-react";
 import { EditableLink } from "@/components/cms-inline/editable-link";
 import { Container } from "@/components/layout/container";
 import { SectionHeader } from "@/components/sections/section-header";
-import { EditableMedia } from "@/components/cms-inline/editable-media";
 import { EditableText } from "@/components/cms-inline/editable-text";
+import {
+  Carousel,
+  Slider,
+  SliderContainer,
+  SliderDotButton,
+  SliderNextButton,
+  SliderPrevButton,
+} from "@/components/uilayouts/carousel";
 import { SERVICES } from "@/constants/services";
+import { AdaptiveEditableMedia } from "./_components/adaptive-editable-media";
 
-const highlightServices = SERVICES;
-const serviceTags = ["All", "Leadership & Identity", "Healing & Wellbeing"];
+const highlightServiceSlugs = [
+  "te-manu-puoro",
+  "te-manu-rongoa-o-te-rangi",
+  "kahukura-matatahi-mentoring",
+  "rere-to-tika-rere-pai",
+  "tinana-whakarunga",
+  "rangatahi-hiking-leadership-initiative",
+  "mau-rakau-programme",
+] as const;
+const serviceTags = ["All", ...new Set(SERVICES.map((service) => service.category))] as const;
 const serviceIcons = [Sparkles, MessageCircleMore, CalendarDays, ShieldCheck];
 
 export function ServicesPageClient() {
+  const servicesWithIndex = useMemo(() => SERVICES.map((service, serviceIndex) => ({ service, serviceIndex })), []);
+  const highlightServices = useMemo(
+    () =>
+      highlightServiceSlugs
+        .map((slug) => servicesWithIndex.find(({ service }) => service.slug === slug))
+        .filter((item): item is (typeof servicesWithIndex)[number] => Boolean(item)),
+    [servicesWithIndex],
+  );
   const [activeTag, setActiveTag] = useState<(typeof serviceTags)[number]>("All");
+
   const filteredServices = useMemo(
-    () => (activeTag === "All" ? SERVICES : SERVICES.filter((service) => service.category === activeTag)),
-    [activeTag],
+    () =>
+      activeTag === "All"
+        ? servicesWithIndex
+        : servicesWithIndex.filter(({ service }) => service.category === activeTag),
+    [activeTag, servicesWithIndex],
   );
 
   return (
@@ -39,34 +67,57 @@ export function ServicesPageClient() {
             </p>
           </div>
 
-          <div className="grid gap-6 gap-y-12 md:grid-cols-6">
-            {highlightServices.map((service, index) => (
-              <article
-                key={service.title}
-                className={`flex h-full flex-col ${
-                  index === 3 && highlightServices.length === 5
-                    ? "md:col-start-2 md:col-span-2"
-                    : "md:col-span-2"
-                }`}
-              >
-                <header>
-                  <h2 className="font-display text-xl font-semibold text-[var(--hero-black)]">
-                    <EditableText path={`home.services.highlight.${index}.title`} fallback={service.title} />
-                  </h2>
-                </header>
-                <main className="mt-2">
-                  <div className="overflow-hidden rounded-2xl border border-border">
-                    <EditableMedia path={`home.services.highlightMedia.${index}.image`} type="image" emptyLabel={service.placeholderLabel} className="h-56 w-full rounded-none" />
-                  </div>
-                </main>
-                <footer className="mt-4">
-                  <p className="font-serif text-sm leading-6 text-[var(--hero-text)]">
-                    <EditableText path={`home.services.highlight.${index}.description`} fallback={service.description[0]} />
-                  </p>
-                </footer>
-              </article>
-            ))}
-          </div>
+          <Carousel options={{ align: "start", containScroll: "trimSnaps" }} className="space-y-6">
+            <SliderContainer className="-ml-4">
+              {highlightServices.map(({ service, serviceIndex }) => (
+                <Slider key={service.slug} className="basis-full pl-4 md:basis-1/2 xl:basis-1/3">
+                  <article className="flex h-full flex-col">
+                    <header>
+                      <h2 className="font-display text-xl font-semibold text-[var(--hero-black)]">
+                        <EditableText path={`home.services.highlight.${serviceIndex}.title`} fallback={service.title} />
+                      </h2>
+                    </header>
+                    <main className="mt-2">
+                      <div className="overflow-hidden rounded-2xl border border-border">
+                        <AdaptiveEditableMedia
+                          path={`home.services.highlightMedia.${serviceIndex}.image`}
+                          emptyLabel={service.placeholderLabel}
+                          className="w-full rounded-none"
+                          unknownClassName="aspect-[16/10]"
+                          landscapeClassName="aspect-[16/10]"
+                          portraitClassName="aspect-[4/5]"
+                          squareClassName="aspect-square"
+                        />
+                      </div>
+                    </main>
+                    <footer className="mt-4">
+                      <p className="font-serif text-sm leading-6 text-[var(--hero-text)]">
+                        <EditableText path={`home.services.highlight.${serviceIndex}.description`} fallback={service.summary} />
+                      </p>
+                    </footer>
+                  </article>
+                </Slider>
+              ))}
+            </SliderContainer>
+
+            <div className="flex items-center justify-between gap-3">
+              <SliderDotButton className="flex-wrap" activeClass="bg-primary" />
+              <div className="flex items-center gap-2">
+                <SliderPrevButton
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-[var(--hero-black)] transition hover:bg-muted/70 disabled:opacity-40"
+                  aria-label="Previous services"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </SliderPrevButton>
+                <SliderNextButton
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-[var(--hero-black)] transition hover:bg-muted/70 disabled:opacity-40"
+                  aria-label="Next services"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </SliderNextButton>
+              </div>
+            </div>
+          </Carousel>
         </Container>
       </section>
 
@@ -97,42 +148,62 @@ export function ServicesPageClient() {
             ))}
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {filteredServices.map((service, index) => {
-              const Icon = serviceIcons[index % serviceIcons.length];
+          <Carousel
+            key={activeTag}
+            options={{ align: "start", containScroll: "trimSnaps" }}
+            className="space-y-6"
+          >
+            <SliderContainer className="-ml-4">
+              {filteredServices.map(({ service, serviceIndex }, visualIndex) => {
+                const Icon = serviceIcons[visualIndex % serviceIcons.length];
 
-              return (
-                <article
-                  key={service.title}
-                  className="rounded-3xl border border-border bg-card p-6 shadow-[0_12px_28px_rgba(15,23,42,0.06)]"
+                return (
+                  <Slider key={service.slug} className="basis-full pl-4 md:basis-1/2 xl:basis-1/3">
+                    <article className="h-full rounded-3xl border border-border bg-card p-6 shadow-[0_12px_28px_rgba(15,23,42,0.06)]">
+                      <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-primary">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <h3 className="font-display text-2xl leading-tight font-semibold text-[var(--hero-black)]">
+                        <EditableText path={`home.services.list.${serviceIndex}.title`} fallback={service.title} />
+                      </h3>
+                      <p className="mt-4 font-serif text-base leading-7 text-[var(--hero-text)]">
+                        <EditableText path={`home.services.list.${serviceIndex}.description`} fallback={service.summary} />
+                      </p>
+                      <EditableLink
+                        path={`home.services.list.${serviceIndex}.ctaLink`}
+                        fallback={{ label: service.ctaLabel, href: `/services/${service.slug}` }}
+                        className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[var(--hero-black)] transition hover:text-primary"
+                        aria-label={`${service.ctaLabel} for ${service.title}`}
+                      >
+                        <EditableText path={`home.services.list.${serviceIndex}.ctaLabel`} fallback={service.ctaLabel} />
+                        <ArrowRight className="h-4 w-4" />
+                      </EditableLink>
+                    </article>
+                  </Slider>
+                );
+              })}
+            </SliderContainer>
+
+            <div className="flex items-center justify-between gap-3">
+              <SliderDotButton className="flex-wrap" activeClass="bg-primary" />
+              <div className="flex items-center gap-2">
+                <SliderPrevButton
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-[var(--hero-black)] transition hover:bg-muted/70 disabled:opacity-40"
+                  aria-label="Previous service cards"
                 >
-                  <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-primary">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="font-display text-2xl leading-tight font-semibold text-[var(--hero-black)]">
-                    <EditableText path={`home.services.list.${index}.title`} fallback={service.title} />
-                  </h3>
-                  <p className="mt-4 font-serif text-base leading-7 text-[var(--hero-text)]">
-                    <EditableText path={`home.services.list.${index}.description`} fallback={service.description[0]} />
-                  </p>
-                  <EditableLink
-                    path={`home.services.list.${index}.ctaLink`}
-                    fallback={{ label: service.ctaLabel, href: "/contact" }}
-                    className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[var(--hero-black)] transition hover:text-primary"
-                    aria-label={`${service.ctaLabel} for ${service.title}`}
-                  >
-                    <EditableText path={`home.services.list.${index}.ctaLabel`} fallback={service.ctaLabel} />
-                    <ArrowRight className="h-4 w-4" />
-                  </EditableLink>
-                </article>
-              );
-            })}
-          </div>
+                  <ChevronLeft className="h-5 w-5" />
+                </SliderPrevButton>
+                <SliderNextButton
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-[var(--hero-black)] transition hover:bg-muted/70 disabled:opacity-40"
+                  aria-label="Next service cards"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </SliderNextButton>
+              </div>
+            </div>
+          </Carousel>
         </Container>
       </section>
     </>
   );
 }
-
-
-

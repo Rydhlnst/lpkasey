@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/layout/container";
@@ -33,6 +32,13 @@ type AboutPillarDetail = {
     question: string;
     answer: string;
   }[];
+};
+
+const PILLAR_TONE_TEXT_CLASS: Record<PillarTone, string> = {
+  blue: "text-[#1f4f8e]",
+  red: "text-[#b53030]",
+  yellow: "text-[#b77705]",
+  green: "text-[#2f8f45]",
 };
 
 const ABOUT_PILLARS: AboutPillarDetail[] = [
@@ -277,27 +283,18 @@ export default async function AboutPillarPage({
       <section className="border-b border-border bg-background py-10 sm:py-14">
         <Container>
           <div className="overflow-visible rounded-[28px] relative border border-border bg-card p-4 sm:p-6">
-            <div className="relative flex min-h-[400px] items-start justify-start overflow-visible rounded-3xl">
+            <div className="relative flex min-h-0 items-center justify-center overflow-visible rounded-3xl px-4 py-8 sm:px-6 sm:py-10 md:min-h-[clamp(420px,72vh,860px)]">
               <Skeleton className="absolute inset-0 h-full w-full rounded-none opacity-60" />
-              <div className="relative z-10">
-                <PillarColorImage
-                  tone={pillar.tone}
-                  className="pointer-events-none absolute -left-16 -top-18 md:-left-24 md:-top-28 lg:-left-28 lg:-top-32 z-20 h-40 w-40 -rotate-[32deg] opacity-95 sm:h-56 sm:w-56 md:h-72 md:w-72"
-                  imageClassName="origin-top-left scale-[0.85]"
-                  priority
-                />
-                <div className="relative ml-4 mt-4 max-w-xl rounded-3xl bg-white/92 p-6 shadow-[0_20px_40px_rgba(15,23,42,0.14)] sm:ml-6 sm:mt-6 sm:p-8">
-                  <p className="inline-flex rounded-full border border-border bg-muted px-3 py-1 font-body text-[11px] font-semibold tracking-[0.14em] uppercase">
-                    <EditableText path="content.hero.badge" fallback={`${pillar.name} - ${pillar.label}`} />
-                  </p>
-                  <h1 className="mt-4 font-display text-4xl font-bold leading-tight tracking-tight text-[var(--hero-black)] sm:text-6xl">
-                    <EditableText path="content.hero.title" fallback={pillar.title} />
-                  </h1>
-                  <p className="mt-4 font-serif text-base leading-7 text-[var(--hero-text)] sm:text-lg">
-                    <EditableText path="content.hero.description" fallback={pillar.description} />
-                  </p>
-                  <p className="mt-3 font-serif text-base leading-7 text-[var(--hero-text)] sm:text-lg">
-                    <EditableText path="content.hero.overview" fallback={pillar.overview} />
+              <div className="relative z-10 flex w-full max-w-6xl flex-col items-center gap-8 text-center">
+                <div className="flex flex-col items-center gap-3">
+                  <PillarColorImage
+                    tone={pillar.tone}
+                    className="h-[clamp(174px,41vw,614px)] w-[clamp(174px,41vw,614px)]"
+                    imageClassName="scale-[1.08]"
+                    priority
+                  />
+                  <p className={`-mt-4 font-display text-[clamp(1.15rem,3.6vw,2.2rem)] font-bold tracking-[0.14em] uppercase ${PILLAR_TONE_TEXT_CLASS[pillar.tone]}`}>
+                    <EditableText path="content.hero.pillarToneLabel" fallback={pillar.label} />
                   </p>
                 </div>
               </div>

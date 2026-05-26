@@ -1,7 +1,7 @@
 import { NAVBAR_CTA, NAVIGATION_ITEMS } from "@/constants/navigation";
 import { COMPANY_LINKS, PROGRAMME_SUMMARY_LINKS, SOCIAL_LINKS } from "@/constants/links";
 import { SITE_CONFIG } from "@/constants/site";
-import { SERVICES } from "@/constants/services";
+import { SERVICES, getServiceBySlug, getServiceDetailFallback } from "@/constants/services";
 import { KAUAE_RARO_VALUES, KAUAE_RUNGA_VALUES } from "@/constants/values";
 
 const LEADERSHIP_PILLARS_DEFAULT = [
@@ -349,17 +349,14 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
           joinCtaLink: { label: "Join a Support Group", href: "/contact" },
         },
         services: {
-          highlightMedia: [
-            { image: { url: "", altText: "Service image 1" } },
-            { image: { url: "", altText: "Service image 2" } },
-            { image: { url: "", altText: "Service image 3" } },
-            { image: { url: "", altText: "Service image 4" } },
-          ],
-          list: SERVICES.slice(0, 4).map((service) => ({
+          highlightMedia: SERVICES.slice(0, 6).map((service, index) => ({
+            image: { url: "", altText: service.placeholderLabel || `Service image ${index + 1}` },
+          })),
+          list: SERVICES.map((service) => ({
             title: service.title,
-            description: service.description[0] ?? "",
+            description: service.summary,
             ctaLabel: service.ctaLabel,
-            ctaLink: { label: service.ctaLabel, href: "/contact" },
+            ctaLink: { label: service.ctaLabel, href: `/services/${service.slug}` },
           })),
         },
         contact: {
@@ -423,6 +420,15 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
         ctaLink: { label: "Ask about cookie settings", href: "/contact" },
       },
     };
+  }
+
+  if (slug.startsWith("services-")) {
+    const serviceSlug = slug.replace(/^services-/, "");
+    const service = getServiceBySlug(serviceSlug);
+
+    if (service) {
+      return getServiceDetailFallback(service);
+    }
   }
 
   if (slug.startsWith("programmes-")) {

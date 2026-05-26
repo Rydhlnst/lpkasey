@@ -65,41 +65,67 @@ const toneStyles = {
 const yellowBirdImageClass = "brightness-[0.72] contrast-[1.34] saturate-[1.1] drop-shadow-[0_2px_4px_rgba(70,52,8,0.42)]";
 
 function RoofBeam() {
+  const roofFrameColor = "#c95745";
+  const roofFrameDark = "#b84b3c";
+  const roofFrameLight = "#d86a57";
+  const roofPanelColor = "#efe6ad";
+  const roofPanelStripe = "#e1d38f";
+
   return (
-    <div className="relative z-10" aria-hidden>
-      <div className="relative left-1/2 w-[114%] -translate-x-1/2">
-        <svg className="mx-auto block h-auto w-full max-w-[100%] drop-shadow-[0_12px_20px_rgba(38,33,24,0.14)]" viewBox="0 0 1200 194" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="600,10 1180,170 20,170" fill="var(--color-foundation)" />
-          <path d="M600 10 L1180 170 L20 170 Z" fill="none" stroke="color-mix(in oklab, var(--color-foundation) 84%, black)" strokeWidth="10" strokeLinejoin="round" />
-          <path d="M600 24 L1138 164 L62 164 Z" fill="none" stroke="color-mix(in oklab, var(--color-foundation) 90%, white)" strokeWidth="6" strokeLinejoin="round" />
-          <rect x="8" y="170" width="1184" height="14" fill="var(--color-foundation)" />
-          <rect x="18" y="184" width="1164" height="10" fill="color-mix(in oklab, var(--color-foundation) 84%, black)" />
+    <div className="relative z-20 -translate-y-[48%]" aria-hidden>
+      <div className="relative left-1/2 w-[100%] -translate-x-1/2 origin-top scale-[1.7]">
+        <svg className="mx-auto block h-auto w-full max-w-[100%] drop-shadow-[0_14px_24px_rgba(38,33,24,0.16)]" viewBox="0 0 1200 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="roof-panel-lines" width="34" height="34" patternUnits="userSpaceOnUse">
+              <rect width="34" height="34" fill={roofPanelColor} />
+              <rect x="27" y="0" width="7" height="34" fill={roofPanelStripe} fillOpacity="0.48" />
+            </pattern>
+          </defs>
+
+          <polygon points="600,30 276,246 600,246" fill="url(#roof-panel-lines)" />
+          <polygon points="600,30 924,246 600,246" fill="url(#roof-panel-lines)" />
+
+          <line x1="600" y1="30" x2="224" y2="278" stroke={roofFrameColor} strokeWidth="28" strokeLinecap="round" />
+          <line x1="600" y1="30" x2="976" y2="278" stroke={roofFrameColor} strokeWidth="28" strokeLinecap="round" />
+
+          <line x1="600" y1="30" x2="302" y2="230" stroke={roofFrameDark} strokeWidth="20" strokeLinecap="round" />
+          <line x1="600" y1="30" x2="898" y2="230" stroke={roofFrameDark} strokeWidth="20" strokeLinecap="round" />
+
+          <rect x="224" y="238" width="752" height="18" rx="8" fill={roofFrameColor} />
+          <rect x="232" y="236" width="736" height="6" rx="3" fill={roofFrameLight} />
+
+          <rect x="580" y="50" width="40" height="236" rx="10" fill={roofFrameColor} />
+          <rect x="570" y="10" width="60" height="48" rx="12" fill={roofFrameColor} />
+          <rect x="272" y="200" width="28" height="64" rx="12" fill={roofFrameColor} />
+          <rect x="902" y="200" width="28" height="64" rx="12" fill={roofFrameColor} />
+          {/* <rect x="902" y="168" width="48" height="118" rx="12" fill={roofFrameColor} /> */}
         </svg>
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <Image
             src="/logo.png"
             alt={`${SITE_CONFIG.name} logo`}
-            width={64}
-            height={64}
-            className="h-[min(10vw,10vh)] w-[min(10vw,10vh)] min-h-12 min-w-12 max-h-24 max-w-24 sm:h-[min(9.5vw,9.5vh)] sm:w-[min(9.5vw,9.5vh)] sm:min-h-13 sm:min-w-13 sm:max-h-26 sm:max-w-26 md:h-[min(9vw,9vh)] md:w-[min(9vw,9vh)] md:min-h-14 md:min-w-14 md:max-h-28 md:max-w-28 lg:h-[min(15.3vw,15.3vh)] lg:w-[min(15.3vw,15.3vh)] lg:min-h-20 lg:min-w-20 lg:max-h-36 lg:max-w-36 object-contain drop-shadow-[0_8px_18px_rgba(10,10,10,0.24)]"
+            width={116}
+            height={116}
+            className="h-[min(11.7vw,11.7vh)] w-[min(11.7vw,11.7vh)] min-h-[3.6rem] min-w-[3.6rem] max-h-[8.1rem] max-w-[8.1rem] -translate-y-[8%] object-contain drop-shadow-[0_6px_14px_rgba(10,10,10,0.28)] sm:h-[min(11.2vw,11.2vh)] sm:w-[min(11.2vw,11.2vh)] md:h-[min(10.4vw,10.4vh)] md:w-[min(10.4vw,10.4vh)] lg:h-[min(14.8vw,14.8vh)] lg:w-[min(14.8vw,14.8vh)]"
             priority
           />
         </div>
-
       </div>
     </div>
   );
 }
 
 function Foundation() {
+  const foundationMain = "#c95745";
+  const foundationDark = "#b84b3c";
+
   return (
     <div className="relative z-10" aria-hidden>
       <div className="relative left-1/2 w-[110%] -translate-x-1/2">
-        <svg className="mx-auto block h-auto w-[99%] drop-shadow-[0_12px_20px_rgba(38,33,24,0.14)]" viewBox="0 0 1200 170" xmlns="http://www.w3.org/2000/svg">
-          <rect x="8" y="6" width="1184" height="32" fill="var(--color-foundation)" />
-          <rect x="34" y="44" width="1132" height="12" fill="color-mix(in oklab, var(--color-foundation) 90%, white)" />
-          <rect x="48" y="62" width="1104" height="12" fill="color-mix(in oklab, var(--color-foundation) 84%, black)" />
-          <rect x="20" y="80" width="1160" height="84" fill="var(--color-foundation)" />
+        <svg className="mx-auto block h-auto w-[99%] drop-shadow-[0_12px_20px_rgba(38,33,24,0.14)]" viewBox="0 0 1200 124" xmlns="http://www.w3.org/2000/svg">
+          <rect x="22" y="12" width="1156" height="26" rx="8" fill={foundationMain} />
+          <rect x="36" y="42" width="1128" height="14" rx="6" fill={foundationDark} />
+          <rect x="24" y="58" width="1152" height="54" rx="10" fill={foundationMain} />
         </svg>
       </div>
     </div>
@@ -211,7 +237,7 @@ export function HeroFoundation() {
       />
 
       <Container className="relative z-10">
-        <ScrollAnimation className="mx-auto max-w-4xl pb-8 pt-14 text-center sm:pb-10 sm:pt-16">
+        <ScrollAnimation className="mx-auto max-w-4xl pb-14 pt-14 text-center sm:pb-16 sm:pt-16">
           <p className="font-body text-[11px] font-bold tracking-[0.26em] text-[var(--hero-main)] uppercase">
             {/* <EditableText path="home.hero.sectionLabel" fallback="Hero Section" /> */}
           </p>
@@ -237,7 +263,7 @@ export function HeroFoundation() {
           </p>
         </ScrollAnimation>
 
-        <ScrollAnimation className="relative" delay={0.12}>
+        <ScrollAnimation className="relative mt-24 sm:mt-28 lg:mt-32" delay={0.12}>
           <div className="pb-2">
             <div
               className="relative mx-auto"
@@ -263,7 +289,7 @@ export function HeroFoundation() {
 
               {activePillar && activeIndex !== null ? <FloatingPanel pillar={activePillar} activeIndex={activeIndex} /> : null}
 
-              <div className="-mt-[1.1%]">
+              <div className="-mt-[0.8%]">
                 <Foundation />
               </div>
             </div>
