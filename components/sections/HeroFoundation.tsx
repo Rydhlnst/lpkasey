@@ -100,16 +100,6 @@ function RoofBeam() {
           <rect x="902" y="200" width="28" height="64" rx="12" fill={roofFrameColor} />
           {/* <rect x="902" y="168" width="48" height="118" rx="12" fill={roofFrameColor} /> */}
         </svg>
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <Image
-            src="/logo.png"
-            alt={`${SITE_CONFIG.name} logo`}
-            width={116}
-            height={116}
-            className="h-[min(11.7vw,11.7vh)] w-[min(11.7vw,11.7vh)] min-h-[3.6rem] min-w-[3.6rem] max-h-[8.1rem] max-w-[8.1rem] -translate-y-[8%] object-contain drop-shadow-[0_6px_14px_rgba(10,10,10,0.28)] sm:h-[min(11.2vw,11.2vh)] sm:w-[min(11.2vw,11.2vh)] md:h-[min(10.4vw,10.4vh)] md:w-[min(10.4vw,10.4vh)] lg:h-[min(14.8vw,14.8vh)] lg:w-[min(14.8vw,14.8vh)]"
-            priority
-          />
-        </div>
       </div>
     </div>
   );
