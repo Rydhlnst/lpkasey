@@ -20,7 +20,6 @@ type LeadershipPillar = {
   buttonClassName: string;
   hoverSurfaceClassName: string;
   overlayClassName: string;
-  patternClassName: string;
 };
 
 type FaqItem = {
@@ -42,8 +41,6 @@ const LEADERSHIP_PILLARS: LeadershipPillar[] = [
     buttonClassName: "border-[var(--color-pillar-blue)]/35 text-[var(--color-pillar-blue)] hover:bg-[var(--color-pillar-blue)]/12",
     hoverSurfaceClassName: "group-hover:bg-[var(--color-pillar-blue)]/12",
     overlayClassName: "from-[rgba(82,170,201,0.40)] via-[rgba(82,170,201,0.18)] to-transparent",
-    patternClassName:
-      "bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.22)_0,rgba(255,255,255,0.22)_3px,transparent_3px,transparent_18px),repeating-linear-gradient(135deg,transparent_0,transparent_9px,rgba(255,255,255,0.14)_9px,rgba(255,255,255,0.14)_12px,transparent_12px,transparent_24px)] bg-[length:48px_48px]",
   },
   {
     slug: "tohunga",
@@ -58,8 +55,6 @@ const LEADERSHIP_PILLARS: LeadershipPillar[] = [
     buttonClassName: "border-[var(--color-pillar-red)]/35 text-[var(--color-pillar-red)] hover:bg-[var(--color-pillar-red)]/12",
     hoverSurfaceClassName: "group-hover:bg-[var(--color-pillar-red)]/12",
     overlayClassName: "from-[rgba(196,111,98,0.42)] via-[rgba(196,111,98,0.18)] to-transparent",
-    patternClassName:
-      "bg-[repeating-linear-gradient(45deg,rgba(255,255,255,0.22)_0,rgba(255,255,255,0.22)_2px,transparent_2px,transparent_14px),repeating-linear-gradient(-45deg,rgba(255,255,255,0.14)_0,rgba(255,255,255,0.14)_2px,transparent_2px,transparent_16px),linear-gradient(0deg,transparent_0,transparent_38%,rgba(255,255,255,0.11)_38%,rgba(255,255,255,0.11)_62%,transparent_62%,transparent_100%)] bg-[length:42px_42px]",
   },
   {
     slug: "mangotoa",
@@ -74,8 +69,6 @@ const LEADERSHIP_PILLARS: LeadershipPillar[] = [
     buttonClassName: "border-[var(--color-pillar-yellow)]/35 text-[var(--color-pillar-yellow)] hover:bg-[var(--color-pillar-yellow)]/14",
     hoverSurfaceClassName: "group-hover:bg-[var(--color-pillar-yellow)]/14",
     overlayClassName: "from-[rgba(210,171,79,0.40)] via-[rgba(210,171,79,0.18)] to-transparent",
-    patternClassName:
-      "bg-[linear-gradient(45deg,rgba(255,255,255,0.20)_12%,transparent_12%,transparent_38%,rgba(255,255,255,0.20)_38%,rgba(255,255,255,0.20)_62%,transparent_62%,transparent_88%,rgba(255,255,255,0.20)_88%),linear-gradient(-45deg,rgba(255,255,255,0.14)_12%,transparent_12%,transparent_38%,rgba(255,255,255,0.14)_38%,rgba(255,255,255,0.14)_62%,transparent_62%,transparent_88%,rgba(255,255,255,0.14)_88%)] bg-[length:40px_40px]",
   },
   {
     slug: "aronui",
@@ -90,8 +83,6 @@ const LEADERSHIP_PILLARS: LeadershipPillar[] = [
     buttonClassName: "border-[var(--color-pillar-green)]/35 text-[var(--color-pillar-green)] hover:bg-[var(--color-pillar-green)]/12",
     hoverSurfaceClassName: "group-hover:bg-[var(--color-pillar-green)]/12",
     overlayClassName: "from-[rgba(111,150,126,0.42)] via-[rgba(111,150,126,0.20)] to-transparent",
-    patternClassName:
-      "bg-[radial-gradient(ellipse_14px_10px_at_25%_25%,rgba(255,255,255,0.26)_0,rgba(255,255,255,0.26)_35%,transparent_36%),radial-gradient(ellipse_14px_10px_at_75%_75%,rgba(255,255,255,0.22)_0,rgba(255,255,255,0.22)_35%,transparent_36%),repeating-linear-gradient(45deg,rgba(255,255,255,0.12)_0,rgba(255,255,255,0.12)_2px,transparent_2px,transparent_14px)] bg-[length:56px_56px]",
   },
 ];
 
@@ -163,15 +154,6 @@ export function LeadershipPillarsSection() {
                     pillar.overlayClassName
                   )}
                 />
-                <div
-                  aria-hidden
-                  className={cn(
-                    "pointer-events-none absolute inset-0 z-0 opacity-0 transition-all duration-700 ease-out",
-                    "translate-x-[-75%] translate-y-[75%] group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100",
-                    pillar.patternClassName
-                  )}
-                />
-
                 <div className="relative z-10 space-y-4">
                   <div className={cn("inline-flex h-16 w-16 items-center justify-center rounded-xl", pillar.iconWrapClassName)}>
                     <PillarColorImage tone={pillar.tone} className="h-12 w-12" />

@@ -8,15 +8,6 @@ import { ScrollAnimation } from "@/components/uilayouts/scroll-animation";
 export function VisionMissionSection() {
   return (
     <section className="relative overflow-hidden border-b border-[hsl(var(--border))] bg-card py-16 transition-colors duration-500 sm:py-24">
-      <div
-        className="pointer-events-none absolute inset-0 opacity-60"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, rgba(87,87,87,0.10) 1px, transparent 1px), linear-gradient(to bottom, rgba(87,87,87,0.10) 1px, transparent 1px)",
-          backgroundSize: "60px 56px",
-        }}
-        aria-hidden
-      />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-b from-transparent to-muted/55" aria-hidden />
 
       <Container className="relative z-10 space-y-10">
