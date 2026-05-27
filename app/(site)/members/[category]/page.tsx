@@ -98,7 +98,7 @@ export default async function MemberCategoryPage({
 
                 return (
                   <article key={`${data.label}-${index + 1}`} className="rounded-2xl border border-border bg-white p-5 text-center shadow-[0_12px_26px_rgba(15,23,42,0.08)] transition-all duration-300 ease-out hover:scale-[1.01] hover:shadow-[0_16px_30px_rgba(15,23,42,0.12)]">
-                    <PillarColorImage tone={data.tone} className="mx-auto h-14 w-14 rounded-full" />
+                    <PillarColorImage tone={data.tone} className="mx-auto h-16 w-16 rounded-full" sizes="64px" />
                     <h3 className="mt-3 font-display text-lg font-bold text-[var(--hero-black)]">
                       <EditableText path={`content.team.members.${index}.name`} fallback={memberName} />
                     </h3>
@@ -134,7 +134,7 @@ export default async function MemberCategoryPage({
               </blockquote>
             </div>
             <div className="flex h-[320px] w-full items-center justify-center rounded-2xl border border-border bg-muted/40">
-              <PillarColorImage tone={data.tone} className="h-28 w-28" />
+              <PillarColorImage tone={data.tone} className="h-28 w-28" sizes="112px" />
             </div>
           </div>
         </Container>

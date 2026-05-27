@@ -46,9 +46,9 @@ const ABOUT_PILLARS: AboutPillarDetail[] = [
     slug: "ariki",
     tone: "blue",
     name: "Ariki",
-    title: "Tumuakitanga",
+    title: "Leader",
     description: "Leadership that gives direction, clarity, and identity.",
-    label: "Te Wai",
+    label: "Te Wai - Water Element",
     overview:
       "Ariki leads strategic direction, protects cultural identity, and keeps every initiative aligned with long-term impact.",
     team: [
@@ -99,9 +99,9 @@ const ABOUT_PILLARS: AboutPillarDetail[] = [
     slug: "tohunga",
     tone: "red",
     name: "Tohunga",
-    title: "Awatea",
+    title: "Leaner",
     description: "The learner's path through knowledge, growth, and discipline.",
-    label: "Te Ahi",
+    label: "Te Ahi - Fire Element",
     overview:
       "Tohunga builds capability through practical learning pathways, mentorship, and consistent coaching for sustainable growth.",
     team: [
@@ -152,9 +152,9 @@ const ABOUT_PILLARS: AboutPillarDetail[] = [
     slug: "mangotoa",
     tone: "yellow",
     name: "Mangotoa",
-    title: "Tautika",
+    title: "Leverager",
     description: "Practical courage, action, and leverage in everyday life.",
-    label: "Te Haa",
+    label: "Te Haa - Air Element",
     overview:
       "Mangotoa turns plans into action by coordinating operations, field delivery, and practical support where it matters most.",
     team: [
@@ -205,9 +205,9 @@ const ABOUT_PILLARS: AboutPillarDetail[] = [
     slug: "aronui",
     tone: "green",
     name: "Aronui",
-    title: "Rauemi",
+    title: "Lover",
     description: "Nurturing resources, care, and collective wellbeing.",
-    label: "Papatuanuku",
+    label: "Papatuanuku - Earth Element",
     overview:
       "Aronui supports wellbeing by connecting people with resources, strengthening care networks, and promoting collective resilience.",
     team: [
@@ -283,18 +283,22 @@ export default async function AboutPillarPage({
       <section className="border-b border-border bg-background py-10 sm:py-14">
         <Container>
           <div className="overflow-visible rounded-[28px] relative border border-border bg-card p-4 sm:p-6">
-            <div className="relative flex min-h-0 items-center justify-center overflow-visible rounded-3xl px-4 py-8 sm:px-6 sm:py-10 md:min-h-[clamp(420px,72vh,860px)]">
+            <div className="relative flex min-h-0 items-center justify-center overflow-visible rounded-3xl px-3 py-2 sm:px-4 sm:py-3 md:min-h-[clamp(380px,58vh,640px)]">
               <Skeleton className="absolute inset-0 h-full w-full rounded-none opacity-60" />
               <div className="relative z-10 flex w-full max-w-6xl flex-col items-center gap-8 text-center">
-                <div className="flex flex-col items-center gap-3">
+                <div className="flex flex-col items-center gap-1">
                   <PillarColorImage
                     tone={pillar.tone}
-                    className="h-[clamp(174px,41vw,614px)] w-[clamp(174px,41vw,614px)]"
-                    imageClassName="scale-[1.08]"
+                    className="h-[clamp(220px,52vw,760px)] w-[min(100%,1400px)]"
+                    imageClassName="scale-[1.2] sm:scale-[1.35] md:scale-[1.55] lg:scale-[2]"
+                    sizes="(max-width: 640px) 96vw, (max-width: 1024px) 92vw, 1400px"
                     priority
                   />
-                  <p className={`-mt-4 font-display text-[clamp(1.15rem,3.6vw,2.2rem)] font-bold tracking-[0.14em] uppercase ${PILLAR_TONE_TEXT_CLASS[pillar.tone]}`}>
-                    <EditableText path="content.hero.pillarToneLabel" fallback={pillar.label} />
+                  <p className={`-mt-1 font-display text-[clamp(1.7rem,5.4vw,3.3rem)] font-bold tracking-[0.12em] uppercase ${PILLAR_TONE_TEXT_CLASS[pillar.tone]}`}>
+                    <EditableText path="content.hero.pillarToneLabel" fallback={`${pillar.name} - ${pillar.title}`} />
+                  </p>
+                  <p className={`-mt-1 font-display text-[clamp(1.2rem,3.8vw,2.4rem)] font-bold tracking-[0.14em] uppercase ${PILLAR_TONE_TEXT_CLASS[pillar.tone]}`}>
+                    <EditableText path="content.hero.pillarElementLabel" fallback={pillar.label} />
                   </p>
                 </div>
               </div>
@@ -360,7 +364,7 @@ export default async function AboutPillarPage({
                 className="group overflow-hidden rounded-2xl border border-border bg-white transition-all duration-300 ease-out hover:scale-[1.01] hover:shadow-[0_16px_34px_rgba(12,35,54,0.10)]"
               >
                 <div className="relative flex h-56 w-full items-center justify-center overflow-hidden bg-muted/40">
-                  <PillarColorImage tone={item.tone} className="h-44 w-44" imageClassName="scale-[1.65]" />
+                  <PillarColorImage tone={item.tone} className="h-56 w-56" sizes="224px" />
                 </div>
                 <div className="p-5">
                   <p className="font-body text-xs font-semibold tracking-[0.18em] text-muted-foreground uppercase">

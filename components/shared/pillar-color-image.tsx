@@ -27,9 +27,18 @@ type PillarColorImageProps = {
   className?: string;
   imageClassName?: string;
   priority?: boolean;
+  sizes?: string;
+  unoptimized?: boolean;
 };
 
-export function PillarColorImage({ tone, className, imageClassName, priority = false }: PillarColorImageProps) {
+export function PillarColorImage({
+  tone,
+  className,
+  imageClassName,
+  priority = false,
+  sizes = "(max-width: 768px) 35vw, 220px",
+  unoptimized = true,
+}: PillarColorImageProps) {
   const toneImage = PILLAR_TONE_IMAGE_MAP[tone];
   return (
     <div className={cn("relative h-16 w-16", className)}>
@@ -38,7 +47,9 @@ export function PillarColorImage({ tone, className, imageClassName, priority = f
         alt={toneImage.alt}
         fill
         priority={priority}
-        sizes="(max-width: 768px) 35vw, 220px"
+        unoptimized={unoptimized}
+        quality={100}
+        sizes={sizes}
         className={cn("object-contain", imageClassName)}
       />
     </div>

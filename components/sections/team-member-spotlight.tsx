@@ -69,7 +69,7 @@ export function TeamMemberSpotlight({
                 }`}
                 aria-pressed={isActive}
               >
-                <PillarColorImage tone={tone} className="mx-auto h-14 w-14 rounded-none" />
+                <PillarColorImage tone={tone} className="mx-auto h-16 w-16 rounded-none" sizes="64px" />
                 <h3 className="mt-3 font-display text-lg font-bold text-[var(--hero-black)]">
                   <EditableText path={`${cmsPathPrefix}.members.${index}.name`} fallback={member.name} />
                 </h3>
