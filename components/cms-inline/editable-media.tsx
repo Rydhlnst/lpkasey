@@ -26,6 +26,64 @@ type MediaValue = {
   cropArea?: CropArea;
 };
 
+function LazyAutoplayVideo({
+  src,
+  className,
+  onReady,
+}: {
+  src: string;
+  className: string;
+  onReady?: () => void;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+
+  useEffect(() => {
+    setShouldLoad(false);
+  }, [src]);
+
+  useEffect(() => {
+    if (shouldLoad) return;
+    const node = containerRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        setShouldLoad(true);
+        observer.disconnect();
+      },
+      { rootMargin: "240px 0px" },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [shouldLoad]);
+
+  useEffect(() => {
+    if (!shouldLoad || !videoRef.current) return;
+    void videoRef.current.play().catch(() => undefined);
+  }, [shouldLoad]);
+
+  return (
+    <div ref={containerRef} className="h-full w-full">
+      <video
+        ref={videoRef}
+        className={className}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload={shouldLoad ? "metadata" : "none"}
+        onLoadedData={onReady}
+      >
+        {shouldLoad ? <source src={src} /> : null}
+      </video>
+    </div>
+  );
+}
+
 function inferAssetKey(value: MediaValue): string | null {
   if (typeof value.key === "string" && value.key.trim()) return value.key.trim();
   if (!value.url) return null;
@@ -280,17 +338,11 @@ export function EditableMedia({
       return (
         <div className={cn("relative overflow-hidden", className)}>
           {!isMediaReady ? <Skeleton className="absolute inset-0 rounded-none" /> : null}
-          <video
+          <LazyAutoplayVideo
+            src={resolvedUrl}
             className={cn("h-full w-full bg-black object-contain transition-opacity duration-300", isMediaReady ? "opacity-100" : "opacity-0")}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            onLoadedData={() => setIsMediaReady(true)}
-          >
-            <source src={resolvedUrl} />
-          </video>
+            onReady={() => setIsMediaReady(true)}
+          />
         </div>
       );
     }
@@ -347,17 +399,11 @@ export function EditableMedia({
           {type === "video" ? (
             <>
               {!isMediaReady ? <Skeleton className="absolute inset-0 rounded-none" /> : null}
-              <video
+              <LazyAutoplayVideo
+                src={resolvedUrl}
                 className={cn("h-full w-full bg-black object-contain transition-opacity duration-300", isMediaReady ? "opacity-100" : "opacity-0")}
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="metadata"
-                onLoadedData={() => setIsMediaReady(true)}
-              >
-                <source src={resolvedUrl} />
-              </video>
+                onReady={() => setIsMediaReady(true)}
+              />
             </>
           ) : (
             <>

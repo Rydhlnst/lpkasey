@@ -24,7 +24,7 @@ type CTAFormValues = {
 export function CTASection({
   title,
   submitLabel = "Sign Me Up",
-  formAction = "#",
+  formAction = "/api/newsletter-signup",
   className,
 }: CTASectionProps) {
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
@@ -44,12 +44,20 @@ export function CTASection({
   const onSubmit = async (values: CTAFormValues) => {
     setSubmitMessage(null);
 
-    if (formAction && formAction !== "#") {
-      await fetch(formAction, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
+    if (!formAction || formAction === "#") {
+      setSubmitMessage("Newsletter endpoint belum dikonfigurasi.");
+      return;
+    }
+
+    const response = await fetch(formAction, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    });
+
+    if (!response.ok) {
+      setSubmitMessage("Sorry, submission failed. Please try again.");
+      return;
     }
 
     reset();

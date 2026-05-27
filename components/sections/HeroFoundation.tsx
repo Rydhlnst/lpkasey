@@ -216,16 +216,6 @@ export function HeroFoundation() {
 
   return (
     <section className="relative min-h-screen overflow-hidden border-b border-[hsl(var(--border))] bg-background transition-colors duration-500" aria-labelledby="leadership-framework-heading">
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.18]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, rgba(15,23,42,0.07) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.07) 1px, transparent 1px)",
-          backgroundSize: "80px 56px",
-        }}
-        aria-hidden
-      />
-
       <Container className="relative z-10">
         <ScrollAnimation className="mx-auto max-w-4xl pb-14 pt-14 text-center sm:pb-16 sm:pt-16">
           <p className="font-body text-[11px] font-bold tracking-[0.26em] text-[var(--hero-main)] uppercase">
