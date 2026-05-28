@@ -1,6 +1,7 @@
 import { Container } from "@/components/layout/container";
 import { EditableMedia } from "@/components/cms-inline/editable-media";
 import { EditableText } from "@/components/cms-inline/editable-text";
+import { EditableYoutube } from "@/components/cms-inline/editable-youtube";
 import { ScrollAnimation } from "@/components/uilayouts/scroll-animation";
 
 const IMPACT_METRICS = [
@@ -45,10 +46,10 @@ export function ImpactSection() {
             />
           </div>
           <div className="mx-auto w-full max-w-[23rem]">
-            <EditableMedia
-              path="home.impact.mediaVideo"
-              type="video"
-              emptyLabel="Impact video"
+            <EditableYoutube
+              path="home.impact.videoUrl"
+              fallback="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              emptyLabel="Impact YouTube video"
               className="aspect-[9/16] w-full overflow-hidden rounded-[4px] border border-[var(--hero-main)]/25 bg-black object-contain shadow-[0_22px_36px_rgba(7,58,61,0.14)]"
             />
           </div>

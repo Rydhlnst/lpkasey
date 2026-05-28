@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,6 @@ function statusLabel(status: ReturnType<typeof useCmsInline>["status"]) {
 
 export function CmsSaveBar() {
   const { isEditMode, save, publish, status } = useCmsInline();
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isHidden, setIsHidden] = useState(() => {
@@ -64,7 +63,7 @@ export function CmsSaveBar() {
         throw new Error(message);
       }
       toast.success("Edit mode disabled.");
-      router.refresh();
+      window.location.assign(redirectTo);
     } catch (error) {
       toast.error(getErrorMessage(error, "Failed to exit edit mode."));
       setIsLeavingEditMode(false);

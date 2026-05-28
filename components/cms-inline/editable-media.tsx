@@ -349,15 +349,13 @@ export function EditableMedia({
 
     return (
       <div className={cn("relative overflow-hidden", className)}>
-        {!isMediaReady ? <Skeleton className="absolute inset-0 rounded-none" /> : null}
         <img
           src={resolvedUrl}
           alt={value.altText || "CMS image"}
-          className={cn("h-full w-full object-cover transition-opacity duration-300", isMediaReady ? "opacity-100" : "opacity-0")}
+          className="h-full w-full object-cover"
           style={cropStyle}
-          loading="lazy"
+          loading="eager"
           decoding="async"
-          onLoad={() => setIsMediaReady(true)}
         />
       </div>
     );
@@ -407,15 +405,13 @@ export function EditableMedia({
             </>
           ) : (
             <>
-              {!isMediaReady ? <Skeleton className="absolute inset-0 rounded-none" /> : null}
               <img
                 src={resolvedUrl}
                 alt={value.altText || "CMS image"}
-                className={cn("h-full w-full object-cover transition-opacity duration-300", isMediaReady ? "opacity-100" : "opacity-0")}
+                className="h-full w-full object-cover"
                 style={cropStyle}
-                loading="lazy"
+                loading="eager"
                 decoding="async"
-                onLoad={() => setIsMediaReady(true)}
               />
             </>
           )}
@@ -595,7 +591,7 @@ export function EditableMedia({
               alt={value.altText || "CMS image preview"}
               className="max-h-64 w-full rounded-md object-contain bg-slate-900/5"
               style={cropStyle}
-              loading="lazy"
+              loading="eager"
               decoding="async"
             />
           )}
