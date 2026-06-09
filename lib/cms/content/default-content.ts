@@ -314,7 +314,7 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
             ...item,
             link: {
               label: `View ${item.title} Members`,
-              href: ["/members/ariki", "/members/tohunga", "/members/mangotoa", "/members/aronui"][index] ?? "/about",
+              href: ["/about/ariki", "/about/tohunga", "/about/mangotoa", "/about/aronui"][index] ?? "/about",
             },
           })),
         },

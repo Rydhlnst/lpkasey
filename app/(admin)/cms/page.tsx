@@ -22,7 +22,7 @@ const onboardingSteps = [
 function mapCmsSlugToPublicRoute(slug: string) {
   if (slug === "home") return "/";
   if (slug.startsWith("about-")) return `/about/${slug.replace("about-", "")}`;
-  if (slug.startsWith("members-")) return `/members/${slug.replace("members-", "")}`;
+  if (slug.startsWith("members-")) return `/about/${slug.replace("members-", "")}`;
   if (slug.startsWith("programmes-")) return `/programmes/${slug.replace("programmes-", "")}`;
   return `/${slug}`;
 }

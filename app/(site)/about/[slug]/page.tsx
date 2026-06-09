@@ -235,6 +235,12 @@ const ABOUT_PILLARS: AboutPillarDetail[] = [
         bio: "Ari strengthens community care networks and helps ensure follow-up support remains consistent over time.",
         quote: "Community resilience is built through shared care and dependable relationships.",
       },
+      {
+        name: "Member Aronui 05",
+        role: "",
+        bio: "This team member supports Aronui by strengthening practical care pathways and helping families stay connected to the right support.",
+        quote: "Care becomes sustainable when support is practical, consistent, and shared across the community.",
+      },
     ],
     faqs: [
       {

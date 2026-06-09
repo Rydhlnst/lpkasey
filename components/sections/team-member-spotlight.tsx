@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useMemo, useState } from "react";
 import { EditableMedia } from "@/components/cms-inline/editable-media";
@@ -54,7 +54,7 @@ export function TeamMemberSpotlight({
           />
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="flex gap-4 overflow-x-auto py-2 px-1 snap-x snap-mandatory custom-scrollbar">
           {members.map((member, index) => {
             const isActive = index === activeIndex;
             return (
@@ -62,10 +62,10 @@ export function TeamMemberSpotlight({
                 key={member.name}
                 type="button"
                 onClick={() => setActiveIndex(index)}
-                className={`border p-5 text-center transition-all duration-200 ease-out ${
+                className={`flex-shrink-0 w-[240px] snap-start border p-5 text-center transition-all duration-200 ease-out ${
                   isActive
-                    ? "border-[var(--hero-main)] bg-[var(--hero-main)]/5 scale-[1.01]"
-                    : "border-border bg-white hover:scale-[1.01] hover:bg-muted/50"
+                    ? "border-[var(--hero-main)] bg-[var(--hero-main)]/5"
+                    : "border-border bg-white hover:bg-muted/50"
                 }`}
                 aria-pressed={isActive}
               >
