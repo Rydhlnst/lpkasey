@@ -1,5 +1,4 @@
 import { and, desc, eq, inArray, isNull } from "drizzle-orm";
-import { ARONUI_TEAM_MEMBERS } from "@/lib/cms/content/about-pillar-members";
 import { getDefaultCmsContentBySlug } from "@/lib/cms/content/default-content";
 import { getCmsDb } from "@/lib/cms/db/client";
 import { cmsAuditLogs, cmsMediaAssets, cmsPages, cmsRevisions, cmsSchedules } from "@/lib/cms/db/schema/cms";
@@ -61,78 +60,6 @@ const PUBLIC_PAGE_DEFS = [
 let seedPromise: Promise<void> | null = null;
 let seeded = false;
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-function syncAronuiMembers(content: Record<string, unknown>, teamTitle: string) {
-  const nextContent = structuredClone(content);
-  const contentNode = isRecord(nextContent.content) ? nextContent.content : {};
-  const teamNode = isRecord(contentNode.team) ? contentNode.team : {};
-  const existingMembers = Array.isArray(teamNode.members) ? teamNode.members : [];
-
-  const members = ARONUI_TEAM_MEMBERS.map((member, index) => {
-    const existing = existingMembers[index];
-    if (!isRecord(existing)) return member;
-
-    const existingName = typeof existing.name === "string" ? existing.name.trim() : "";
-    const shouldUseDefaultName =
-      existingName.length === 0 ||
-      existingName === `Member Aronui 0${index + 1}` ||
-      (index === 4 && existingName !== member.name);
-
-    return {
-      ...member,
-      ...existing,
-      name: shouldUseDefaultName ? member.name : existingName,
-    };
-  });
-
-  contentNode.team = {
-    badge: "Our Team",
-    title: teamTitle,
-    description: "",
-    ...teamNode,
-    members,
-  };
-  nextContent.content = contentNode;
-
-  return nextContent;
-}
-
-async function ensureAronuiMembersPage(
-  exec: CmsDbExecutor,
-  slug: "about-aronui" | "members-aronui",
-  teamTitle: string,
-) {
-  const pageRows = await exec
-    .select()
-    .from(cmsPages)
-    .where(and(eq(cmsPages.slug, slug), isNull(cmsPages.deletedAt)))
-    .limit(1);
-  const page = pageRows[0];
-  if (!page) return;
-
-  const revisionRows = await exec
-    .select()
-    .from(cmsRevisions)
-    .where(eq(cmsRevisions.id, page.currentRevisionId))
-    .limit(1);
-  const revision = revisionRows[0];
-  if (!revision) return;
-
-  const previousContent = (revision.contentSnapshot as Record<string, unknown> | undefined) ?? {};
-  const nextContent = syncAronuiMembers(previousContent, teamTitle);
-  if (JSON.stringify(previousContent) === JSON.stringify(nextContent)) return;
-
-  await exec
-    .update(cmsRevisions)
-    .set({
-      contentSnapshot: nextContent,
-    })
-    .where(eq(cmsRevisions.id, revision.id));
-}
-
 async function ensureSeeded() {
   if (seeded) return;
   if (seedPromise) return seedPromise;
@@ -175,9 +102,6 @@ async function ensureSeeded() {
         createdAt,
       });
     }
-
-    await ensureAronuiMembersPage(db, "about-aronui", "Meet Our Expert Team");
-    await ensureAronuiMembersPage(db, "members-aronui", "Meet The Team");
 
     seeded = true;
   })()

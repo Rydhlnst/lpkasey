@@ -10,7 +10,6 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Skeleton } from "@/components/ui/skeleton";
 import { PillarColorImage, type PillarTone } from "@/components/shared/pillar-color-image";
 import { getProfileImagesByTone } from "@/constants/member-profile-images";
-import { ARONUI_TEAM_MEMBERS } from "@/lib/cms/content/about-pillar-members";
 import { getDefaultCmsContentBySlug } from "@/lib/cms/content/default-content";
 
 type TeamMember = {
@@ -242,6 +241,12 @@ const ABOUT_PILLARS: AboutPillarDetail[] = [
         bio: "This team member supports Aronui by strengthening practical care pathways and helping families stay connected to the right support.",
         quote: "Care becomes sustainable when support is practical, consistent, and shared across the community.",
       },
+      {
+        name: "Mātua Wiremu",
+        role: "",
+        bio: "Mātua Wiremu supports Aronui by deepening practical care pathways and helping whanau stay connected to trusted support.",
+        quote: "Strong care grows when support stays close, practical, and grounded in community.",
+      },
     ],
     faqs: [
       {
@@ -262,11 +267,6 @@ const ABOUT_PILLARS: AboutPillarDetail[] = [
     ],
   },
 ];
-
-const aronuiPillar = ABOUT_PILLARS.find((pillar) => pillar.slug === "aronui");
-if (aronuiPillar) {
-  aronuiPillar.team = ARONUI_TEAM_MEMBERS;
-}
 
 export function generateStaticParams() {
   return ABOUT_PILLARS.map((pillar) => ({ slug: pillar.slug }));
