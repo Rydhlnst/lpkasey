@@ -142,6 +142,8 @@ export function EditableMedia({
   type,
   className,
   emptyLabel,
+  fallbackSrc,
+  fallbackAlt,
   cropAspect = 4 / 3,
   frameClassName,
 }: {
@@ -149,6 +151,8 @@ export function EditableMedia({
   type: "image" | "video";
   className?: string;
   emptyLabel?: string;
+  fallbackSrc?: string;
+  fallbackAlt?: string;
   cropAspect?: number;
   frameClassName?: string;
 }) {
@@ -327,6 +331,19 @@ export function EditableMedia({
 
   if (!isEditMode) {
     if (!resolvedUrl) {
+      if (type === "image" && fallbackSrc) {
+        return (
+          <div className={cn("relative overflow-hidden", className)}>
+            <img
+              src={fallbackSrc}
+              alt={fallbackAlt || emptyLabel || "Image"}
+              className="h-full w-full object-cover"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+        );
+      }
       if (!emptyLabel) return null;
       return (
         <div className={cn("flex items-center justify-center bg-muted/30 text-center", className)}>

@@ -241,6 +241,12 @@ const ABOUT_PILLARS: AboutPillarDetail[] = [
         bio: "This team member supports Aronui by strengthening practical care pathways and helping families stay connected to the right support.",
         quote: "Care becomes sustainable when support is practical, consistent, and shared across the community.",
       },
+      {
+        name: "Mātua Wiremu",
+        role: "",
+        bio: "Mātua Wiremu supports Aronui by deepening practical care pathways and helping whanau stay connected to trusted support.",
+        quote: "Strong care grows when support stays close, practical, and grounded in community.",
+      },
     ],
     faqs: [
       {
@@ -317,6 +323,7 @@ export default async function AboutPillarPage({
         divisionName={pillar.name}
         tone={pillar.tone}
         members={spotlightMembers}
+        fallbackPhotos={profileImages}
         cmsPathPrefix="content.team"
         mediaAspectClassName="aspect-[4/3]"
         mediaCropAspect={4 / 3}

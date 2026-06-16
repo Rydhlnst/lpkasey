@@ -18,6 +18,7 @@ type TeamMemberSpotlightProps = {
   divisionName: string;
   tone: PillarTone;
   members: TeamMemberSpotlightItem[];
+  fallbackPhotos?: string[];
   cmsPathPrefix?: string;
   mediaAspectClassName?: string;
   mediaCropAspect?: number;
@@ -27,6 +28,7 @@ export function TeamMemberSpotlight({
   divisionName,
   tone,
   members,
+  fallbackPhotos = [],
   cmsPathPrefix = "home.teamSpotlight",
   mediaAspectClassName = "aspect-[4/3]",
   mediaCropAspect = 4 / 3,
@@ -98,6 +100,8 @@ export function TeamMemberSpotlight({
                 path={`${cmsPathPrefix}.members.${activeIndex}.photo`}
                 type="image"
                 emptyLabel="Team member image"
+                fallbackSrc={fallbackPhotos[activeIndex]}
+                fallbackAlt={`${activeMember.name} profile image`}
                 className="h-full w-full"
                 cropAspect={mediaCropAspect}
                 frameClassName={cn("w-full", mediaAspectClassName)}
