@@ -3,6 +3,7 @@ import { COMPANY_LINKS, PROGRAMME_SUMMARY_LINKS, SOCIAL_LINKS } from "@/constant
 import { SITE_CONFIG } from "@/constants/site";
 import { SERVICES, getServiceBySlug, getServiceDetailFallback } from "@/constants/services";
 import { KAUAE_RARO_VALUES, KAUAE_RUNGA_VALUES } from "@/constants/values";
+import { ARONUI_TEAM_MEMBERS } from "@/lib/cms/content/about-pillar-members";
 
 const LEADERSHIP_PILLARS_DEFAULT = [
   { slug: "ariki", name: "Ariki", meta: "Blue - Water", meaning: "Te Wai - Leader", cta: "Explore Pillar", media: { url: "", altText: "Ariki pillar image" } },
@@ -457,7 +458,12 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
     return {
       content: {
         hero: { badge: "", title: "", description: "", overview: "" },
-        team: { badge: "Our Team", title: "Meet Our Expert Team", description: "", members: [] },
+        team: {
+          badge: "Our Team",
+          title: "Meet Our Expert Team",
+          description: "",
+          members: slug === "about-aronui" ? ARONUI_TEAM_MEMBERS : [],
+        },
         faq: { badge: "For Your Questions", title: "Frequently Asked Questions", description: "", items: [] },
         next: {
           badge: "Next Division",
@@ -474,7 +480,12 @@ export function getDefaultCmsContentBySlug(slug: string): Record<string, unknown
     return {
       content: {
         hero: { badge: "Category Members", title: "", subtitle: "" },
-        team: { badge: "Our Team", title: "Meet The Team", description: "", members: [] },
+        team: {
+          badge: "Our Team",
+          title: "Meet The Team",
+          description: "",
+          members: slug === "members-aronui" ? ARONUI_TEAM_MEMBERS : [],
+        },
         insight: {
           badge: "Team Insight",
           title: "Collective Progress Starts with Support",

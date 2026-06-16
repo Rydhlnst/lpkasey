@@ -10,6 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Skeleton } from "@/components/ui/skeleton";
 import { PillarColorImage, type PillarTone } from "@/components/shared/pillar-color-image";
 import { getProfileImagesByTone } from "@/constants/member-profile-images";
+import { ARONUI_TEAM_MEMBERS } from "@/lib/cms/content/about-pillar-members";
 import { getDefaultCmsContentBySlug } from "@/lib/cms/content/default-content";
 
 type TeamMember = {
@@ -261,6 +262,11 @@ const ABOUT_PILLARS: AboutPillarDetail[] = [
     ],
   },
 ];
+
+const aronuiPillar = ABOUT_PILLARS.find((pillar) => pillar.slug === "aronui");
+if (aronuiPillar) {
+  aronuiPillar.team = ARONUI_TEAM_MEMBERS;
+}
 
 export function generateStaticParams() {
   return ABOUT_PILLARS.map((pillar) => ({ slug: pillar.slug }));
