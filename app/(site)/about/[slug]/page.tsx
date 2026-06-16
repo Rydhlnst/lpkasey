@@ -323,6 +323,7 @@ export default async function AboutPillarPage({
         divisionName={pillar.name}
         tone={pillar.tone}
         members={spotlightMembers}
+        fallbackPhotos={profileImages}
         cmsPathPrefix="content.team"
         mediaAspectClassName="aspect-[4/3]"
         mediaCropAspect={4 / 3}
